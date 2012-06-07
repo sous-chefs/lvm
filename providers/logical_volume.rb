@@ -1,9 +1,12 @@
+require 'lvm'
 action :create do
     device_name = "/dev/mapper/#{new_resource.group}-#{new_resource.name}"
     fs_type = new_resource[:filesystem]
 
     ruby_block "create_logical_volume_#{new_resource.name}" do
         block do 
+            lvm = LVM::LVM.new
+
             name = new_resource.name
             group = new_resource.group
             size = case new_resource.size
@@ -30,7 +33,16 @@ action :create do
             Chef::Log.debug "Command output: #{output}"
         end
 
-        only_if { lvm.volume_groups[new_resource.group].logical_volumes.select { |lv| lv.name == new_resource.name }.empty? }
+        only_if do
+            lvm = LVM::LVM.new
+            vg = lvm.volume_groups[new_resource.group]
+            return true if vg.nil?
+
+            found_lvs = vg.logical_volumes.select do |lv|
+                lv.name == new_resource.name
+            end
+            found_lvs.empty?
+        end
         notifies :run, "execute[format_logical_volume_#{new_resource.name}]", :immediately
     end
 
@@ -48,6 +60,7 @@ action :create do
         
         directory lv_mount_point do
             mode '0777'
+            not_if "mount | grep #{device_name}"
         end
 
         mount "mount_logical_volume_#{new_resource.name}" do
@@ -57,7 +70,7 @@ action :create do
             pass lv_mount_pass
             device device_name
             fstype fs_type
-            options "rw,noatime"
+            options lv_mount_options
             action [:mount, :enable]
         end
     end
