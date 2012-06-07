@@ -6,6 +6,14 @@ action :create do
         block do 
             name = new_resource.name
             group = new_resource.group
+            size = case new_resource.size
+                when /\d+[kKmMgGtT]/
+                    "-L #{new_resource.size}"
+                when /(\d{2}|100)%(FREE|VG)/
+                    "-l #{new_resource.size}"
+                when /(\d+) extents/
+                    "-l #{$1}"
+            end
             
             stripes = new_resource.stripes ? "--stripes #{new_resource.stripes}" : ''
             stripe_size = new_resource.stripe_size ? "--stripesize #{new_resource.stripesize}" : ''
@@ -15,7 +23,7 @@ action :create do
 
             physical_volumes = new_resource.physical_volumes.join ' '
             
-            command = "lvcreate #{stripes} #{stripe_size} #{mirrors} #{contiguous} #{readahead} --name #{name} #{physical_volumes} #{group}"
+            command = "lvcreate #{size} #{stripes} #{stripe_size} #{mirrors} #{contiguous} #{readahead} --name #{name} #{physical_volumes} #{group}"
 
             Chef::Log.debug "Executing lvm command: #{command}"
             output = lvm.raw command 
