@@ -1,5 +1,3 @@
-require 'lvm'
-
 actions :create
 
 def initialize *args
@@ -16,8 +14,13 @@ attribute :group, :kind_of => String
 attribute :size, :kind_of => String, :regex => /\d+[kKmMgGtT]|(\d{2}|100)%(FREE|VG)|\d+ extents/, :required => true
 attribute :filesystem, :kind_of => String
 attribute :mount_point, :kind_of => Hash, :callbacks => {
-    ': location is required!' => Proc.new { |value| value[:point] },
-    ': location must be an absolute path!' => Proc.new { |value| value[:point] =~ %r{/[^\0]*} }
+    ': location is required!' => Proc.new do |value| 
+        value['location'] && !value['location'].empty?
+    end,
+    ': location must be an absolute path!' => Proc.new do |value| 
+        matches = value['location'] =~ %r{^/[^\0]*} 
+        !matches.nil?
+    end 
 }
 attribute :mount_options, :kind_of => String
 attribute :physical_volumes, :kind_of => [String, Array]
@@ -31,4 +34,4 @@ attribute :stripe_size, :kind_of => Integer, :callbacks => {
 }
 attribute :mirrors, :kind_of => Integer, :callbacks => must_be_greater_than_0
 attribute :contiguous, :kind_of => [TrueClass, FalseClass]
-attribute :readahead, :kind_of => [ Integer, String ], :equals => [ 2..120, 'auto', 'none' ].flatten!
+attribute :readahead, :kind_of => [ Integer, String ], :equal_to => [ 2..120, 'auto', 'none' ].flatten!

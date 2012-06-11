@@ -19,3 +19,5 @@
 package "lvm2" do
   action :upgrade
 end
+
+chef_gem 'di-ruby-lvm'

@@ -1,4 +1,7 @@
-require 'lvm'
+def initialize *args
+    super
+    require 'lvm'
+end
 
 action :create do
     ruby_block "create physical volume on #{new_resource.name}" do

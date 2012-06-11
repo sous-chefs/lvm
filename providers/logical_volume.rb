@@ -1,7 +1,12 @@
-require 'lvm'
+def initialize *args
+    super
+    require 'lvm'
+    require 'mixlib/shellout'
+end
+
 action :create do
-    device_name = "/dev/mapper/#{new_resource.group}-#{new_resource.name}"
-    fs_type = new_resource[:filesystem]
+    device_name = "/dev/mapper/#{new_resource.group}-#{new_resource.name.gsub /-/, '--'}"
+    fs_type = new_resource.filesystem
 
     ruby_block "create_logical_volume_#{new_resource.name}" do
         block do 
@@ -24,13 +29,14 @@ action :create do
             contiguous = new_resource.contiguous ? "--contiguous y" : ''
             readahead = new_resource.readahead ? "--readahead #{new_resource.readahead}" : ''
 
-            physical_volumes = new_resource.physical_volumes.join ' '
+            physical_volumes = [new_resource.physical_volumes].flatten.join ' ' if new_resource.physical_volumes
             
-            command = "lvcreate #{size} #{stripes} #{stripe_size} #{mirrors} #{contiguous} #{readahead} --name #{name} #{physical_volumes} #{group}"
+            command = "lvcreate #{size} #{stripes} #{stripe_size} #{mirrors} #{contiguous} #{readahead} --name #{name} #{group} #{physical_volumes}"
 
             Chef::Log.debug "Executing lvm command: #{command}"
             output = lvm.raw command 
             Chef::Log.debug "Command output: #{output}"
+            new_resource.updated_by_last_action true
         end
 
         only_if do
@@ -43,27 +49,37 @@ action :create do
             end
             found_lvs.empty?
         end
-        notifies :run, "execute[format_logical_volume_#{new_resource.name}]", :immediately
     end
 
-    execute "format_logical_volume_#{new_resource.name}" do
+    execute "format_logical_volume_#{new_resource.group}_#{new_resource.name}" do
         command "yes | mkfs -t #{fs_type} #{device_name}"
-        action :nothing
-        only_if { fs_type }
+        not_if do
+            return true if fs_type.nil?
+
+            Chef::Log.debug "Checking to see if #{device_name} is formatted..."
+            blkid = ::Mixlib::ShellOut.new "blkid -o value -s TYPE #{device_name}"
+            blkid.run_command
+
+            Chef::Log.debug "Result of check: #{blkid}"
+            Chef::Log.debug "blkid.exitstatus: #{blkid.exitstatus}"
+            Chef::Log.debug "blkid.stdout: #{blkid.stdout.inspect}"
+            blkid.exitstatus == 0 && blkid.stdout.strip == fs_type.strip
+        end 
     end
 
-    if new_resource[:mount_point]
-        lv_mount_point = new_resource[:mount_point][:location]
-        lv_mount_options = new_resource[:mount_point][:options]
-        lv_mount_dump = new_resource[:mount_point][:dump]
-        lv_mount_pass = new_resource[:mount_point][:pass]
+    if new_resource.mount_point
+        lv_mount_point = new_resource.mount_point[:location]
+        lv_mount_options = new_resource.mount_point[:options]
+        lv_mount_dump = new_resource.mount_point[:dump]
+        lv_mount_pass = new_resource.mount_point[:pass]
         
         directory lv_mount_point do
             mode '0777'
+            recursive true
             not_if "mount | grep #{device_name}"
         end
 
-        mount "mount_logical_volume_#{new_resource.name}" do
+        mount "mount_logical_volume_#{new_resource.group}_#{new_resource.name}" do
             mount_point lv_mount_point
             options lv_mount_options
             dump lv_mount_dump
