@@ -11,7 +11,7 @@ must_be_greater_than_0 = {
 
 attribute :name, :kind_of => String, :name_attribute => true, :required => true
 attribute :group, :kind_of => String
-attribute :size, :kind_of => String, :regex => /\d+[kKmMgGtT]|(\d{2}|100)%(FREE|VG)|\d+ extents/, :required => true
+attribute :size, :kind_of => String, :regex => /\d+[kKmMgGtT]|(\d{2}|100)%(FREE|VG|PVS)|\d+/, :required => true
 attribute :filesystem, :kind_of => String
 attribute :mount_point, :kind_of => Hash, :callbacks => {
     ': location is required!' => Proc.new do |value| 

@@ -17,9 +17,9 @@ action :create do
             size = case new_resource.size
                 when /\d+[kKmMgGtT]/
                     "-L #{new_resource.size}"
-                when /(\d{2}|100)%(FREE|VG)/
+                when /(\d{2}|100)%(FREE|VG|PVS)/
                     "-l #{new_resource.size}"
-                when /(\d+) extents/
+                when /(\d+)/
                     "-l #{$1}"
             end
             
