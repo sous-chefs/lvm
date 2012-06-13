@@ -16,7 +16,7 @@ There are three LWRPs in the LVM cookbook that can be used to perform operations
 with the Logical Volume Manager.
 
 `lvm_physical_volume`
--------------------
+---------------------
 
 Manages LVM physical volumes.
 
@@ -34,6 +34,7 @@ Manages LVM physical volumes.
     lvm_physical_volume '/dev/sda'
 
 `lvm_logical_volume`
+--------------------
 
 Manages LVM logical volumes
 
@@ -73,7 +74,7 @@ Manages LVM logical volumes
 
     lvm_logical_volume 'home' do
         group 'vg00'
-        size 25%VG
+        size '25%VG'
         filesystem 'ext4'
         mount_point {
             'location' => '/home'
@@ -108,7 +109,7 @@ Manages LVM volume groups.
     lvm_volume_group 'vg00' do
         physical_volumes [ /dev/sda, /dev/sdb, /dev/sdc ]
         logical_volume 'logs' do
-            size 1G
+            size '1G'
             filesystem 'xfs'
             mount_point {
                 'location' => '/var/log',
@@ -117,7 +118,7 @@ Manages LVM volume groups.
             stripes 3
         end
         logical_volume 'home' do
-            size 25%VG
+            size '25%VG'
             filesystem 'ext4'
             mount_point {
                 'location' => '/home'
