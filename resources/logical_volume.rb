@@ -22,14 +22,11 @@ attribute :mount_point, :kind_of => Hash, :callbacks => {
         !matches.nil?
     end 
 }
-attribute :mount_options, :kind_of => String
 attribute :physical_volumes, :kind_of => [String, Array]
 attribute :stripes, :kind_of => Integer, :callbacks => must_be_greater_than_0
 attribute :stripe_size, :kind_of => Integer, :callbacks => {
-    'must be a power of 2 from 2^2 to 2^9' => Proc.new do |value| 
-        2..9.each do |pwr| 
-            return true if 2**pwr == value
-        end
+    'must be a power of 2' => Proc.new do |value| 
+        return Math.log2(value) % 1 == 0
     end
 }
 attribute :mirrors, :kind_of => Integer, :callbacks => must_be_greater_than_0
