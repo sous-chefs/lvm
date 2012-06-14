@@ -9,7 +9,19 @@ must_be_greater_than_0 = {
    'must be greater than 0' => Proc.new { |value| value > 0 }
 }
 
-attribute :name, :kind_of => String, :name_attribute => true, :required => true
+attribute :name, 
+    :kind_of => String,
+    :regex => /[\w+.-]+/,
+    :name_attribute => true,
+    :required => true,
+    :callbacks => {
+        "cannot be '.', '..', 'snapshot', or 'pvmove'" => Proc.new do |value|
+            !(value == '.' || value == '..' || value == 'snapshot' || value == 'pvmove')
+        end,
+        "cannot contain the strings '_mlog' or '_mimage'" => Proc.new do |value|
+            !value.match /.*(_mlog|_mimage).*/
+        end
+    }
 attribute :group, :kind_of => String
 attribute :size, :kind_of => String, :regex => /\d+[kKmMgGtT]|(\d{2}|100)%(FREE|VG|PVS)|\d+/, :required => true
 attribute :filesystem, :kind_of => String
