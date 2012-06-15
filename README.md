@@ -54,7 +54,8 @@ Manages LVM logical volumes
   physical volumes assigned to the volume.
 - `filesystem` - The filesystem to format the volume as. The appropriate tools
   must be installed for the filesystem.
-- `mount_point` - A hash containing the following keys:
+- `mount_point` - Either a string containing the path to the mount point, or a
+  Hash containing the following keys:
   - `location` - the directory to mount the volume on. Required.
   - `options` - the mount options for the volume.
   - `dump` - the `dump` field for the fstab entry.
@@ -76,9 +77,7 @@ Manages LVM logical volumes
         group 'vg00'
         size '25%VG'
         filesystem 'ext4'
-        mount_point {
-            'location' => '/home'
-        }
+        mount_point '/home'
         stripes 3
         mirrors 2
     end
@@ -111,18 +110,13 @@ Manages LVM volume groups.
         logical_volume 'logs' do
             size '1G'
             filesystem 'xfs'
-            mount_point {
-                'location' => '/var/log',
-                'options' => 'noatime,nodiratime'
-            }
+            mount_point :location => '/var/log', :options => 'noatime,nodiratime'
             stripes 3
         end
         logical_volume 'home' do
             size '25%VG'
             filesystem 'ext4'
-            mount_point {
-                'location' => '/home'
-            }
+            mount_point '/home'
             stripes 3
             mirrors 2
         end

@@ -68,11 +68,12 @@ action :create do
     end
 
     if new_resource.mount_point
-        lv_mount_point = new_resource.mount_point[:location]
-        lv_mount_options = new_resource.mount_point[:options]
-        lv_mount_dump = new_resource.mount_point[:dump]
-        lv_mount_pass = new_resource.mount_point[:pass]
-        
+        if new_resource.mount_point.class == String
+            mount_spec = { :location => new_resource.mount_point }
+        else
+            mount_spec = new_resource.mount_point
+        end
+
         directory lv_mount_point do
             mode '0777'
             recursive true
@@ -80,14 +81,13 @@ action :create do
         end
 
         mount "mount_logical_volume_#{new_resource.group}_#{new_resource.name}" do
-            mount_point lv_mount_point
-            options lv_mount_options
-            dump lv_mount_dump
-            pass lv_mount_pass
-            device device_name
-            fstype fs_type
-            options lv_mount_options
-            action [:mount, :enable]
+            mount_point mount_spec[:location]
+            options     mount_spec[:options]
+            dump        mount_spec[:dump]
+            pass        mount_spec[:pass]
+            device      device_name
+            fstype      fs_type
+            action      [:mount, :enable]
         end
     end
 end
