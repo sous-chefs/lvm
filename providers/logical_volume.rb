@@ -74,7 +74,7 @@ action :create do
             mount_spec = new_resource.mount_point
         end
 
-        directory lv_mount_point do
+        directory mount_spec[:location] do
             mode '0777'
             recursive true
             not_if "mount | grep #{device_name}"
