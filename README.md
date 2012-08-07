@@ -132,6 +132,7 @@ License and Author
 ==================
 
 Author:: Joshua Timberman <joshua@opscode.com>
+Author:: Greg Symons <gsymons@drillinginfo.com>
 
 Copyright:: 2011, Opscode, Inc
 
