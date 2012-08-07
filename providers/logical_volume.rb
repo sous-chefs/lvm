@@ -76,6 +76,8 @@ action :create do
 
         directory mount_spec[:location] do
             mode '0777'
+            owner 'root'
+            group 'root'
             recursive true
             not_if "mount | grep #{device_name}"
         end
