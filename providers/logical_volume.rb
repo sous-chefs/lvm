@@ -4,8 +4,15 @@ def initialize *args
     require 'mixlib/shellout'
 end
 
+def to_dm_name name
+    #The device mapper will double any hyphens found in a volume group or
+    #logical volume name so that it can properly locate the separator between
+    #the volume group and the logical volume in the device name.
+    name.gsub /-/, '--'
+end
+
 action :create do
-    device_name = "/dev/mapper/#{new_resource.group}-#{new_resource.name.gsub /-/, '--'}"
+    device_name = "/dev/mapper/#{to_dm_name(new_resource.group)}-#{to_dm_name(new_resource.name)}"
     fs_type = new_resource.filesystem
 
     ruby_block "create_logical_volume_#{new_resource.name}" do
