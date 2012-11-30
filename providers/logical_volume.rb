@@ -49,28 +49,32 @@ action :create do
         only_if do
             lvm = LVM::LVM.new
             vg = lvm.volume_groups[new_resource.group]
-            return true if vg.nil?
-
-            found_lvs = vg.logical_volumes.select do |lv|
+            if vg.nil?
+              true
+            else
+              found_lvs = vg.logical_volumes.select do |lv|
                 lv.name == new_resource.name
+              end
+              found_lvs.empty?
             end
-            found_lvs.empty?
         end
     end
 
     execute "format_logical_volume_#{new_resource.group}_#{new_resource.name}" do
         command "yes | mkfs -t #{fs_type} #{device_name}"
         not_if do
-            return true if fs_type.nil?
+            if fs_type.nil?
+              true
+            else
+              Chef::Log.debug "Checking to see if #{device_name} is formatted..."
+              blkid = ::Mixlib::ShellOut.new "blkid -o value -s TYPE #{device_name}"
+              blkid.run_command
 
-            Chef::Log.debug "Checking to see if #{device_name} is formatted..."
-            blkid = ::Mixlib::ShellOut.new "blkid -o value -s TYPE #{device_name}"
-            blkid.run_command
-
-            Chef::Log.debug "Result of check: #{blkid}"
-            Chef::Log.debug "blkid.exitstatus: #{blkid.exitstatus}"
-            Chef::Log.debug "blkid.stdout: #{blkid.stdout.inspect}"
-            blkid.exitstatus == 0 && blkid.stdout.strip == fs_type.strip
+              Chef::Log.debug "Result of check: #{blkid}"
+              Chef::Log.debug "blkid.exitstatus: #{blkid.exitstatus}"
+              Chef::Log.debug "blkid.stdout: #{blkid.stdout.inspect}"
+              blkid.exitstatus == 0 && blkid.stdout.strip == fs_type.strip
+            end
         end 
     end
 
