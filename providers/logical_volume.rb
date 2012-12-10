@@ -31,7 +31,7 @@ action :create do
             end
             
             stripes = new_resource.stripes ? "--stripes #{new_resource.stripes}" : ''
-            stripe_size = new_resource.stripe_size ? "--stripesize #{new_resource.stripesize}" : ''
+            stripe_size = new_resource.stripe_size ? "--stripesize #{new_resource.stripe_size}" : ''
             mirrors = new_resource.mirrors ? "--mirrors #{new_resource.mirrors}" : ''
             contiguous = new_resource.contiguous ? "--contiguous y" : ''
             readahead = new_resource.readahead ? "--readahead #{new_resource.readahead}" : ''
