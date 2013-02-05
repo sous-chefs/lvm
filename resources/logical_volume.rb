@@ -25,12 +25,12 @@ attribute :name,
 attribute :group, :kind_of => String
 attribute :size, :kind_of => String, :regex => /\d+[kKmMgGtT]|(\d{2}|100)%(FREE|VG|PVS)|\d+/, :required => true
 attribute :filesystem, :kind_of => String
-attribute :mount_point, :kind_of => Hash, :callbacks => {
+attribute :mount_point, :kind_of => [ Hash, String], :callbacks => {
     ': location is required!' => Proc.new do |value| 
-        value[:location] && !value[:location].empty?
+        value.class == String || ( value[:location] && !value[:location].empty? )
     end,
     ': location must be an absolute path!' => Proc.new do |value| 
-        matches = value[:location] =~ %r{^/[^\0]*} 
+        matches = value[:location] =~ %r{^/[^\0]*} ||  value =~ %r{^/[^\0]*}
         !matches.nil?
     end 
 }
