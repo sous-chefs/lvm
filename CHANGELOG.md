@@ -1,3 +1,8 @@
+## v0.8.6:
+
+* [COOK-2348] - lvm `logical_volume` doesn't work with `mount_point`
+  parameter as String
+
 ## v0.8.4:
 
 * [COOK-1977] - Typo "stripesize" in LVM cookbook
