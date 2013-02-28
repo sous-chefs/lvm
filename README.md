@@ -128,10 +128,23 @@ Usage
 Make sure the lvm package is always up to date with this recipe. Put
 it in a base role that gets applied to all nodes.
 
+Note that this cookbook depends on the
+[di-ruby-lvm](https://github.com/DrillingInfo/di-ruby-lvm) and
+[di-ruby-lvm-attrib](https://github.com/DrillingInfo/di-ruby-lvm-attrib) gems.
+The di-ruby-lvm-attrib gem in particular is a common cause of failures when
+using the providers. If you get a failure with an error message similar to 
+
+``` No such file or directory - /opt/chef/.../di-ruby-lvm-attrib-0.0.3/lib/lvm/attributes/2.02.86(2)/lvs.yaml```
+
+then you are running a version of lvm that the gems do not support. However,
+getting support added is usually pretty easy. Just follow the instructions on
+"Adding Attributes" in the [di-ruby-lvm-attrib README](https://github.com/DrillingInfo/di-ruby-lvm-attrib).
+
 License and Author
 ==================
 
 Author:: Joshua Timberman <joshua@opscode.com>
+
 Author:: Greg Symons <gsymons@drillinginfo.com>
 
 Copyright:: 2011, Opscode, Inc
