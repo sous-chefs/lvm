@@ -1,14 +1,16 @@
 def initialize *args
-    super
-    require 'lvm'
+  super
+  require 'lvm'
 end
 
 action :create do
-    ruby_block "create physical volume on #{new_resource.name}" do
-        @lvm = LVM::LVM.new
-        block do
-            @lvm.raw "pvcreate #{new_resource.name}"
-        end
-        only_if @lvm.physical_volumes[new_resource.name].nil?
+  ruby_block "create physical volume on #{new_resource.name}" do
+    @lvm = LVM::LVM.new
+
+    block do
+      if @lvm.physical_volumes[new_resource.name].nil?
+        @lvm.raw "pvcreate #{new_resource.name}"
+      end
     end
+  end
 end
