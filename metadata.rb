@@ -7,6 +7,6 @@ version           "0.8.9"
 
 recipe "lvm", "Installs lvm2 package"
 
-%w{ redhat centos debian ubuntu }.each do |os|
+%w{ redhat centos debian ubuntu sles }.each do |os|
   supports os
 end
