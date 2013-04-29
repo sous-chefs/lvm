@@ -1,3 +1,9 @@
+## v0.8.8:
+
+* [COOK-2283] - lvm version mismatch on fresh amazon linux install
+* [COOK-2733] - Fix invalid only_if command in lvm cookbook
+* [COOK-2822] - install, don't upgrade, lvm2 package
+
 ## v0.8.6:
 
 * [COOK-2348] - lvm `logical_volume` doesn't work with `mount_point`
