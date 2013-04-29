@@ -1,7 +1,7 @@
 Description
 ===========
 
-Installs lvm2 package and ensures it stays upgraded.
+Installs lvm2 package and includes resources for managing LVM.
 
 Requirements
 ============

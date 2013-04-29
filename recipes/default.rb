@@ -2,7 +2,7 @@
 # Cookbook Name:: lvm
 # Recipe:: default
 #
-# Copyright 2009, Opscode, Inc.
+# Copyright 2009-2013, Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-package "lvm2" do
-  action :upgrade
-end
+package "lvm2"
 
 chef_gem 'di-ruby-lvm'
