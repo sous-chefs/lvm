@@ -8,6 +8,7 @@ Requirements
 
 * Debian/Ubuntu
 * RHEL/CentOS
+* Suse Enterprise Linux (SLES)
 
 Resources/Providers
 ===================
