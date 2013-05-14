@@ -54,6 +54,7 @@ Manages LVM logical volumes
   physical volumes assigned to the volume.
 - `filesystem` - The filesystem to format the volume as. The appropriate tools
   must be installed for the filesystem.
+- `mkfs_params` - Parameters to pass to mkfs when formatting the filesystem
 - `mount_point` - Either a string containing the path to the mount point, or a
   Hash containing the following keys:
   - `location` - the directory to mount the volume on. Required.
