@@ -14,7 +14,7 @@ end
 action :create do
     device_name = "/dev/mapper/#{to_dm_name(new_resource.group)}-#{to_dm_name(new_resource.name)}"
     fs_type = new_resource.filesystem
-    fs_params = new_resource.fs_params
+    mkfs_params = new_resource.mkfs_params
 
     ruby_block "create_logical_volume_#{new_resource.name}" do
         block do 
@@ -62,7 +62,7 @@ action :create do
     end
 
     execute "format_logical_volume_#{new_resource.group}_#{new_resource.name}" do
-        command "yes | mkfs -t #{fs_type} #{fs_params} #{device_name}"
+        command "yes | mkfs -t #{fs_type} #{mkfs_params} #{device_name}"
         not_if do
             if fs_type.nil?
               true
