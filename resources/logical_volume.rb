@@ -25,6 +25,7 @@ attribute :name,
 attribute :group, :kind_of => String
 attribute :size, :kind_of => String, :regex => /\d+[kKmMgGtT]|(\d{2}|100)%(FREE|VG|PVS)|\d+/, :required => true
 attribute :filesystem, :kind_of => String
+attribute :fs_params, :kind_of => String
 attribute :mount_point, :kind_of => [ Hash, String], :callbacks => {
     ': location is required!' => Proc.new do |value| 
         value.class == String || ( value[:location] && !value[:location].empty? )
