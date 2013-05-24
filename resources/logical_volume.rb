@@ -1,4 +1,5 @@
-actions :create
+actions :create, :format, :mount
+attr_accessor :device_name
 
 def initialize *args
     super
