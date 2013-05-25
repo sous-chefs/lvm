@@ -23,6 +23,7 @@ Manages LVM physical volumes.
 ### Actions
 
 - `:create` - Creates a new physical volume. Default.
+- `:resize` - Resizes a existing physical volume to the block device size in case it was extended.
 
 ### Attribute Parameters
 
@@ -52,6 +53,8 @@ Manages LVM logical volumes
   supported by LVM&mdash;SI bytes (e.g. 10G), physical extents, or percentages
   of all the extents in the volume group, all the free extents, or of the
   physical volumes assigned to the volume.
+- `resize` - When resize is true and the requested volume is already existing
+  and smaller than the requested size the volume is instead extended to the desired size.
 - `filesystem` - The filesystem to format the volume as. The appropriate tools
   must be installed for the filesystem.
 - `mount_point` - Either a string containing the path to the mount point, or a

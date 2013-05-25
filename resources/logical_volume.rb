@@ -24,6 +24,7 @@ attribute :name,
     }
 attribute :group, :kind_of => String
 attribute :size, :kind_of => String, :regex => /\d+[kKmMgGtT]|(\d{2}|100)%(FREE|VG|PVS)|\d+/, :required => true
+attribute :resize, :kind_of => [TrueClass, FalseClass], :default => true
 attribute :filesystem, :kind_of => String
 attribute :mount_point, :kind_of => [ Hash, String], :callbacks => {
     ': location is required!' => Proc.new do |value| 
@@ -44,3 +45,5 @@ attribute :stripe_size, :kind_of => Integer, :callbacks => {
 attribute :mirrors, :kind_of => Integer, :callbacks => must_be_greater_than_0
 attribute :contiguous, :kind_of => [TrueClass, FalseClass]
 attribute :readahead, :kind_of => [ Integer, String ], :equal_to => [ 2..120, 'auto', 'none' ].flatten!
+
+actions :create
