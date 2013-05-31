@@ -58,8 +58,8 @@ action :create do
     end
   end
 
-  self.run_action(:format) unless new_resource.filesystem.nil?
-  self.run_action(:mount) if new_resource.mount_point
+  self.action_format unless new_resource.filesystem.nil?
+  self.action_mount if new_resource.mount_point
 
 end
 
