@@ -40,7 +40,10 @@ Manages LVM logical volumes
 
 ### Actions
 
-- `:create` - Creates a new logical volume
+- `:create` - Creates a new logical volume. Will trigger the `:format` and `:mount`
+  actions if the `filesystem` and `mount` attributes are specified.
+- `:format` - formats a logical volume
+- `:mount` - mounts the logical volume to a specified directory
 
 ### Attribute Parameters
 
@@ -48,6 +51,9 @@ Manages LVM logical volumes
 - `group` - The volume group in which to create the new volume. Required unless
   the volume is declared inside of an `lvm_volume_group` block (<a
   href='#volume_group'>see below</a>).
+- `device_name` - this will default to "/dev/mapper/#{vg_name}-#{lv_name)}" but is exposed
+   so one that one can use an additional [DeviceMapper](http://en.wikipedia.org/wiki/Device_mapper) 
+   device on top of the logical volume, such as an [encrypted filesystem](https://help.ubuntu.com/community/EncryptedFilesystems)
 - `size` - The size of the volume. This can be any of the size specifications
   supported by LVM&mdash;SI bytes (e.g. 10G), physical extents, or percentages
   of all the extents in the volume group, all the free extents, or of the
@@ -73,14 +79,16 @@ Manages LVM logical volumes
 
 ### Example
 
-    lvm_logical_volume 'home' do
-        group 'vg00'
-        size '25%VG'
-        filesystem 'ext4'
-        mount_point '/home'
-        stripes 3
-        mirrors 2
-    end
+```Ruby
+  lvm_logical_volume 'home' do
+    group 'vg00'
+    size '25%VG'
+    filesystem 'ext4'
+    mount_point '/home'
+    stripes 3
+    mirrors 2
+  end
+```
 
 <a name='volume_group' />
 `lvm_volume_group`
@@ -105,22 +113,45 @@ Manages LVM volume groups.
 
 ### Example
 
-    lvm_volume_group 'vg00' do
-        physical_volumes [ /dev/sda, /dev/sdb, /dev/sdc ]
-        logical_volume 'logs' do
-            size '1G'
-            filesystem 'xfs'
-            mount_point :location => '/var/log', :options => 'noatime,nodiratime'
-            stripes 3
-        end
-        logical_volume 'home' do
-            size '25%VG'
-            filesystem 'ext4'
-            mount_point '/home'
-            stripes 3
-            mirrors 2
-        end
+```Ruby
+  lvm_volume_group 'vg00' do
+    physical_volumes [ /dev/sda, /dev/sdb, /dev/sdc ]
+    logical_volume 'logs' do
+      size '1G'
+      filesystem 'xfs'
+      mount_point :location => '/var/log', :options => 'noatime,nodiratime'
+      stripes 3
     end
+    logical_volume 'home' do
+      size '25%VG'
+      filesystem 'ext4'
+      mount_point '/home'
+      stripes 3
+      mirrors 2
+    end
+  end
+```
+
+Here is an example using the actions of `lvm_logical_volume` separately
+
+```Ruby
+  lvm_volume_group "vg0" do
+    physical_volumes [ '/dev/sdf', '/dev/sdg' ]
+  end
+  logical_volume 'home' do
+    size '25%VG'
+	group "vg0"
+  end
+  # create an encrypted volume mapped on top of /dev/mapper/vg0-home
+  # ....
+  # format and mount the encrypted volume that system
+  logical_volume 'home' do
+    device_name '/dev/mapper/encryptedfs'
+	mount_point '/home'
+	action [:format, :mount]
+  end
+```
+
 
 Usage
 =====
@@ -146,6 +177,8 @@ License and Author
 Author:: Joshua Timberman <joshua@opscode.com>
 
 Author:: Greg Symons <gsymons@drillinginfo.com>
+
+Author:: Bryan W. Berry <bryan.berry@cyclecomputing.com>  
 
 Copyright:: 2011, Opscode, Inc
 
