@@ -1,3 +1,10 @@
+## v0.8.10:
+
+### Bug
+
+- [COOK-3031]: `ruby_block` to create logical volume is improperly
+  named, causing collisions
+
 ## v0.8.8:
 
 * [COOK-2283] - lvm version mismatch on fresh amazon linux install
