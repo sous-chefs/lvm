@@ -9,6 +9,15 @@ Requirements
 * Debian/Ubuntu
 * RHEL/CentOS
 
+Attributes
+==========
+
+* `vendor_gems`
+  By default, this recipe uses rubygems.org to install the di-ruby-lvm gem. If you prefer to
+  bake this gem and its dependencies into your OS image or otherwise install it w/out accessing 
+  rubygems.org, set this attribute to true.
+
+
 Resources/Providers
 ===================
 

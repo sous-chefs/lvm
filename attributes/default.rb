@@ -1,6 +1,5 @@
 #
 # Cookbook Name:: lvm
-# Recipe:: default
 #
 # Copyright 2009-2013, Opscode, Inc.
 #
@@ -17,6 +16,5 @@
 # limitations under the License.
 #
 
-package "lvm2"
 
-chef_gem 'di-ruby-lvm' unless node[:lvm][:vendor_gems]
+default[:lvm][:vendor_gems] = false
