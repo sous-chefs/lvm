@@ -30,6 +30,7 @@ attribute :mount_point, :kind_of => [ Hash, String], :callbacks => {
         value.class == String || ( value[:location] && !value[:location].empty? )
     end,
     ': location must be an absolute path!' => Proc.new do |value| 
+        # this can be a string or a hash, so attempt to match either for the regex
         matches = value =~ %r{^/[^\0]*} || value[:location] =~ %r{^/[^\0]*}
         !matches.nil?
     end 
