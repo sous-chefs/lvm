@@ -15,6 +15,7 @@ action :create do
   device_name = "/dev/mapper/#{to_dm_name(new_resource.group)}-#{to_dm_name(new_resource.name)}"
   fs_type = new_resource.filesystem
 
+  # ~FC014
   ruby_block "create_logical_volume_#{new_resource.group}_#{new_resource.name}" do
     block do
       lvm = LVM::LVM.new
