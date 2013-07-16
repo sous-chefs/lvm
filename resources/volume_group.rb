@@ -1,4 +1,4 @@
-include Chef::Mixin::RecipeDefinitionDSLCore
+include Chef::DSL::Recipe
 
 actions :create
 default_action :create
