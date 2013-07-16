@@ -1,0 +1,3 @@
+rspec: (cd $COOKBOOK && bundle exec rspec --color --format progress)
+foodcritic: bundle exec foodcritic -f any $SANDBOX/$COOKBOOK
+kitchen: (cd $COOKBOOK && bundle exec kitchen test)
