@@ -1,152 +1,290 @@
-Description
-===========
+LVM Cookbook and LWRP
+=====================
+Installs lvm2 package and includes resources for managing LVM. The default recipe simply installs LVM and the supporting Ruby gem. The cookbok includes and LWRP for managing LVMs.
 
-Installs lvm2 package and includes resources for managing LVM.
 
 Requirements
-============
+------------
+- Chef 10 or higher
 
-* Debian/Ubuntu
-* RHEL/CentOS
-* Suse Enterprise Linux (SLES)
 
-Resources/Providers
-===================
-
-There are three LWRPs in the LVM cookbook that can be used to perform operations
-with the Logical Volume Manager.
-
-`lvm_physical_volume`
----------------------
-
+LWRPs
+-----
+#### `lvm_physical_volume`
 Manages LVM physical volumes.
 
-### Actions
+##### Actions
+<table>
+  <tr>
+    <th>Action</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>:create</td>
+    <td>(default) Creates a new physical volume</td>
+  </tr>
+</table>
 
-- `:create` - Creates a new physical volume. Default.
+##### Parameters
+<table>
+  <tr>
+    <th>Parameter</th>
+    <th>Description</th>
+    <th>Example</th>
+    <th>Default</th>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>(required) device to create the new physical volume on</td>
+    <td><tt>'bacon'</tt></td>
+    <td></td>
+  </tr>
+</table>
 
-### Attribute Parameters
+##### Examples
+```ruby
+lvm_physical_volume '/dev/sda'
+```
 
-- `name`
-  The device to create the new physical volume on. Required, name parameter.
+---
 
-### Example
 
-    lvm_physical_volume '/dev/sda'
+#### `lvm_logical_volume`
+Manages LVM logical volumes.
 
-`lvm_logical_volume`
---------------------
+##### Actions
+<table>
+  <tr>
+    <th>Action</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>:create</td>
+    <td>(default) CCreates a new logical volume</td>
+  </tr>
+</table>
 
-Manages LVM logical volumes
+##### Parameters
+<table>
+  <tr>
+    <th>Attribute</th>
+    <th>Description</th>
+    <th>Example</th>
+    <th>Default</th>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>(name attribute) name of the logical volume</td>
+    <td><tt>bacon</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>group</td>
+    <td>(required) volume group in which to create the new volume (required unless the volume is declared inside of an `lvm_volume_group` block)</td>
+    <td><tt>bits</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>size</td>
+    <td>(required) size of the volume</td>
+    <td><tt>10G</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>filesystem</td>
+    <td>format for the file system</td>
+    <td><tt>'ntfs'</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>mount_point</td>
+    <td>
+      either a string containing the path to the mount point, or Hash containing the following keys:
+      <ul>
+        <li>`location` - (required) the directory to mount the volume on</li>
+        <li>`options` - the mount options for the volume</li>
+        <li>`dump` - the `dump` field for the fstab entry</li>
+        <li>`pass` - the `pass` field for the fstab entry</li>
+      </ul>
+    </td>
+    <td><tt>'/var/my/mount'</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>physical_volumes</td>
+    <td>array of physical volumes that the volume will be
+  restricted to</td>
+    <td><tt>['/u01']</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>stripes</td>
+    <td>number of stripes for the volume</td>
+    <td><tt>5</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>stripe_size</td>
+    <td>number of kilobytes per stripe segment (must be a power of 2 less than or equal to the physical extent size for the volume group)</td>
+    <td><tt>24</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>mirrors</td>
+    <td>number of mirrors for the volume</td>
+    <td><tt>5</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>contiguous</td>
+    <td>whether or not volume should use the contiguous allocation
+  policy</td>
+    <td><tt>true</tt></td>
+    <td><tt>false</tt></td>
+  </tr>
+  <tr>
+    <td>readahead</td>
+    <td>readahead sector count for the volume (can be a value
+  between 2 and 120, 'auto', or 'none')</td>
+    <td><tt>'auto'</tt></td>
+    <td></td>
+  </tr>
+</table>
 
-### Actions
+##### Examples
 
-- `:create` - Creates a new logical volume
+```ruby
+lvm_logical_volume 'home' do
+  group 'vg00'
+  size '25%VG'
+  filesystem 'ext4'
+  mount_point '/home'
+  stripes 3
+  mirrors 2
+end
+```
 
-### Attribute Parameters
+---
 
-- `name` - The name of the logical volume. Required, name parameter.
-- `group` - The volume group in which to create the new volume. Required unless
-  the volume is declared inside of an `lvm_volume_group` block (<a
-  href='#volume_group'>see below</a>).
-- `size` - The size of the volume. This can be any of the size specifications
-  supported by LVM&mdash;SI bytes (e.g. 10G), physical extents, or percentages
-  of all the extents in the volume group, all the free extents, or of the
-  physical volumes assigned to the volume.
-- `filesystem` - The filesystem to format the volume as. The appropriate tools
-  must be installed for the filesystem.
-- `mount_point` - Either a string containing the path to the mount point, or a
-  Hash containing the following keys:
-  - `location` - the directory to mount the volume on. Required.
-  - `options` - the mount options for the volume.
-  - `dump` - the `dump` field for the fstab entry.
-  - `pass` - the `pass` field for the fstab entry.
-- `physical_volumes` - An array of physical volumes that the volume will be
-  restricted to.
-- `stripes` - the number of stripes for the volume.
-- `stripe_size` - the number of kilobytes per stripe segment. Must be a power of
-  2 less than or equal to the physical extent size for the volume group.
-- `mirrors` - the number of mirrors for the volume.
-- `contiguous` - whether or not volume should use the contiguous allocation
-  policy. Default is non-contiguous.
-- `readahead` - the readahead sector count for the volume. Can be a value
-  between 2 and 120, 'auto', or 'none'
 
-### Example
-
-    lvm_logical_volume 'home' do
-        group 'vg00'
-        size '25%VG'
-        filesystem 'ext4'
-        mount_point '/home'
-        stripes 3
-        mirrors 2
-    end
-
-<a name='volume_group' />
-`lvm_volume_group`
-------------------
-
+#### `lvm_volume_group`
 Manages LVM volume groups.
 
-### Actions
+##### Actions
+<table>
+  <tr>
+    <th>Action</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>:create</td>
+    <td>(default) Creates a new volume group</td>
+  </tr>
+</table>
 
-- `:create` - Creates a new volume group. Default.
+##### Parameters
+<table>
+  <tr>
+    <th>Attribute</th>
+    <th>Description</th>
+    <th>Example</th>
+    <th>Default</th>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>(required) name of the volume group</td>
+    <td><tt>'bacon'</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>physical_volumes</td>
+    <td>(required) device or list of devices to use as physical volumes (if theyhaven't already been initialized as physical volumes, they will be initialized automatically)</td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>physical_extent_size</td>
+    <td>physical extent size for the volume group</td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>logical_volume</td>
+    <td>shortcut for creating a new `lvm_logical_volume` definition (the logical volumes will be created in the order they are declared)</td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
 
-### Attribute Parameters
+##### Examples
+```ruby
+lvm_volume_group 'vg00' do
+  physical_volumes [g'/dev/sda', '/dev/sdb', '/dev/sdc']
 
-- `name` - The name of the volume group. Required, name parameter.
-- `physical_volumes` - A device or list of devices to use as physical volumes. If they
-  haven't already been initialized as physical volumes, they will be
-  initialized automatically. Required.
-- `physical_extent_size` - The physical extent size for the volume group.
-- `logical_volume` - A shortcut for creating a new `lvm_logical_volume`
-  definition. The logical volumes will be created in the order they are
-  declared.
+  logical_volume 'logs' do
+    size '1G'
+    filesystem 'xfs'
+    mount_point :location => '/var/log', :options => 'noatime,nodiratime'
+    stripes 3
+  end
 
-### Example
+  logical_volume 'home' do
+    size '25%VG'
+    filesystem 'ext4'
+    mount_point '/home'
+    stripes 3
+    mirrors 2
+  end
+end
+```
 
-    lvm_volume_group 'vg00' do
-        physical_volumes [ /dev/sda, /dev/sdb, /dev/sdc ]
-        logical_volume 'logs' do
-            size '1G'
-            filesystem 'xfs'
-            mount_point :location => '/var/log', :options => 'noatime,nodiratime'
-            stripes 3
-        end
-        logical_volume 'home' do
-            size '25%VG'
-            filesystem 'ext4'
-            mount_point '/home'
-            stripes 3
-            mirrors 2
-        end
-    end
 
 Usage
-=====
+-----
+If you're using [Berkshelf](http://berkshelf.com), just add this cookbook to your `Berksfile`:
 
-Make sure the lvm package is always up to date with this recipe. Put
-it in a base role that gets applied to all nodes.
+```ruby
+cookbook 'lvm'
+```
 
-Note that this cookbook depends on the
-[di-ruby-lvm](https://github.com/DrillingInfo/di-ruby-lvm) and
-[di-ruby-lvm-attrib](https://github.com/DrillingInfo/di-ruby-lvm-attrib) gems.
-The di-ruby-lvm-attrib gem in particular is a common cause of failures when
-using the providers. If you get a failure with an error message similar to 
+You can also install it from the community site:
 
-``` No such file or directory - /opt/chef/.../di-ruby-lvm-attrib-0.0.3/lib/lvm/attributes/2.02.86(2)/lvs.yaml```
+```ruby
+knife cookbook site install lvm
+```
 
-then you are running a version of lvm that the gems do not support. However,
-getting support added is usually pretty easy. Just follow the instructions on
-"Adding Attributes" in the [di-ruby-lvm-attrib README](https://github.com/DrillingInfo/di-ruby-lvm-attrib).
+Include the default recipe in your run list on a node, in a role, or in another recipe:
 
-License and Author
-==================
+```ruby
+run_list(
+  'recipe[lvm::default]'
+)
+```
 
-Author:: Joshua Timberman <joshua@opscode.com>
+Depend on `lvm` in any cookbook that uses its LWRP:
 
-Author:: Greg Symons <gsymons@drillinginfo.com>
+```ruby
+# other_cookbook/metadata.rb
+depends 'lvm'
+```
+
+
+Caveats
+-------
+This cookbook depends on the [di-ruby-lvm](https://github.com/DrillingInfo/di-ruby-lvm) and [di-ruby-lvm-attrib](https://github.com/DrillingInfo/di-ruby-lvm-attrib) gems. The di-ruby-lvm-attrib gem in particular is a common cause of failures when using the providers. If you get a failure with an error message similar to
+
+```text
+No such file or directory - /opt/chef/.../di-ruby-lvm-attrib-0.0.3/lib/lvm/attributes/2.02.86(2)/lvs.yaml
+```
+
+then you are running a version of lvm that the gems do not support. However, getting support added is usually pretty easy. Just follow the instructions on "Adding Attributes" in the [di-ruby-lvm-attrib README](https://github.com/DrillingInfo/di-ruby-lvm-attrib).
+
+
+License and Authors
+-------------------
+- Author:: Joshua Timberman <joshua@opscode.com>
+- Author:: Greg Symons <gsymons@drillinginfo.com>
+
 
 Copyright:: 2011, Opscode, Inc
 
