@@ -4,14 +4,12 @@ def initializ(*args)
 end
 
 action :create do
-  Array(new_resource.physical_volumes).each do |pv|
-    #make sure any pvs are not being used as filesystems (e.g. ephemeral0 on
-    #AWS is always mounted at /mnt as an ext3 fs).
-    if ::File.exist?(pv)
-      mount pv do
-        device pv
-        action [ :umount, :disable ]
-      end
+  Array(new_resource.physical_volumes).select { |pv| ::File.exist?(pv) }.each do |pv|
+    # Make sure any pvs are not being used as filesystems (e.g. ephemeral0 on
+    # AWS is always mounted at /mnt as an ext3 fs).
+    mount pv do
+      device pv
+      action [ :umount, :disable ]
     end
   end
 
