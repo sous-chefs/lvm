@@ -16,6 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-package "lvm2"
 
+package 'lvm2'
 chef_gem 'di-ruby-lvm'
