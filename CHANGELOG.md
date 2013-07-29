@@ -1,3 +1,6 @@
+* [COOK-3412] - add new optional argument to logical_volume to
+  specify filesystem specific options.
+
 ## v0.8.10:
 
 ### Bug
