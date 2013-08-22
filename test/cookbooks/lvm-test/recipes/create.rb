@@ -2,7 +2,7 @@
 # Cookbook Name:: lvm-test
 # Recipe:: create
 #
-# Copyright (C) 2013 RightScale, Inc.
+# Copyright (C) 2013 Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,7 +24,8 @@ device = '/dev/loop0'
 LvmTest::Helper.create_loop_devices(device)
 
 # Creates the physical device
-#
+
+log "Creating physical volume for test"
 lvm_physical_volume device
 
 # Creates the volume group

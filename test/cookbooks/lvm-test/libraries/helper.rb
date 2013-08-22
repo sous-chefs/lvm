@@ -2,7 +2,7 @@
 # Cookbook Name:: simple_lvm-test
 # Library:: helper
 #
-# Copyright (C) 2013 RightScale, Inc.
+# Copyright (C) 2013 Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

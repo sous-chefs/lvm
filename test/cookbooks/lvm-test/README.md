@@ -10,4 +10,4 @@
 
 # Author
 
-Author:: RightScale, Inc. (<cookbooks@rightscale.com>)
+Author:: Opscode, Inc. (<cookbooks@opscode.com>)
