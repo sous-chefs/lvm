@@ -1,4 +1,4 @@
-def initializ(*args)
+def initialize(*args)
   super
   require 'lvm'
 end
@@ -33,9 +33,10 @@ action :create do
 
   ruby_block "create_volume_group_#{new_resource.name}" do
     block do
-      lvm = LVM::LVM.new
+      lvm = ::LVM::LVM.new
 
       name = new_resource.name
+      physical_volume_list = [new_resource.physical_volumes].flatten
       physical_volumes = physical_volume_list.join ' '
       physical_extent_size = new_resource.physical_extent_size ? "-s #{new_resource.physical_extent_size}" : ''
       command = "vgcreate #{name} #{physical_extent_size} #{physical_volumes}"
