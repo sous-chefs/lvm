@@ -29,10 +29,10 @@ class Chef
 
       def action_create
         require 'lvm'
-        @lvm = LVM::LVM.new
-        if @lvm.physical_volumes[new_resource.name].nil?
+        lvm = LVM::LVM.new
+        if lvm.physical_volumes[new_resource.name].nil?
           Chef::Log.info "Creating physical volume '#{new_resource.name}'"
-          @lvm.raw "pvcreate #{new_resource.name}"
+          lvm.raw "pvcreate #{new_resource.name}"
           new_resource.updated_by_last_action(true)
         else
           Chef::Log.info "Physical volume '#{new_resource.name}' found. Not creating..."

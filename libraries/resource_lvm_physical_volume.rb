@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: lvm
-# Recipe:: default
+# Library:: resource_lvm_physical_volume
 #
 # Copyright 2009-2013, Opscode, Inc.
 #
