@@ -39,6 +39,6 @@ end
 lvm_logical_volume 'test' do
   group 'vg-data'
   size '90%VG'
-  filesystem 'ext4'
+  filesystem 'ext3'
   mount_point '/mnt/test'
 end

@@ -25,7 +25,7 @@ module LvmTest
     #
     #
     def self.create_loop_devices(devices)
-      cmd = Mixlib::ShellOut.new("losetup --find")
+      cmd = Mixlib::ShellOut.new("losetup -f")
       cmd.run_command.error!
       Array(devices).each do |device|
         num = device.slice(/\d+/)
@@ -45,7 +45,7 @@ module LvmTest
       Array(devices).each do |device|
         Chef::Log.info "Removing loop device: #{device}"
         num = device.slice(/\d+/)
-        Mixlib::ShellOut.new("losetup --detach #{device}").run_command.error!
+        Mixlib::ShellOut.new("losetup -d #{device}").run_command.error!
         FileUtils.rm_rf("/vfile#{num}")
       end
     end
