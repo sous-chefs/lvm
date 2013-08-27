@@ -1,3 +1,4 @@
-rspec: (cd $COOKBOOK && bundle exec rspec --color --format progress)
-foodcritic: bundle exec foodcritic -f any $SANDBOX/$COOKBOOK --tags ~FC014
-kitchen: (cd $COOKBOOK && bundle exec kitchen test)
+knife: bundle exec knife cookbook test $COOKBOOK
+foodcritic: bundle exec foodcritic -f any $SANDBOX/$COOKBOOK
+chefrspec: bundle exec rspec --color --format documentation
+kitchen: bundle exec kitchen test
