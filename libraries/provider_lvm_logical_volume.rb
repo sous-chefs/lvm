@@ -36,7 +36,7 @@ class Chef
 
         vg = lvm.volume_groups[new_resource.group]
         # Create the logical volume
-        if vg.nil? || vg.logical_volumes { |lv| lv.name == name }.empty?
+        if vg.nil? || vg.logical_volumes.select { |lv| lv.name == name }.empty?
           device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
           size =
             case new_resource.size

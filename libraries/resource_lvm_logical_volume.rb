@@ -79,7 +79,7 @@ class Chef
         set_or_return(
           :mount_point,
           arg,
-          :kind_of => String,
+          :kind_of => [String, Hash],
           :callbacks => {
             ': location is required!' => Proc.new do |value|
               value.class == String || (value[:location] && !value[:location].empty?)
@@ -106,7 +106,7 @@ class Chef
         set_or_return(
           :stripes,
           arg,
-          :kind_of => String,
+          :kind_of => Integer,
           :callbacks => {
             'must be greater than 0' => Proc.new { |value| value > 0 }
           }
