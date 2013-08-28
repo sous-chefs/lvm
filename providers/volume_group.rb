@@ -23,9 +23,9 @@ action :create do
         end
         action :nothing
     end
-    
+
     ruby_block "create_logical_volumes_for_group_#{new_resource.name}" do
-        block do 
+        block do
             new_resource.logical_volumes.each do |lv|
                 lv.group new_resource.name
                 lv.run_action :create
@@ -43,15 +43,15 @@ action :create do
             physical_volumes = physical_volume_list.join ' '
             physical_extent_size = new_resource.physical_extent_size ? "-s #{new_resource.physical_extent_size}" : ''
             command = "vgcreate #{name} #{physical_extent_size} #{physical_volumes}"
-            
+
             Chef::Log.debug "Executing lvm command '#{command}'"
             output = lvm.raw command
             Chef::Log.debug "Command output: '#{output}'"
             new_resource.updated_by_last_action true
         end
-        not_if do 
+        not_if do
             lvm = LVM::LVM.new
-            lvm.volume_groups[new_resource.name] 
+            lvm.volume_groups[new_resource.name]
         end
         notifies :create, "ruby_block[create_logical_volumes_for_group_#{new_resource.name}]", :immediately
     end
