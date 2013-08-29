@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: lvm
-# Recipe:: default
+# Library:: provider_lvm_physical_volume
 #
 # Copyright 2009-2013, Opscode, Inc.
 #
@@ -21,12 +21,20 @@ require 'chef/provider'
 
 class Chef
   class Provider
+    # The provider for lvm_physical_volume resource
+    #
     class LvmPhysicalVolume < Chef::Provider
+      # Loads the current resource attributes
+      #
+      # @return [Chef::Resource::LvmPhysicalVolume] the lvm_physical_volume resource
+      #
       def load_current_resource
         @current_resource ||= Chef::Resource::LvmPhysicalVolume.new(@new_resource.name)
         @current_resource
       end
 
+      # The create action
+      #
       def action_create
         require 'lvm'
         lvm = LVM::LVM.new

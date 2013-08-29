@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: lvm
-# Library:: provider_lvm_volume_group
+# Library:: provider_lvm_logical_volume
 #
 # Copyright 2009-2013, Opscode, Inc.
 #
@@ -17,17 +17,28 @@
 # limitations under the License.
 #
 
+require 'chef/mixin/shell_out'
+
 class Chef
   class Provider
+    # The provider for lvm_logical_volume resource
+    #
     class LvmLogicalVolume < Chef::Provider
+      include Chef::Mixin::ShellOut
+
+      # Loads the current resource attributes
+      #
+      # @return [Chef::Resource::LvmLogicalVolume] the lvm_logical_volume resource
+      #
       def load_current_resource
         @current_resource ||= Chef::Resource::LvmLogicalVolume.new(@new_resource.name)
         @current_resource
       end
 
+      # The create action
+      #
       def action_create
         require 'lvm'
-        require 'mixlib/shellout'
         lvm = LVM::LVM.new
         name = new_resource.name
         group = new_resource.group
@@ -47,6 +58,7 @@ class Chef
             when /(\d+)/
               "--size #{$1}"
             end
+
           stripes = new_resource.stripes ? "--stripes #{new_resource.stripes}" : ''
           stripe_size = new_resource.stripe_size ? "--stripesize #{new_resource.stripe_size}" : ''
           mirrors = new_resource.mirrors ? "--mirrors #{new_resource.mirrors}" : ''
@@ -58,7 +70,7 @@ class Chef
           Chef::Log.debug "Executing lvm command: '#{command}'"
           output = lvm.raw(command)
           Chef::Log.debug "Command output: '#{output}'"
-          new_resource.updated_by_last_action true
+          new_resource.updated_by_last_action(true)
         else
           Chef::Log.info "Logical volume '#{name}' already exists. Not creating..."
         end
@@ -66,15 +78,11 @@ class Chef
         # If file system is specified, format the logical volume
         if fs_type.nil?
           Chef::Log.info "File system type is not set. Not formatting..."
-        elsif device_formatted?(device_name)
+        elsif device_formatted?(device_name, fs_type)
           Chef::Log.info "Volume '#{device_name}' is already formatted. Not formatting..."
         else
-          mkfs = ::Mixlib::ShellOut.new("yes | mkfs -t #{fs_type} #{device_name}")
-          mkfs.run_command.error!
-
-          Chef::Log.debug "mkfs.exitstatus: #{mkfs.exitstatus}"
-          Chef::Log.debug "mkfs.stdout: #{mkfs.stdout.inspect}"
-          Chef::Log.debug "mkfs.stderr: #{mkfs.stderr.inspect}"
+          shell_out!("yes | mkfs --type #{fs_type} #{device_name}")
+          new_resource.updated_by_last_action(true)
         end
 
         # If the mount point is specified, mount the logical volume
@@ -86,42 +94,62 @@ class Chef
           end
 
           # Create the mount point
-          directory mount_spec[:location] do
+          dir_resource = directory mount_spec[:location] do
             mode 0777
             owner 'root'
             group 'root'
             recursive true
+            action :nothing
           end
+          dir_resource.run_action(:create)
+          # Mark the resource as updated if the directory resource is updated
+          new_resource.updated_by_last_action(dir_resource.updated?)
 
           # Mount the logical volume
-          mount mount_spec[:location] do
+          mount_resource = mount mount_spec[:location] do
             options mount_spec[:options]
             dump mount_spec[:dump]
             pass mount_spec[:pass]
             device device_name
             fstype fs_type
-            action [:mount, :enable]
+            action :nothing
           end
+          mount_resource.run_action(:mount)
+          mount_resource.run_action(:enable)
+          # Mark the resource as updated if the mount resource is updated
+          new_resource.updated_by_last_action(mount_resource.updated?)
         end
       end
 
     private
 
+      # Converts the device name to the dm name format
+      #
+      # The device mapper will double any hyphens found in a volume group or
+      # logical volume name so that it can properly locate the separator between
+      # the volume group and the logical volume in the device name.
+      #
+      # @param name [String] the name to map
+      #
+      # @return [String] the mapped dm name
+      #
       def to_dm_name(name)
-        # The device mapper will double any hyphens found in a volume group or
-        # logical volume name so that it can properly locate the separator between
-        # the volume group and the logical volume in the device name.
         name.gsub(/-/, '--')
       end
 
-      def device_formatted?(device_name)
-        require 'mixlib/shellout'
+      # Checks if the device is formatted with the given file system type
+      #
+      # @param device_name [String] the device name
+      # @param fs_type [String] the file system type
+      #
+      # @return [Boolean] whether the device is formatted with the given file
+      #   system type or not
+      #
+      def device_formatted?(device_name, fs_type)
         Chef::Log.debug "Checking to see if #{device_name} is formatted..."
-        blkid = ::Mixlib::ShellOut.new "blkid -o value -s TYPE #{device_name}"
-
-        Chef::Log.debug "Result of check: #{blkid}"
-        Chef::Log.debug "blkid.exitstatus: #{blkid.exitstatus}"
-        Chef::Log.debug "blkid.stdout: #{blkid.stdout.inspect}"
+        # Do not raise when there is an error in running the blkid command. If the exitstatus is not 0,
+        # the device is perhaps not formatted.
+        blkid = shell_out("blkid -o value -s TYPE #{device_name}")
         blkid.exitstatus == 0 && blkid.stdout.strip == fs_type.strip
       end
     end

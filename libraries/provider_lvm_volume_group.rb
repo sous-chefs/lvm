@@ -19,13 +19,21 @@
 
 class Chef
   class Provider
+    # The provider for lvm_volume_group resource
+    #
     class LvmVolumeGroup < Chef::Provider
 
+      # Loads the current resource attributes
+      #
+      # @return [Chef::Resource::LvmVolumeGroup] the lvm_volume_group resource
+      #
       def load_current_resource
         @current_resource ||= Chef::Resource::LvmVolumeGroup.new(@new_resource.name)
         @current_resource
       end
 
+      # The create action
+      #
       def action_create
         require 'lvm'
         name = new_resource.name
@@ -41,6 +49,7 @@ class Chef
         end
 
         lvm = LVM::LVM.new
+        # Create the volume group
         if lvm.volume_groups[name]
           Chef::Log.info "Volume group '#{name}' already exists. Not creating..."
         else
@@ -56,7 +65,6 @@ class Chef
             lv.group new_resource.name
             lv.run_action :create
           end
-
           new_resource.updated_by_last_action(true)
         end
       end
