@@ -1,6 +1,6 @@
-LVM Cookbook and LWRP
-=====================
-Installs lvm2 package and includes resources for managing LVM. The default recipe simply installs LVM and the supporting Ruby gem. The cookbok includes and LWRP for managing LVMs.
+LVM Cookbook and Providers
+==========================
+Installs lvm2 package and includes resources for managing LVM. The default recipe simply installs LVM and the supporting Ruby gem. The cookbok includes providers for managing LVMs.
 
 
 Requirements
@@ -8,8 +8,8 @@ Requirements
 - Chef 10 or higher
 
 
-LWRPs
------
+Resources/Providers
+-------------------
 #### `lvm_physical_volume`
 Manages LVM physical volumes.
 
@@ -35,8 +35,8 @@ Manages LVM physical volumes.
   </tr>
   <tr>
     <td>name</td>
-    <td>(required) device to create the new physical volume on</td>
-    <td><tt>'bacon'</tt></td>
+    <td>(required) The device to create the new physical volume on</td>
+    <td><tt>'/dev/sda'</tt></td>
     <td></td>
   </tr>
 </table>
@@ -60,7 +60,7 @@ Manages LVM logical volumes.
   </tr>
   <tr>
     <td>:create</td>
-    <td>(default) CCreates a new logical volume</td>
+    <td>(default) Creates a new logical volume</td>
   </tr>
 </table>
 
@@ -74,37 +74,47 @@ Manages LVM logical volumes.
   </tr>
   <tr>
     <td>name</td>
-    <td>(name attribute) name of the logical volume</td>
+    <td>(name attribute) Name of the logical volume</td>
     <td><tt>bacon</tt></td>
     <td></td>
   </tr>
   <tr>
     <td>group</td>
-    <td>(required) volume group in which to create the new volume (required unless the volume is declared inside of an `lvm_volume_group` block)</td>
+    <td>(required) Volume group in which to create the new volume (not required if the volume is declared inside of an `lvm_volume_group` block)</td>
     <td><tt>bits</tt></td>
     <td></td>
   </tr>
   <tr>
     <td>size</td>
-    <td>(required) size of the volume</td>
-    <td><tt>10G</tt></td>
+    <td>(required) Size of the volume.
+      <ul>
+        <li>It can be the size of the volume with units (k, K, m, M, g, G, t, T)</li>
+        <li>It can be the specified as the percentage of the size of the volume group</li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li><tt>10G</tt></li>
+        <li><tt>25%VG</tt></li>
+      </ul>
+    </td>
     <td></td>
   </tr>
   <tr>
     <td>filesystem</td>
-    <td>format for the file system</td>
-    <td><tt>'ntfs'</tt></td>
+    <td>The format for the file system</td>
+    <td><tt>'ext4'</tt></td>
     <td></td>
   </tr>
   <tr>
     <td>mount_point</td>
     <td>
-      either a string containing the path to the mount point, or Hash containing the following keys:
+      Either a String containing the path to the mount point, or a Hash with the following keys:
       <ul>
-        <li>`location` - (required) the directory to mount the volume on</li>
-        <li>`options` - the mount options for the volume</li>
-        <li>`dump` - the `dump` field for the fstab entry</li>
-        <li>`pass` - the `pass` field for the fstab entry</li>
+        <li><tt>location<tt> - (required) the directory to mount the volume on</li>
+        <li><tt>options</tt> - the mount options for the volume</li>
+        <li><tt>dump</tt> - the <tt>dump</tt> field for the fstab entry</li>
+        <li><tt>pass</tt> - the <tt>pass</tt> field for the fstab entry</li>
       </ul>
     </td>
     <td><tt>'/var/my/mount'</tt></td>
@@ -112,39 +122,39 @@ Manages LVM logical volumes.
   </tr>
   <tr>
     <td>physical_volumes</td>
-    <td>array of physical volumes that the volume will be
+    <td>Array of physical volumes that the volume will be
   restricted to</td>
-    <td><tt>['/u01']</tt></td>
+    <td><tt>['/dev/sda', '/dev/sdb']</tt></td>
     <td></td>
   </tr>
   <tr>
     <td>stripes</td>
-    <td>number of stripes for the volume</td>
+    <td>Number of stripes for the volume</td>
     <td><tt>5</tt></td>
     <td></td>
   </tr>
   <tr>
     <td>stripe_size</td>
-    <td>number of kilobytes per stripe segment (must be a power of 2 less than or equal to the physical extent size for the volume group)</td>
+    <td>Number of kilobytes per stripe segment (must be a power of 2 less than or equal to the physical extent size for the volume group)</td>
     <td><tt>24</tt></td>
     <td></td>
   </tr>
   <tr>
     <td>mirrors</td>
-    <td>number of mirrors for the volume</td>
+    <td>Number of mirrors for the volume</td>
     <td><tt>5</tt></td>
     <td></td>
   </tr>
   <tr>
     <td>contiguous</td>
-    <td>whether or not volume should use the contiguous allocation
+    <td>Whether or not volume should use the contiguous allocation
   policy</td>
     <td><tt>true</tt></td>
     <td><tt>false</tt></td>
   </tr>
   <tr>
     <td>readahead</td>
-    <td>readahead sector count for the volume (can be a value
+    <td>The readahead sector count for the volume (can be a value
   between 2 and 120, 'auto', or 'none')</td>
     <td><tt>'auto'</tt></td>
     <td></td>
@@ -192,25 +202,25 @@ Manages LVM volume groups.
   </tr>
   <tr>
     <td>name</td>
-    <td>(required) name of the volume group</td>
+    <td>(required) Name of the volume group</td>
     <td><tt>'bacon'</tt></td>
     <td></td>
   </tr>
   <tr>
     <td>physical_volumes</td>
-    <td>(required) device or list of devices to use as physical volumes (if theyhaven't already been initialized as physical volumes, they will be initialized automatically)</td>
-    <td></td>
+    <td>(required) The device or list of devices to use as physical volumes (if they haven't already been initialized as physical volumes, they will be initialized automatically)</td>
+    <td><tt>['/dev/sda', '/dev/sdb']</tt></td>
     <td></td>
   </tr>
   <tr>
     <td>physical_extent_size</td>
-    <td>physical extent size for the volume group</td>
+    <td>The physical extent size for the volume group</td>
     <td></td>
     <td></td>
   </tr>
   <tr>
     <td>logical_volume</td>
-    <td>shortcut for creating a new `lvm_logical_volume` definition (the logical volumes will be created in the order they are declared)</td>
+    <td>Shortcut for creating a new `lvm_logical_volume` definition (the logical volumes will be created in the order they are declared)</td>
     <td></td>
     <td></td>
   </tr>
@@ -219,7 +229,7 @@ Manages LVM volume groups.
 ##### Examples
 ```ruby
 lvm_volume_group 'vg00' do
-  physical_volumes [g'/dev/sda', '/dev/sdb', '/dev/sdc']
+  physical_volumes ['/dev/sda', '/dev/sdb', '/dev/sdc']
 
   logical_volume 'logs' do
     size '1G'
@@ -261,7 +271,7 @@ run_list(
 )
 ```
 
-Depend on `lvm` in any cookbook that uses its LWRP:
+Depend on `lvm` in any cookbook that uses its Resources/Providers:
 
 ```ruby
 # other_cookbook/metadata.rb
