@@ -81,7 +81,7 @@ class Chef
         elsif device_formatted?(device_name, fs_type)
           Chef::Log.info "Volume '#{device_name}' is already formatted. Not formatting..."
         else
-          shell_out!("yes | mkfs --type #{fs_type} #{device_name}")
+          shell_out!("yes | mkfs -t #{fs_type} #{device_name}")
           new_resource.updated_by_last_action(true)
         end
 
