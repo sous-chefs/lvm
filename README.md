@@ -89,7 +89,7 @@ Manages LVM logical volumes.
     <td>(required) Size of the volume.
       <ul>
         <li>It can be the size of the volume with units (k, K, m, M, g, G, t, T)</li>
-        <li>It can be the specified as the percentage of the size of the volume group</li>
+        <li>It can be specified as the percentage of the size of the volume group</li>
       </ul>
     </td>
     <td>
