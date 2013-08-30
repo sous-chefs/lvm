@@ -27,6 +27,6 @@ platforms:
       box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_centos-5.9_provisionerless.box
 
 suites:
-  - name: default
-    run_list: ["recipe[lvm]"]
+  - name: create
+    run_list: ["recipe[lvm]", "recipe[lvm-test::create]"]
     attributes: {}
