@@ -21,11 +21,21 @@ require 'chef/resource'
 
 class Chef
   class Resource
+    # The lvm_volume_group resource
+    #
     class LvmVolumeGroup < Chef::Resource
       include Chef::DSL::Recipe
 
+      # Logical volumes to be created in the volume group
       attr_reader :logical_volumes
 
+      # Initializes the lvm_volume_group resource
+      #
+      # @param name [String] name of the resource
+      # @param run_context [Chef::RunContext] the run context of chef run
+      #
+      # @return [Chef::Resource::LvmVolumeGroup] the lvm_volume_group resource
+      #
       def initialize(name, run_context = nil)
         super
         @resource_name = :lvm_volume_group
@@ -35,6 +45,12 @@ class Chef
         @provider = Chef::Provider::LvmVolumeGroup
       end
 
+      # Attribute: name - name of the volume group
+      #
+      # @param arg [String] the name of the volume group
+      #
+      # @return [String] the name of the volume group
+      #
       def name(arg = nil)
         set_or_return(
           :name,
@@ -51,6 +67,12 @@ class Chef
         )
       end
 
+      # Attribute: physical_volumes - list of physical devices this volume group should be restricted to
+      #
+      # @param arg [Array, String] list of physical devices
+      #
+      # @return [String] list of physical devices
+      #
       def physical_volumes(arg = nil)
         set_or_return(
           :physical_volumes,
@@ -60,6 +82,12 @@ class Chef
         )
       end
 
+      # Attribute: physical_extent_size - the physical_extent_size
+      #
+      # @param arg [String] the physical extent size
+      #
+      # @return [String] the physical extent size
+      #
       def physical_extent_size(arg = nil)
         set_or_return(
           :physical_extent_size,
@@ -69,6 +97,13 @@ class Chef
         )
       end
 
+      # A shortcut for creating a logical volume when creating the volume group
+      #
+      # @param name [String] the name of the logical volume
+      # @param block [Proc] the block defining the lvm_logical_volume resource
+      #
+      # @return [Chef::Resource::LvmLogicalVolume] the lvm_logical_volume resource
+      #
       def logical_volume(name, &block)
         Chef::Log.debug "Creating logical volume #{name}"
         volume = lvm_logical_volume(name, &block)

@@ -21,7 +21,16 @@ require 'chef/resource'
 
 class Chef
   class Resource
+    # The lvm_physical_volume resource
+    #
     class LvmPhysicalVolume < Chef::Resource
+      # Initializes lvm_physical_volume resource
+      #
+      # @param name [String] name of the resource
+      # @param run_context [Chef::RunContext] the run context of chef run
+      #
+      # @return [Chef::Resource::LvmPhysicalVolume] the lvm_physical_volume resource
+      #
       def initialize(name, run_context = nil)
         super
         @resource_name = :lvm_physical_volume
@@ -30,6 +39,12 @@ class Chef
         @provider = Chef::Provider::LvmPhysicalVolume
       end
 
+      # Attribute: name - the physical device
+      #
+      # @param arg [String] the physical device
+      #
+      # @return [String] the physical device
+      #
       def name(arg = nil)
         set_or_return(
           :name,

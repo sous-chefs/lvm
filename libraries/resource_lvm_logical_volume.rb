@@ -21,7 +21,16 @@ require 'chef/resource'
 
 class Chef
   class Resource
+    # The lvm_logical_volume resource
+    #
     class LvmLogicalVolume < Chef::Resource
+      # Initializes the lvm_logical_volume resource
+      #
+      # @param name [String] name of the resource
+      # @param run_context [Chef::RunContext] the run context of chef run
+      #
+      # @return [Chef::Resource::LvmLogicalVolume] the lvm_logical_volume resource
+      #
       def initialize(name, run_context = nil)
         super
         @resource_name = :lvm_logical_volume
@@ -30,6 +39,12 @@ class Chef
         @provider = Chef::Provider::LvmLogicalVolume
       end
 
+      # Attribute: name - name of the logical volume
+      #
+      # @param arg [String] the name of the logical volume
+      #
+      # @return [String] the name of the logical volume
+      #
       def name(arg = nil)
         set_or_return(
           :name,
@@ -49,6 +64,12 @@ class Chef
         )
       end
 
+      # Attribute: group - the volume group the logical volume belongs to
+      #
+      # @param arg [String] the volume group name
+      #
+      # @return [String] the volume group name
+      #
       def group(arg = nil)
         set_or_return(
           :group,
@@ -57,6 +78,12 @@ class Chef
         )
       end
 
+      # Attribute: size - size of the logical volume
+      #
+      # @param arg [String] the size of the logical volume
+      #
+      # @return [String] the size of the logical volume
+      #
       def size(arg = nil)
         set_or_return(
           :size,
@@ -67,6 +94,12 @@ class Chef
         )
       end
 
+      # Attribute: filesystem - the file system type
+      #
+      # @param arg [String] the file system type
+      #
+      # @return [String] the file system type
+      #
       def filesystem(arg = nil)
         set_or_return(
           :filesystem,
@@ -75,6 +108,12 @@ class Chef
         )
       end
 
+      # Attribute: mount_point - mount point for the logical volume
+      #
+      # @param arg [String] the mount point
+      #
+      # @return [String] the mount point
+      #
       def mount_point(arg = nil)
         set_or_return(
           :mount_point,
@@ -94,6 +133,12 @@ class Chef
         )
       end
 
+      # Attribute: physical_volumes - list of physical volumes to be used for creation
+      #
+      # @param arg [String, Array] - list of physical devices
+      #
+      # @return [String, Array] - list of physical devices
+      #
       def physical_volumes(arg = nil)
         set_or_return(
           :physical_volumes,
@@ -102,6 +147,12 @@ class Chef
         )
       end
 
+      # Attribute: stripes - number of stripes for the volume
+      #
+      # @param arg [String] number of stripes
+      #
+      # @return [String] number of stripes
+      #
       def stripes(arg = nil)
         set_or_return(
           :stripes,
@@ -113,19 +164,29 @@ class Chef
         )
       end
 
+      # Attribute: stripe_size - the stripe size
+      #
+      # @param arg [String] the stripe size
+      #
+      # @return [String] the stripe size
+      #
       def stripe_size(arg = nil)
         set_or_return(
           :stripe_size,
           arg,
           :kind_of => Integer,
           :callbacks => {
-            'must be a power of 2' => Proc.new do |value|
-              return Math.log2(value) % 1 == 0
-            end
+            'must be a power of 2' => Proc.new { |value| Math.log2(value) % 1 == 0 }
           }
         )
       end
 
+      # Attribute: mirrors - number of mirrors for the volume
+      #
+      # @param arg [Integer] number of mirrors
+      #
+      # @return [Integer] number of mirrors
+      #
       def mirrors(arg = nil)
         set_or_return(
           :mirrors,
@@ -137,6 +198,12 @@ class Chef
         )
       end
 
+      # Attribute: contiguous - whether to use contiguous allocation policy
+      #
+      # @param arg [Boolean] whether to use contiguous allocation policy
+      #
+      # @return [Boolean] the contiguous allocation policy setting
+      #
       def contiguous(arg = nil)
         set_or_return(
           :contiguous,
@@ -145,6 +212,12 @@ class Chef
         )
       end
 
+      # Attribute: readahead - the read ahead sector count of the logical volume
+      #
+      # @param arg [Integer, String] the read ahead sector count
+      #
+      # @return [Integer, String] the read ahead sector count
+      #
       def readahead(arg = nil)
         set_or_return(
           :readahead,
