@@ -38,7 +38,7 @@ attribute :physical_volumes, :kind_of => [String, Array]
 attribute :stripes, :kind_of => Integer, :callbacks => must_be_greater_than_0
 attribute :stripe_size, :kind_of => Integer, :callbacks => {
     'must be a power of 2' => Proc.new do |value| 
-        return Math.log2(value) % 1 == 0
+        Math.log2(value) % 1 == 0
     end
 }
 attribute :mirrors, :kind_of => Integer, :callbacks => must_be_greater_than_0
