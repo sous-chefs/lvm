@@ -17,11 +17,14 @@
 # limitations under the License.
 #
 
+require 'chef/mixin/shell_out'
+
 class Chef
   class Provider
     # The provider for lvm_volume_group resource
     #
     class LvmVolumeGroup < Chef::Provider
+      include Chef::Mixin::ShellOut
 
       # Loads the current resource attributes
       #
@@ -41,10 +44,19 @@ class Chef
 
         # Make sure any pvs are not being used as filesystems (e.g. ephemeral0 on
         # AWS is always mounted at /mnt as an ext3 fs).
+        #
         physical_volume_list.select { |pv| ::File.exist?(pv) }.each do |pv|
-          mount pv do
-            device pv
-            action [:umount, :disable]
+          # If the device is mounted, the mount point will be returned else nil will be returned.
+          # mount_point is required by the mount resource for umount and disable actions.
+          #
+          mount_point = get_mount_point(pv)
+          unless mount_point.nil?
+            mount_resource = mount mount_point do
+              device pv
+              action :nothing
+            end
+            mount_resource.run_action(:umount)
+            mount_resource.run_action(:disable)
           end
         end
 
@@ -67,6 +79,27 @@ class Chef
           end
           new_resource.updated_by_last_action(true)
         end
+      end
+
+      private
+
+      # Obtains the mount point of a device and returns nil if the device is not mounted
+      #
+      # @param device [String] the physical device
+      #
+      # @return [String] the mount point of the device if mounted and nil otherwise
+      #
+      def get_mount_point(device)
+        mount_point = nil
+        shell_out!("mount").stdout.each_line do |line|
+          matched = line.match(/#{Regexp.escape(device)}\s+on\s+(.*)\s+type.*/)
+          # If a match is found in the mount, obtain the mount point and return it
+          unless matched.nil?
+            mount_point = matched[1]
+            break
+          end
+        end
+        mount_point
       end
     end
   end
