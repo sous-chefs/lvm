@@ -1,6 +1,14 @@
 LVM Cookbook Changelog
 ======================
 
+v0.8.12
+-------
+### Improvement
+- **[COOK-2991](https://tickets.opscode.com/browse/COOK-2991)** - Add SLES support
+
+### Bug
+- **[COOK-2348](https://tickets.opscode.com/browse/COOK-2348)** - Fix `lvm_logical_volume` when `mount_point` parameter is a String
+
 v0.8.10
 -------
 ### Bug
