@@ -15,8 +15,8 @@ action :create do
     device_name = "/dev/mapper/#{to_dm_name(new_resource.group)}-#{to_dm_name(new_resource.name)}"
     fs_type = new_resource.filesystem
 
-    ruby_block "create_logical_volume_#{new_resource.name}" do
-        block do 
+    ruby_block "create_logical_volume_#{new_resource.group}_#{new_resource.name}" do
+        block do
             lvm = LVM::LVM.new
 
             name = new_resource.name
@@ -29,7 +29,7 @@ action :create do
                 when /(\d+)/
                     "-l #{$1}"
             end
-            
+
             stripes = new_resource.stripes ? "--stripes #{new_resource.stripes}" : ''
             stripe_size = new_resource.stripe_size ? "--stripesize #{new_resource.stripe_size}" : ''
             mirrors = new_resource.mirrors ? "--mirrors #{new_resource.mirrors}" : ''
@@ -37,11 +37,11 @@ action :create do
             readahead = new_resource.readahead ? "--readahead #{new_resource.readahead}" : ''
 
             physical_volumes = [new_resource.physical_volumes].flatten.join ' ' if new_resource.physical_volumes
-            
+
             command = "lvcreate #{size} #{stripes} #{stripe_size} #{mirrors} #{contiguous} #{readahead} --name #{name} #{group} #{physical_volumes}"
 
             Chef::Log.debug "Executing lvm command: #{command}"
-            output = lvm.raw command 
+            output = lvm.raw command
             Chef::Log.debug "Command output: #{output}"
             new_resource.updated_by_last_action true
         end
@@ -75,7 +75,7 @@ action :create do
               Chef::Log.debug "blkid.stdout: #{blkid.stdout.inspect}"
               blkid.exitstatus == 0 && blkid.stdout.strip == fs_type.strip
             end
-        end 
+        end
     end
 
     if new_resource.mount_point

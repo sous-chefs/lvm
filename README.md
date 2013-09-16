@@ -133,7 +133,7 @@ Note that this cookbook depends on the
 [di-ruby-lvm](https://github.com/DrillingInfo/di-ruby-lvm) and
 [di-ruby-lvm-attrib](https://github.com/DrillingInfo/di-ruby-lvm-attrib) gems.
 The di-ruby-lvm-attrib gem in particular is a common cause of failures when
-using the providers. If you get a failure with an error message similar to 
+using the providers. If you get a failure with an error message similar to
 
 ``` No such file or directory - /opt/chef/.../di-ruby-lvm-attrib-0.0.3/lib/lvm/attributes/2.02.86(2)/lvs.yaml```
 

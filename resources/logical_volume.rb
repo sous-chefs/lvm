@@ -9,7 +9,7 @@ must_be_greater_than_0 = {
    'must be greater than 0' => Proc.new { |value| value > 0 }
 }
 
-attribute :name, 
+attribute :name,
     :kind_of => String,
     :regex => /[\w+.-]+/,
     :name_attribute => true,
@@ -26,13 +26,14 @@ attribute :group, :kind_of => String
 attribute :size, :kind_of => String, :regex => /\d+[kKmMgGtT]|(\d{2}|100)%(FREE|VG|PVS)|\d+/, :required => true
 attribute :filesystem, :kind_of => String
 attribute :mount_point, :kind_of => [ Hash, String], :callbacks => {
-    ': location is required!' => Proc.new do |value| 
+    ': location is required!' => Proc.new do |value|
         value.class == String || ( value[:location] && !value[:location].empty? )
     end,
-    ': location must be an absolute path!' => Proc.new do |value| 
-        matches = value[:location] =~ %r{^/[^\0]*} ||  value =~ %r{^/[^\0]*}
+    ': location must be an absolute path!' => Proc.new do |value|
+        # this can be a string or a hash, so attempt to match either for the regex
+        matches = value =~ %r{^/[^\0]*} || value[:location] =~ %r{^/[^\0]*}
         !matches.nil?
-    end 
+    end
 }
 attribute :physical_volumes, :kind_of => [String, Array]
 attribute :stripes, :kind_of => Integer, :callbacks => must_be_greater_than_0
