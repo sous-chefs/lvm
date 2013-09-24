@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: simple_lvm-test
+# Cookbook Name:: fake
 # Library:: helper
 #
 # Copyright (C) 2013 Opscode, Inc.
@@ -22,7 +22,6 @@ module LvmTest
     # Creates given loop devices
     #
     # @param devices [Integer] the devices to create
-    #
     #
     def self.create_loop_devices(devices)
       Array(devices).each do |device|

@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: lvm-test
+# Cookbook Name:: fake
 # Recipe:: create
 #
 # Copyright (C) 2013 Opscode, Inc.

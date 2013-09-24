@@ -1,5 +1,7 @@
-LVM Cookbook Changelog
+lvm Cookbook CHANGELOG
 ======================
+This file is used to list changes made in each version of the lvm cookbook.
+
 
 v0.8.12
 -------
@@ -12,8 +14,7 @@ v0.8.12
 v0.8.10
 -------
 ### Bug
-- [COOK-3031]: `ruby_block` to create logical volume is improperly
-  named, causing collisions
+- [COOK-3031]: `ruby_block` to create logical volume is improperly named, causing collisions
 
 v0.8.8
 ------
@@ -23,8 +24,7 @@ v0.8.8
 
 v0.8.6
 ------
-- [COOK-2348] - lvm `logical_volume` doesn't work with `mount_point`
-  parameter as String
+- [COOK-2348] - lvm `logical_volume` doesn't work with `mount_point` parameter as String
 
 v0.8.4
 ------
@@ -33,13 +33,11 @@ v0.8.4
 
 v0.8.2
 ------
-- [COOK-1857] - `lvm_logical_volume` resource callback conflicts with
-  code in provider.
+- [COOK-1857] - `lvm_logical_volume` resource callback conflicts with code in provider.
 
 v0.8.0
 ------
-- Added providers for managing the creation of LVM physical volumes, volume
-  groups, and logical volumes.
+- Added providers for managing the creation of LVM physical volumes, volume groups, and logical volumes.
 
 v0.7.1
 ------
