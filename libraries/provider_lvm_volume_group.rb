@@ -91,7 +91,7 @@ class Chef
       #
       def get_mount_point(device)
         mount_point = nil
-        shell_out!("mount").stdout.each_line do |line|
+        shell_out!('mount').stdout.each_line do |line|
           matched = line.match(/#{Regexp.escape(device)}\s+on\s+(.*)\s+type.*/)
           # If a match is found in the mount, obtain the mount point and return it
           unless matched.nil?

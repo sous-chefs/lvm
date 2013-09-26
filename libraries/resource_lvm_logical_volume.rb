@@ -54,10 +54,10 @@ class Chef
           :name_attribute => true,
           :required => true,
           :callbacks => {
-            "cannot be '.', '..', 'snapshot', or 'pvmove'" => Proc.new do |value|
+            "cannot be '.', '..', 'snapshot', or 'pvmove'" => proc do |value|
               !(value == '.' || value == '..' || value == 'snapshot' || value == 'pvmove')
             end,
-            "cannot contain the strings '_mlog' or '_mimage'" => Proc.new do |value|
+            "cannot contain the strings '_mlog' or '_mimage'" => proc do |value|
               !value.match(/.*(_mlog|_mimage).*/)
             end
           }
@@ -120,13 +120,13 @@ class Chef
           arg,
           :kind_of => [String, Hash],
           :callbacks => {
-            ': location is required!' => Proc.new do |value|
+            ': location is required!' => proc do |value|
               value.class == String || (value[:location] && !value[:location].empty?)
             end,
-            ': location must be an absolute path!' => Proc.new do |value|
+            ': location must be an absolute path!' => proc do |value|
               # this can be a string or a hash, so attempt to match either for
               # the regex
-              matches = value =~ %r{^/[^\0]*} || value[:location] =~ %r{^/[^\0]*}
+              matches = value =~ /^\/[^\0]*/ || value[:location] =~ /^\/[^\0]*/
               !matches.nil?
             end
           }
@@ -159,7 +159,7 @@ class Chef
           arg,
           :kind_of => Integer,
           :callbacks => {
-            'must be greater than 0' => Proc.new { |value| value > 0 }
+            'must be greater than 0' => proc { |value| value > 0 }
           }
         )
       end
@@ -176,7 +176,7 @@ class Chef
           arg,
           :kind_of => Integer,
           :callbacks => {
-            'must be a power of 2' => Proc.new { |value| Math.log2(value) % 1 == 0 }
+            'must be a power of 2' => proc { |value| Math.log2(value) % 1 == 0 }
           }
         )
       end
@@ -193,7 +193,7 @@ class Chef
           arg,
           :kind_of => Integer,
           :callbacks => {
-            'must be greater than 0' => Proc.new { |value| value > 0 }
+            'must be greater than 0' => proc { |value| value > 0 }
           }
         )
       end

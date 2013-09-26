@@ -1,5 +1,7 @@
-LVM Cookbook and Providers
-==========================
+lvm Cookbook
+============
+[![Build Status](https://secure.travis-ci.org/opscode-cookbooks/lvm.png?branch=master)](http://travis-ci.org/opscode-cookbooks/lvm)
+
 Installs lvm2 package and includes resources for managing LVM. The default recipe simply installs LVM and the supporting Ruby gem. The cookbok includes providers for managing LVMs.
 
 
@@ -165,12 +167,12 @@ Manages LVM logical volumes.
 
 ```ruby
 lvm_logical_volume 'home' do
-  group 'vg00'
-  size '25%VG'
-  filesystem 'ext4'
+  group       'vg00'
+  size        '25%VG'
+  filesystem  'ext4'
   mount_point '/home'
-  stripes 3
-  mirrors 2
+  stripes     3
+  mirrors     2
 end
 ```
 
@@ -232,18 +234,18 @@ lvm_volume_group 'vg00' do
   physical_volumes ['/dev/sda', '/dev/sdb', '/dev/sdc']
 
   logical_volume 'logs' do
-    size '1G'
-    filesystem 'xfs'
-    mount_point :location => '/var/log', :options => 'noatime,nodiratime'
-    stripes 3
+    size        '1G'
+    filesystem  'xfs'
+    mount_point location: '/var/log', options: 'noatime,nodiratime'
+    stripes     3
   end
 
   logical_volume 'home' do
-    size '25%VG'
-    filesystem 'ext4'
+    size        '25%VG'
+    filesystem  'ext4'
     mount_point '/home'
-    stripes 3
-    mirrors 2
+    stripes     3
+    mirrors     2
   end
 end
 ```
@@ -290,12 +292,43 @@ No such file or directory - /opt/chef/.../di-ruby-lvm-attrib-0.0.3/lib/lvm/attri
 then you are running a version of lvm that the gems do not support. However, getting support added is usually pretty easy. Just follow the instructions on "Adding Attributes" in the [di-ruby-lvm-attrib README](https://github.com/DrillingInfo/di-ruby-lvm-attrib).
 
 
+Development
+-----------
+This section details "quick development" steps. For a detailed explanation, see [[Contributing.md]].
+
+1. Clone this repository from GitHub:
+
+        $ git clone git@github.com:opscode-cookbooks/lvm.git
+
+2. Create a git branch
+
+        $ git checkout -b my_bug_fix
+
+3. Install dependencies:
+
+        $ bundle install
+
+4. Make your changes/patches/fixes, committing appropiately
+5. **Write tests**
+6. Run the tests:
+    - `bundle exec foodcritic -f any .`
+    - `bundle exec rspec`
+    - `bundle exec rubocop`
+    - `bundle exec kitchen test`
+
+  In detail:
+    - Foodcritic will catch any Chef-specific style errors
+    - RSpec will run the unit tests
+    - Rubocop will check for Ruby-specific style errors
+    - Test Kitchen will run and converge the recipes
+
+
 License and Authors
 -------------------
 - Author:: Joshua Timberman <joshua@opscode.com>
 - Author:: Greg Symons <gsymons@drillinginfo.com>
 
-
+```text
 Copyright:: 2011, Opscode, Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -309,3 +342,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+```

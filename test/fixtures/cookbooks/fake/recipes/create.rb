@@ -25,7 +25,7 @@ LvmTest::Helper.create_loop_devices(devices)
 
 # Creates the physical device
 
-log "Creating physical volume for test"
+log 'Creating physical volume for test'
 devices.each do |device|
   lvm_physical_volume device
 end
@@ -39,18 +39,18 @@ lvm_volume_group 'vg-data' do
   physical_volumes ['/dev/loop0', '/dev/loop1', '/dev/loop2', '/dev/loop3']
 
   logical_volume 'logs' do
-    size '10M'
-    filesystem 'ext2'
-    mount_point :location => '/mnt/logs', :options => 'noatime,nodiratime'
-    stripes 2
+    size        '10M'
+    filesystem  'ext2'
+    mount_point location: '/mnt/logs', options: 'noatime,nodiratime'
+    stripes     2
   end
 
   logical_volume 'home' do
-    size '5M'
-    filesystem 'ext2'
+    size        '5M'
+    filesystem  'ext2'
     mount_point '/mnt/home'
-    stripes 1
-    mirrors 2
+    stripes     1
+    mirrors     2
   end
 end
 
@@ -61,8 +61,8 @@ end
 # Creates the logical volume
 #
 lvm_logical_volume 'test' do
-  group 'vg-test'
-  size '50%VG'
-  filesystem 'ext3'
+  group       'vg-test'
+  size        '50%VG'
+  filesystem  'ext3'
   mount_point '/mnt/test'
 end

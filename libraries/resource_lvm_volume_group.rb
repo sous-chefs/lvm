@@ -60,7 +60,7 @@ class Chef
           :regex => /[\w+.-]+/,
           :required => true,
           :callbacks => {
-            "cannot be '.' or '..'" => Proc.new do |value|
+            "cannot be '.' or '..'" => proc do |value|
               !(value == '.' || value == '..')
             end
           }

@@ -2,7 +2,7 @@ site :opscode
 metadata
 
 group :integration do
-  cookbook 'apt'
-  cookbook 'yum'
-  cookbook 'fake', path: './test/cookbooks/fake'
+  cookbook 'apt', '~> 2.0'
+  cookbook 'yum', '~> 2.0'
+  cookbook 'fake', path: 'test/fixtures/cookbooks/fake'
 end
