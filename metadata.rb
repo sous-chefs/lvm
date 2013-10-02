@@ -5,8 +5,10 @@ license           'Apache 2.0'
 description       'Installs lvm2 package'
 version           '0.8.13'
 
-recipe 'lvm', 'Installs lvm2 package'
+supports 'centos'
+supports 'debian'
+supports 'redhat'
+supports 'sles'
+supports 'ubuntu'
 
-%w(redhat centos debian ubuntu sles).each do |os|
-  supports os
-end
+recipe 'lvm', 'Installs lvm2 package'
