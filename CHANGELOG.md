@@ -3,6 +3,11 @@ lvm Cookbook CHANGELOG
 This file is used to list changes made in each version of the lvm cookbook.
 
 
+v1.0.0
+------
+### Improvement
+- **[COOK-3357](https://tickets.opscode.com/browse/COOK-3357)** - Complete refactor into a heavy-weight provider with tests
+
 v0.8.12
 -------
 ### Improvement
