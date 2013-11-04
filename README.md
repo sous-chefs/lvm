@@ -2,7 +2,7 @@ lvm Cookbook
 ============
 [![Build Status](https://secure.travis-ci.org/opscode-cookbooks/lvm.png?branch=master)](http://travis-ci.org/opscode-cookbooks/lvm)
 
-Installs lvm2 package and includes resources for managing LVM. The default recipe simply installs LVM and the supporting Ruby gem. The cookbok includes providers for managing LVMs.
+Installs lvm2 package and includes resources for managing LVM. The default recipe simply installs LVM and the supporting Ruby gem. The cookbook includes providers for managing LVMs.
 
 
 Requirements
