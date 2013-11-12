@@ -11,14 +11,23 @@
 #    http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
+# distributed under the License is distribued on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
 
 # The test device to use
-devices = ['/dev/loop0', '/dev/loop1', '/dev/loop2', '/dev/loop3', '/dev/loop4']
+devices = [
+  '/dev/loop0',
+  '/dev/loop1',
+  '/dev/loop2',
+  '/dev/loop3',
+  '/dev/loop4',
+  '/dev/loop5',
+  '/dev/loop6',
+  '/dev/loop7'
+]
 
 # Creates the loop back device
 LvmTest::Helper.create_loop_devices(devices)
@@ -55,7 +64,7 @@ lvm_volume_group 'vg-data' do
 end
 
 lvm_volume_group 'vg-test' do
-  physical_volumes '/dev/loop4'
+  physical_volumes ['/dev/loop4', '/dev/loop5', '/dev/loop6', '/dev/loop7']
 end
 
 # Creates the logical volume
@@ -65,4 +74,13 @@ lvm_logical_volume 'test' do
   size        '50%VG'
   filesystem  'ext3'
   mount_point '/mnt/test'
+end
+
+# Creates a small logical volume
+#
+lvm_logical_volume 'small' do
+  group       'vg-test'
+  size        '2%VG'
+  filesystem  'ext3'
+  mount_point '/mnt/small'
 end

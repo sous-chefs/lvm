@@ -58,3 +58,23 @@ export PATH=$PATH:/sbin:/usr/sbin
   mountpoint /mnt/test
   mount | grep /dev/mapper/vg--test-test | grep /mnt/test
 }
+
+@test "creates the logical volume 'small' on 'vg-test'" {
+  lvs | grep small | grep vg-test
+}
+
+@test "logical volume 'test' is formatted as 'ext3' filesystem" {
+  blkid /dev/mapper/vg--test-small | grep "TYPE=\"ext3\""
+}
+
+@test "mounts the logical volume to /mnt/small" {
+  mountpoint /mnt/small
+  mount | grep /dev/mapper/vg--test-small | grep /mnt/small
+}
+
+@test "creates the logical volume using 2% of the available vg extents" {
+  vgsize="$(vgdisplay vg-test|awk '/Total PE/ {print $3}')"
+  lvsize="$(lvdisplay /dev/mapper/vg--test-small|awk '/Current LE/ {print $3}')"
+  vg2pct="$(( $vgsize/50 ))"
+  [ "$lvsize" -ge "$vg2pct" ]
+}

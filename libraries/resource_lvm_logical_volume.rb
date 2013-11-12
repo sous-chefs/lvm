@@ -89,7 +89,7 @@ class Chef
           :size,
           arg,
           :kind_of => String,
-          :regex => /\d+[kKmMgGtT]|(\d{2}|100)%(FREE|VG|PVS)|\d+/,
+          :regex => /\d+[kKmMgGtT]|(\d{1,2}|100)%(FREE|VG|PVS)|\d+/,
           :required => true
         )
       end
