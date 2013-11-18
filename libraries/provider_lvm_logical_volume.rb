@@ -115,7 +115,13 @@ class Chef
             action :nothing
           end
           mount_resource.run_action(:mount)
-          mount_resource.run_action(:enable)
+          # We should enable by default to remain backwards-compatible, as we used to enable without asking
+          mount_spec[:enable] ||= true
+          if mount_spec[:enable]
+            mount_resource.run_action(:enable)
+          else
+            mount_resource.run_action(:disable)
+          end
           # Mark the resource as updated if the mount resource is updated
           new_resource.updated_by_last_action(mount_resource.updated?)
         end
