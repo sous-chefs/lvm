@@ -115,6 +115,7 @@ Manages LVM logical volumes.
       <ul>
         <li><tt>location<tt> - (required) the directory to mount the volume on</li>
         <li><tt>options</tt> - the mount options for the volume</li>
+        <li><tt>enable</tt> - whether to create the fstab entry</li>
         <li><tt>dump</tt> - the <tt>dump</tt> field for the fstab entry</li>
         <li><tt>pass</tt> - the <tt>pass</tt> field for the fstab entry</li>
       </ul>
