@@ -3,6 +3,14 @@ lvm Cookbook CHANGELOG
 This file is used to list changes made in each version of the lvm cookbook.
 
 
+v1.0.2
+------
+### Bug
+- **[COOK-3935](https://tickets.opscode.com/browse/COOK-3935)** - fix minor typo
+- Fixing up style
+- Updating test harness
+
+
 v1.0.0
 ------
 ### Improvement
