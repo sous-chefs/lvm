@@ -152,7 +152,6 @@ class Chef
           blkid = shell_out("blkid -o value -s TYPE #{device_name}")
           blkid.exitstatus == 0 && blkid.stdout.strip == fs_type.strip
         end
-
     end
   end
 end

@@ -18,6 +18,7 @@
 #
 
 module LvmTest
+  # Helper definitions for lvmtest
   module Helper
     # Creates given loop devices
     #

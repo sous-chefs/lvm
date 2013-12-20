@@ -41,7 +41,7 @@ lvm_volume_group 'vg-data' do
   logical_volume 'logs' do
     size        '10M'
     filesystem  'ext2'
-    mount_point location: '/mnt/logs', options: 'noatime,nodiratime'
+    mount_point :location => '/mnt/logs', :options => 'noatime,nodiratime'
     stripes     2
   end
 
