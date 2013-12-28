@@ -3,6 +3,12 @@ lvm Cookbook CHANGELOG
 This file is used to list changes made in each version of the lvm cookbook.
 
 
+v1.0.4 (2013-12-28)
+-------------------
+### Bug
+- **[COOK-3987](https://tickets.opscode.com/browse/COOK-3987)** - Volumes are created with the wrong # of extents.  Size = '2%VG' is treated as a size of 2 extents.
+
+
 v1.0.2
 ------
 ### Bug
