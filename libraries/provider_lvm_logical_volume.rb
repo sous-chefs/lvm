@@ -53,7 +53,7 @@ class Chef
             case new_resource.size
             when /\d+[kKmMgGtT]/
               "--size #{new_resource.size}"
-            when /(\d{2}|100)%(FREE|VG|PVS)/
+            when /(\d{1,2}|100)%(FREE|VG|PVS)/
               "--extents #{new_resource.size}"
             when /(\d+)/
               "--size #{$1}" # rubocop:disable PerlBackrefs
