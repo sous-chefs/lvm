@@ -43,7 +43,7 @@ platforms:
 #     region_id: 4
 #     ssh_key_ids: <%= ENV['DIGITAL_OCEAN_SSH_KEY_IDS'] %>
 
-- name: ubuntu-1004
+- name: ubuntu-10.04
   driver_plugin: digitalocean
   driver_config:
     image_id: 14097
@@ -53,7 +53,7 @@ platforms:
   run_list:
   - recipe[apt]
 
-- name: ubuntu-1204
+- name: ubuntu-12.04
   driver_plugin: digitalocean
   driver_config:
     image_id: 1505447
