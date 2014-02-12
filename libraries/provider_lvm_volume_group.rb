@@ -61,24 +61,37 @@ class Chef
         end
 
         lvm = LVM::LVM.new
-        # Create the volume group
         if lvm.volume_groups[name]
-          Chef::Log.info "Volume group '#{name}' already exists. Not creating..."
+          Chef::Log.info "Volume group '#{name}' already exists. Seeking for new PV to add..."
+          vg = lvm.volume_groups[name]
+          vg.physical_volumes.each do |existing_pv|
+            physical_volume_list.delete(existing_pv.name)
+          end
+          physical_volume_list.each do |new_pv|
+            command = "vgextend #{name} #{new_pv}"
+            Chef::Log.debug "Executing lvm command: '#{command}'"
+            output = lvm.raw command
+            Chef::Log.info "Added #{new_pv} to vg #{name}"
+            Chef::Log.debug "Command output: '#{output}'"
+          end
         else
+          # Create the volume group
           physical_volumes = physical_volume_list.join(' ')
           physical_extent_size = new_resource.physical_extent_size ? "-s #{new_resource.physical_extent_size}" : ''
           command = "vgcreate #{name} #{physical_extent_size} #{physical_volumes}"
 
           Chef::Log.debug "Executing lvm command: '#{command}'"
           output = lvm.raw command
+          Chef::Log.info "Created vg #{name} with #{physical_volumes}"
           Chef::Log.debug "Command output: '#{output}'"
-          # Create the logical volumes specified as sub-resources
-          new_resource.logical_volumes.each do |lv|
-            lv.group new_resource.name
-            lv.run_action :create
-          end
-          new_resource.updated_by_last_action(true)
         end
+
+        # Create the logical volumes specified as sub-resources
+        new_resource.logical_volumes.each do |lv|
+          lv.group new_resource.name
+          lv.run_action :create
+        end
+        new_resource.updated_by_last_action(true)
       end
 
       private
