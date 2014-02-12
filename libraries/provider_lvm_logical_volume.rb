@@ -73,7 +73,7 @@ class Chef
           new_resource.updated_by_last_action(true)
         else
           Chef::Log.info "LV '#{name}' already exists: trying if enlarging is required"
-          command = "lvresize #{size} #{stripes} #{stripe_size} #{mirrors} #{contiguous} #{readahead} #{device_name}"
+          command = "lvextend #{size} #{device_name}"
           Chef::Log.debug "Executing lvm command: '#{command}'"
           begin
             output = lvm.raw(command)
