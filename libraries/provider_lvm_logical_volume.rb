@@ -80,8 +80,8 @@ class Chef
             Chef::Log.debug "Command output: '#{output}'"
           rescue LVM::External::ExternalFailure => e
             unless e.message =~ /New size.*matches existing size/
-                Chef::Log.info "Unexpected exception on lvresize: '#{e.message}'"
-                raise e
+              Chef::Log.info "Unexpected exception on lvresize: '#{e.message}'"
+              raise e
             end
           end
           new_resource.updated_by_last_action(true)
@@ -156,7 +156,7 @@ class Chef
       # @return [String] the mapped dm name
       #
       def to_dm_name(name)
-          name.gsub(/-/, '--')
+        name.gsub(/-/, '--')
       end
 
       # Checks if the device is formatted with the given file system type
@@ -168,13 +168,12 @@ class Chef
       #   system type or not
       #
       def device_formatted?(device_name, fs_type)
-          Chef::Log.debug "Checking to see if #{device_name} is formatted..."
-          # Do not raise when there is an error in running the blkid command. If the exitstatus is not 0,
-          # the device is perhaps not formatted.
-          blkid = shell_out("blkid -o value -s TYPE #{device_name}")
-          blkid.exitstatus == 0 && blkid.stdout.strip == fs_type.strip
+        Chef::Log.debug "Checking to see if #{device_name} is formatted..."
+        # Do not raise when there is an error in running the blkid command. If the exitstatus is not 0,
+        # the device is perhaps not formatted.
+        blkid = shell_out("blkid -o value -s TYPE #{device_name}")
+        blkid.exitstatus == 0 && blkid.stdout.strip == fs_type.strip
       end
-
     end
   end
 end
