@@ -46,40 +46,62 @@ class Chef
         device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
 
         vg = lvm.volume_groups[new_resource.group]
+        size =
+          case new_resource.size
+          when /\d+[kKmMgGtT]/
+            "--size #{new_resource.size}"
+          when /(\d{1,2}|100)%(FREE|VG|PVS)/
+            "--extents #{new_resource.size}"
+          when /(\d+)/
+            "--size #{$1}" # rubocop:disable PerlBackrefs
+          end
+
+        stripes = new_resource.stripes ? "--stripes #{new_resource.stripes}" : ''
+        stripe_size = new_resource.stripe_size ? "--stripesize #{new_resource.stripe_size}" : ''
+        mirrors = new_resource.mirrors ? "--mirrors #{new_resource.mirrors}" : ''
+        contiguous = new_resource.contiguous ? '--contiguous y' : ''
+        readahead = new_resource.readahead ? "--readahead #{new_resource.readahead}" : ''
+        physical_volumes = [new_resource.physical_volumes].flatten.join ' ' if new_resource.physical_volumes
+
         # Create the logical volume
         if vg.nil? || vg.logical_volumes.select { |lv| lv.name == name }.empty?
-          device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
-          size =
-            case new_resource.size
-            when /\d+[kKmMgGtT]/
-              "--size #{new_resource.size}"
-            when /(\d{1,2}|100)%(FREE|VG|PVS)/
-              "--extents #{new_resource.size}"
-            when /(\d+)/
-              "--size #{$1}" # rubocop:disable PerlBackrefs
-            end
-
-          stripes = new_resource.stripes ? "--stripes #{new_resource.stripes}" : ''
-          stripe_size = new_resource.stripe_size ? "--stripesize #{new_resource.stripe_size}" : ''
-          mirrors = new_resource.mirrors ? "--mirrors #{new_resource.mirrors}" : ''
-          contiguous = new_resource.contiguous ? '--contiguous y' : ''
-          readahead = new_resource.readahead ? "--readahead #{new_resource.readahead}" : ''
-          physical_volumes = [new_resource.physical_volumes].flatten.join ' ' if new_resource.physical_volumes
-
           command = "lvcreate #{size} #{stripes} #{stripe_size} #{mirrors} #{contiguous} #{readahead} --name #{name} #{group} #{physical_volumes}"
           Chef::Log.debug "Executing lvm command: '#{command}'"
           output = lvm.raw(command)
+          Chef::Log.info "Created LV #{name}"
           Chef::Log.debug "Command output: '#{output}'"
           new_resource.updated_by_last_action(true)
         else
-          Chef::Log.info "Logical volume '#{name}' already exists. Not creating..."
+          Chef::Log.info "LV '#{name}' already exists: trying if enlarging is required"
+          command = "lvresize #{size} #{stripes} #{stripe_size} #{mirrors} #{contiguous} #{readahead} #{device_name}"
+          Chef::Log.debug "Executing lvm command: '#{command}'"
+          begin
+            output = lvm.raw(command)
+            Chef::Log.debug "Command output: '#{output}'"
+          rescue LVM::External::ExternalFailure => e
+            unless e.message =~ /New size.*matches existing size/
+                Chef::Log.info "Unexpected exception on lvresize: '#{e.message}'"
+                raise e
+            end
+          end
+          new_resource.updated_by_last_action(true)
         end
 
         # If file system is specified, format the logical volume
         if fs_type.nil?
           Chef::Log.info 'File system type is not set. Not formatting...'
         elsif device_formatted?(device_name, fs_type)
-          Chef::Log.info "Volume '#{device_name}' is already formatted. Not formatting..."
+          Chef::Log.info "Volume '#{device_name}' is already formatted."
+          case fs_type
+          when /^ext([3-4])$/
+            shell_out!("resize2fs #{device_name}")
+            new_resource.updated_by_last_action(true)
+          when 'xfs'
+            shell_out!("xfs_growfs #{device_name}")
+            new_resource.updated_by_last_action(true)
+          else
+            Chef::Log.info "#{fs_type} unsupported, leaving fs untouched."
+          end
         else
           shell_out!("yes | mkfs -t #{fs_type} #{device_name}")
           new_resource.updated_by_last_action(true)
