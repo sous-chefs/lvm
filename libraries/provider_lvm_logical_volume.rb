@@ -95,7 +95,7 @@ class Chef
 
           # Create the mount point
           dir_resource = directory mount_spec[:location] do
-            mode 0777
+            mode 0755
             owner 'root'
             group 'root'
             recursive true
