@@ -123,35 +123,35 @@ class Chef
 
       private
 
-        # Converts the device name to the dm name format
-        #
-        # The device mapper will double any hyphens found in a volume group or
-        # logical volume name so that it can properly locate the separator between
-        # the volume group and the logical volume in the device name.
-        #
-        # @param name [String] the name to map
-        #
-        # @return [String] the mapped dm name
-        #
-        def to_dm_name(name)
-          name.gsub(/-/, '--')
-        end
+      # Converts the device name to the dm name format
+      #
+      # The device mapper will double any hyphens found in a volume group or
+      # logical volume name so that it can properly locate the separator between
+      # the volume group and the logical volume in the device name.
+      #
+      # @param name [String] the name to map
+      #
+      # @return [String] the mapped dm name
+      #
+      def to_dm_name(name)
+        name.gsub(/-/, '--')
+      end
 
-        # Checks if the device is formatted with the given file system type
-        #
-        # @param device_name [String] the device name
-        # @param fs_type [String] the file system type
-        #
-        # @return [Boolean] whether the device is formatted with the given file
-        #   system type or not
-        #
-        def device_formatted?(device_name, fs_type)
-          Chef::Log.debug "Checking to see if #{device_name} is formatted..."
-          # Do not raise when there is an error in running the blkid command. If the exitstatus is not 0,
-          # the device is perhaps not formatted.
-          blkid = shell_out("blkid -o value -s TYPE #{device_name}")
-          blkid.exitstatus == 0 && blkid.stdout.strip == fs_type.strip
-        end
+      # Checks if the device is formatted with the given file system type
+      #
+      # @param device_name [String] the device name
+      # @param fs_type [String] the file system type
+      #
+      # @return [Boolean] whether the device is formatted with the given file
+      #   system type or not
+      #
+      def device_formatted?(device_name, fs_type)
+        Chef::Log.debug "Checking to see if #{device_name} is formatted..."
+        # Do not raise when there is an error in running the blkid command. If the exitstatus is not 0,
+        # the device is perhaps not formatted.
+        blkid = shell_out("blkid -o value -s TYPE #{device_name}")
+        blkid.exitstatus == 0 && blkid.stdout.strip == fs_type.strip
+      end
     end
   end
 end

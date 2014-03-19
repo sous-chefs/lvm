@@ -223,7 +223,7 @@ class Chef
           :readahead,
           arg,
           :kind_of => [Integer, String],
-          :equal_to => [2..120, 'auto', 'none'].flatten!
+          :equal_to => [(2..120).to_a, 'auto', 'none'].flatten!
         )
       end
     end
