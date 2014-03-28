@@ -3,6 +3,12 @@ lvm Cookbook CHANGELOG
 This file is used to list changes made in each version of the lvm cookbook.
 
 
+v1.0.6 (2014-03-27)
+-------------------
+- [COOK-4486] - Add ChefSpec matchers for LVM resources
+- [COOK-4481] - The lvm_volume_group resource is not convergent
+
+
 v1.0.4 (2013-12-28)
 -------------------
 ### Bug
