@@ -3,6 +3,11 @@ lvm Cookbook CHANGELOG
 This file is used to list changes made in each version of the lvm cookbook.
 
 
+v1.0.8 (2014-03-27)
+-------------------
+No change. Bumping version for toolchain
+
+
 v1.0.6 (2014-03-27)
 -------------------
 - [COOK-4486] - Add ChefSpec matchers for LVM resources
