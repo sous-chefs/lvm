@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: lvm
-# Library:: provider_lvm_volume_group
+# Library:: matchers
 #
 # Copyright 2014, Opscode, Inc.
 #
