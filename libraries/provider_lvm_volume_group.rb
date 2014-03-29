@@ -60,6 +60,10 @@ class Chef
           end
         end
 
+        # The notifications should be set if the lvm_volume_group or any of its sub lvm_logical_volume resources are
+        # updated.
+        updates = []
+
         lvm = LVM::LVM.new
         # Create the volume group
         if lvm.volume_groups[name]
@@ -72,13 +76,16 @@ class Chef
           Chef::Log.debug "Executing lvm command: '#{command}'"
           output = lvm.raw command
           Chef::Log.debug "Command output: '#{output}'"
-          # Create the logical volumes specified as sub-resources
-          new_resource.logical_volumes.each do |lv|
-            lv.group new_resource.name
-            lv.run_action :create
-          end
-          new_resource.updated_by_last_action(true)
+          updates << true
         end
+
+        # Create the logical volumes specified as sub-resources
+        new_resource.logical_volumes.each do |lv|
+          lv.group new_resource.name
+          lv.run_action :create
+          updates << lv.updated?
+        end
+        new_resource.updated_by_last_action(updates.any?)
       end
 
       private
