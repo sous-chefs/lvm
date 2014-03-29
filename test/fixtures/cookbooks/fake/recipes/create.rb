@@ -84,3 +84,12 @@ lvm_logical_volume 'small' do
   filesystem  'ext3'
   mount_point '/mnt/small'
 end
+
+# Set the directory attributes of the mounted volume
+#
+directory '/mnt/small' do
+  mode '0444'
+  owner 1
+  group 1
+  only_if { file.stat('/mnt/small') != 0100444 }
+end

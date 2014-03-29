@@ -78,3 +78,12 @@ export PATH=$PATH:/sbin:/usr/sbin
   vg2pct="$(( $vgsize/50 ))"
   [ "$lvsize" -ge "$vg2pct" ]
 }
+
+@test "mode of mounted file systems should not be reset" {
+  ls -la /mnt/small | grep "444"
+}
+
+@test "mount point mode should be 755" {
+  umount /mnt/small
+  ls -la /mnt/small | grep "775"
+}
