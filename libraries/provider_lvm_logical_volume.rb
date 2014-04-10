@@ -95,11 +95,12 @@ class Chef
 
           # Create the mount point
           dir_resource = directory mount_spec[:location] do
-            mode 0777
+            mode 0755
             owner 'root'
             group 'root'
             recursive true
             action :nothing
+            not_if { Pathname.new(mount_spec[:location]).mountpoint? }
           end
           dir_resource.run_action(:create)
           # Mark the resource as updated if the directory resource is updated
@@ -133,9 +134,9 @@ class Chef
         #
         # @return [String] the mapped dm name
         #
-        def to_dm_name(name)
-          name.gsub(/-/, '--')
-        end
+      def to_dm_name(name)
+        name.gsub(/-/, '--')
+      end
 
         # Checks if the device is formatted with the given file system type
         #
@@ -145,13 +146,13 @@ class Chef
         # @return [Boolean] whether the device is formatted with the given file
         #   system type or not
         #
-        def device_formatted?(device_name, fs_type)
-          Chef::Log.debug "Checking to see if #{device_name} is formatted..."
-          # Do not raise when there is an error in running the blkid command. If the exitstatus is not 0,
-          # the device is perhaps not formatted.
-          blkid = shell_out("blkid -o value -s TYPE #{device_name}")
-          blkid.exitstatus == 0 && blkid.stdout.strip == fs_type.strip
-        end
+      def device_formatted?(device_name, fs_type)
+        Chef::Log.debug "Checking to see if #{device_name} is formatted..."
+        # Do not raise when there is an error in running the blkid command. If the exitstatus is not 0,
+        # the device is perhaps not formatted.
+        blkid = shell_out("blkid -o value -s TYPE #{device_name}")
+        blkid.exitstatus == 0 && blkid.stdout.strip == fs_type.strip
+      end
     end
   end
 end

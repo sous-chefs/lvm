@@ -88,8 +88,17 @@ end
 # Set the directory attributes of the mounted volume
 #
 directory '/mnt/small' do
-  mode '0444'
+  mode '0555'
   owner 1
   group 1
-  only_if { file.stat('/mnt/small') != 0100444 }
+  only_if { File.stat('/mnt/small') != 0100555 }
+end
+
+# Creates a small logical volume
+#
+lvm_logical_volume 'small' do
+  group       'vg-test'
+  size        '2%VG'
+  filesystem  'ext3'
+  mount_point '/mnt/small'
 end

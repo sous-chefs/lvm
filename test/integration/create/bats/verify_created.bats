@@ -79,11 +79,16 @@ export PATH=$PATH:/sbin:/usr/sbin
   [ "$lvsize" -ge "$vg2pct" ]
 }
 
-@test "mode of mounted file systems should not be reset" {
-  ls -la /mnt/small | grep "444"
+@test "mode of mounted file systems should match the directory setting" {
+  ls -la /mnt/small | grep "dr-xr-xr-x"
 }
 
-@test "mount point mode should be 755" {
+@test "Exposed mount point mode should be 755" {
   umount /mnt/small
-  ls -la /mnt/small | grep "775"
+  ls -la /mnt/small | grep "drwxr-xr-x"
+}
+
+@test "Remount works using fstab information" {
+  mount /mnt/small
+  mount | grep /dev/mapper/vg--test-small | grep /mnt/small
 }
