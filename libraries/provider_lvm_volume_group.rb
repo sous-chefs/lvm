@@ -45,10 +45,26 @@ class Chef
         # Make sure any pvs are not being used as filesystems (e.g. ephemeral0 on
         # AWS is always mounted at /mnt as an ext3 fs).
         #
+        create_mount_resource(physical_volume_list)
+
+        # The notifications should be set if the lvm_volume_group or any of its sub lvm_logical_volume resources are
+        # updated.
+
+        lvm = LVM::LVM.new
+        # Create the volume group
+        create_volume_group(lvm, physical_volume_list, name)
+
+        # Create the logical volumes specified as sub-resources
+        create_logical_volumes
+      end
+
+      private
+
+      def create_mount_resource(physical_volume_list)
         physical_volume_list.select { |pv| ::File.exist?(pv) }.each do |pv|
-          # If the device is mounted, the mount point will be returned else nil will be returned.
-          # mount_point is required by the mount resource for umount and disable actions.
-          #
+        # If the device is mounted, the mount point will be returned else nil will be returned.
+        # mount_point is required by the mount resource for umount and disable actions.
+        #
           mount_point = get_mount_point(pv)
           unless mount_point.nil?
             mount_resource = mount mount_point do
@@ -59,27 +75,24 @@ class Chef
             mount_resource.run_action(:disable)
           end
         end
+      end
 
-        # The notifications should be set if the lvm_volume_group or any of its sub lvm_logical_volume resources are
-        # updated.
-        updates = []
-
-        lvm = LVM::LVM.new
-        # Create the volume group
+      def create_volume_group(lvm, physical_volume_list, name)
         if lvm.volume_groups[name]
           Chef::Log.info "Volume group '#{name}' already exists. Not creating..."
         else
           physical_volumes = physical_volume_list.join(' ')
           physical_extent_size = new_resource.physical_extent_size ? "-s #{new_resource.physical_extent_size}" : ''
           command = "vgcreate #{name} #{physical_extent_size} #{physical_volumes}"
-
           Chef::Log.debug "Executing lvm command: '#{command}'"
           output = lvm.raw command
           Chef::Log.debug "Command output: '#{output}'"
-          updates << true
+          new_resource.updated_by_last_action(true)
         end
+      end
 
-        # Create the logical volumes specified as sub-resources
+      def create_logical_volumes
+        updates = []
         new_resource.logical_volumes.each do |lv|
           lv.group new_resource.name
           lv.run_action :create
@@ -87,8 +100,6 @@ class Chef
         end
         new_resource.updated_by_last_action(updates.any?)
       end
-
-      private
 
       # Obtains the mount point of a device and returns nil if the device is not mounted
       #
