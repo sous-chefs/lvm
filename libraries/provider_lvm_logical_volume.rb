@@ -150,11 +150,11 @@ class Chef
         
         # figure out how we should calculate extents
         resize_type = case new_resource.size
-            when /\d+[kKmMgGtT]/
+            when /^\d+[kKmMgGtT]$/
                 "byte"
-            when /(\d{2}|100)%(FREE|VG|PVS)/
+            when /^(\d{2}|100)%(FREE|VG|PVS)$/
                 "percent"
-            when /(\d+)/
+            when /^(\d+)$/
                 "extent"
         end
 
@@ -162,15 +162,15 @@ class Chef
         # if not suffix is supplied assume extents is what is being specified
         if resize_type == "byte" || resize_type == "extent"
           lv_size_req = case new_resource.size
-                          when /(\d+)(k|K)/
+                          when /^(\d+)(k|K)$/
                             ($1.to_i *1024) / pe_size
-                          when /(\d+)(m|M)/
+                          when /^(\d+)(m|M)$/
                             ($1.to_i * 1048576) / pe_size
-                          when /(\d+)(g|G)/
+                          when /^(\d+)(g|G)$/
                             ($1.to_i * 1073741824) / pe_size
-                          when /(\d+)(t|T)/
+                          when /^(\d+)(t|T)$/
                             ($1.to_i * 1099511627776) / pe_size
-                          when /(\d+)/
+                          when /^(\d+)$/
                             $1.to_i
                           else
                             Chef::Application.fatal!("Invalid size #{$1} for lvm resize", 2)

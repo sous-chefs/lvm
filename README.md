@@ -70,7 +70,7 @@ Manages LVM logical volumes.
   </tr>
   <tr>
     <td>:resize</td>
-    <td>Reisze an existing logical volume</td>
+    <td>Resize an existing logical volume</td>
   </tr>
 </table>
 
