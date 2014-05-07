@@ -50,7 +50,7 @@ class Chef
         require 'lvm'
         lvm = LVM::LVM.new
         pv = lvm.physical_volumes.select do |pvs|        
-          pvs == new_resource.name 
+          pvs.name == new_resource.name 
         end
         unless pv.empty?
           # get the size the OS says the block device is
