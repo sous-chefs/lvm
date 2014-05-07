@@ -25,6 +25,10 @@ Manages LVM physical volumes.
     <td>:create</td>
     <td>(default) Creates a new physical volume</td>
   </tr>
+  <tr>
+    <td>:resize</td>
+    <td>Resize an existing physical volume</td>
+  </tr>
 </table>
 
 ##### Parameters
@@ -63,6 +67,10 @@ Manages LVM logical volumes.
   <tr>
     <td>:create</td>
     <td>(default) Creates a new logical volume</td>
+  </tr>
+  <tr>
+    <td>:resize</td>
+    <td>Reisze an existing logical volume</td>
   </tr>
 </table>
 

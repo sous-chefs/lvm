@@ -46,6 +46,29 @@ class Chef
           Chef::Log.info "Physical volume '#{new_resource.name}' found. Not creating..."
         end
       end
+      def action_resize
+        require 'lvm'
+        lvm = LVM::LVM.new
+        pv = lvm.physical_volumes.select do |pvs|        
+          pvs == new_resource.name 
+        end
+        unless pv.empty?
+          # get the size the OS says the block device is
+          block_device_size = shell_out("blockdev --getsize64 #{new_resource.name}").to_i
+          # get the size LVM thinks the PV is
+          pv_size = pv[0].dev_size.to_i
+          
+          # don't resize unless they are not same
+          unless pv_size == block_device_size
+            Chef::Log.info "Resizing physical volume '#{new_resource.name}'"
+            lvm.raw "pvresize #{new_resource.name}"
+          else
+            Chef::Log.debug "Physical volume '#{new_resource.name}' is already the right size"
+          end
+        else
+          Chef::Log.info "Physical volume '#{new_resource.name}' found. Not resizing..."
+        end
+      end
     end
   end
 end

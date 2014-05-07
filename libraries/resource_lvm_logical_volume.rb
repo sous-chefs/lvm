@@ -36,6 +36,7 @@ class Chef
         @resource_name = :lvm_logical_volume
         @action = :create
         @allowed_actions.push :create
+        @allowed_actions.push :resize
         @provider = Chef::Provider::LvmLogicalVolume
       end
 
