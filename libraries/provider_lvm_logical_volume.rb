@@ -152,7 +152,7 @@ class Chef
         resize_type = case new_resource.size
             when /^\d+[kKmMgGtT]$/
                 "byte"
-            when /^(\d{2}|100)%(FREE|VG|PVS)$/
+            when /^(\d{1,2}|100)%(FREE|VG|PVS)$/
                 "percent"
             when /^(\d+)$/
                 "extent"
@@ -177,7 +177,7 @@ class Chef
                         end
         # calcuate the number of extents needed differently if specifying a percentage
         elsif resize_type == "percent"
-          percent,type = new_resource.size.scan(/(\d{2}|100)%(FREE|VG|PVS)/).first
+          percent,type = new_resource.size.scan(/(\d{1,2}|100)%(FREE|VG|PVS)/).first
           
           lv_size_req = case type
                           when "VG"
