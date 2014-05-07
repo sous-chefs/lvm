@@ -62,6 +62,8 @@ class Chef
           unless pv_size == block_device_size
             Chef::Log.info "Resizing physical volume '#{new_resource.name}'"
             lvm.raw "pvresize #{new_resource.name}"
+            # broadcast that we did a resize
+            new_resource.updated_by_last_action true
           else
             Chef::Log.debug "Physical volume '#{new_resource.name}' is already the right size"
           end
