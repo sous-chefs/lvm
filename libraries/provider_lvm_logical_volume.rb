@@ -73,11 +73,11 @@ class Chef
           updates << true
         else
           lv = vg.logical_volumes.select { |lv| lv.name == name }.first
-          if lv.active == 'active'
+          if lv.state.to_sym == :active
             Chef::Log.info "Logical volume '#{name}' already exists and active. Not creating..."
           else
             Chef::Log.info "Logical volume '#{name}' already created and inactive. Activating now..."
-            command = "lvchange --activate y #{device_name}"
+            command = "lvchange -a y #{device_name}"
             Chef::Log.debug "Executing lvm command: '#{command}'"
             output = lvm.raw(command)
             Chef::Log.debug "Command output: '#{output}'"
