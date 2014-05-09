@@ -73,7 +73,7 @@ class Chef
           updates << true
         else
           lv = vg.logical_volumes.select { |lv| lv.name == name }.first
-          if lv.state.to_sym == :active
+          if !lv.state.nil? && lv.state.to_sym == :active
             Chef::Log.info "Logical volume '#{name}' already exists and active. Not creating..."
           else
             Chef::Log.info "Logical volume '#{name}' already created and inactive. Activating now..."
