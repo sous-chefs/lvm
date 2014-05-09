@@ -68,3 +68,4 @@ suites:
     run_list:
       - recipe[lvm]
       - recipe[fake::create]
+      - recipe[fake::resize]
