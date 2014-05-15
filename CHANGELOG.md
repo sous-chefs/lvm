@@ -3,6 +3,11 @@ lvm Cookbook CHANGELOG
 This file is used to list changes made in each version of the lvm cookbook.
 
 
+v1.1.2 (2014-05-15)
+-------------------
+- [COOK-4609] Enable the logical volume if it is disabled
+
+
 v1.1.0 (2014-04-10)
 -------------------
 - [COOK-4539] - Change default mount mode to 0755
