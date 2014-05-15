@@ -44,11 +44,11 @@ class Chef
         group = new_resource.group
         fs_type = new_resource.filesystem
         device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
+        updates = []
 
         vg = lvm.volume_groups[new_resource.group]
         # Create the logical volume
         if vg.nil? || vg.logical_volumes.select { |lv| lv.name == name }.empty?
-          device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
           size =
             case new_resource.size
             when /\d+[kKmMgGtT]/
@@ -70,9 +70,19 @@ class Chef
           Chef::Log.debug "Executing lvm command: '#{command}'"
           output = lvm.raw(command)
           Chef::Log.debug "Command output: '#{output}'"
-          new_resource.updated_by_last_action(true)
+          updates << true
         else
-          Chef::Log.info "Logical volume '#{name}' already exists. Not creating..."
+          lv = vg.logical_volumes.select { |lv| lv.name == name }.first
+          if !lv.state.nil? && lv.state.to_sym == :active
+            Chef::Log.info "Logical volume '#{name}' already exists and active. Not creating..."
+          else
+            Chef::Log.info "Logical volume '#{name}' already created and inactive. Activating now..."
+            command = "lvchange -a y #{device_name}"
+            Chef::Log.debug "Executing lvm command: '#{command}'"
+            output = lvm.raw(command)
+            Chef::Log.debug "Command output: '#{output}'"
+            updates << true
+          end
         end
 
         # If file system is specified, format the logical volume
@@ -82,7 +92,7 @@ class Chef
           Chef::Log.info "Volume '#{device_name}' is already formatted. Not formatting..."
         else
           shell_out!("yes | mkfs -t #{fs_type} #{device_name}")
-          new_resource.updated_by_last_action(true)
+          updates << true
         end
 
         # If the mount point is specified, mount the logical volume
@@ -104,7 +114,7 @@ class Chef
           end
           dir_resource.run_action(:create)
           # Mark the resource as updated if the directory resource is updated
-          new_resource.updated_by_last_action(dir_resource.updated?)
+          updates << dir_resource.updated?
 
           # Mount the logical volume
           mount_resource = mount mount_spec[:location] do
@@ -118,8 +128,9 @@ class Chef
           mount_resource.run_action(:mount)
           mount_resource.run_action(:enable)
           # Mark the resource as updated if the mount resource is updated
-          new_resource.updated_by_last_action(mount_resource.updated?)
+          updates << mount_resource.updated?
         end
+        new_resource.updated_by_last_action(updates.any?)
       end
 
       private
