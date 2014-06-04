@@ -41,6 +41,7 @@ class Chef
         @resource_name = :lvm_volume_group
         @action = :create
         @allowed_actions.push :create
+        @allowed_actions.push :extend
         @logical_volumes = []
         @provider = Chef::Provider::LvmVolumeGroup
       end
