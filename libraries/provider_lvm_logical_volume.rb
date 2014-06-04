@@ -143,6 +143,7 @@ class Chef
         pe_size = lvm.volume_groups[new_resource.group].extent_size.to_i
         pe_free = lvm.volume_groups[new_resource.group].free_count.to_i
         pe_count = lvm.volume_groups[new_resource.group].extent_count.to_i
+        pe_allocated = pe_count - pe_free
         lv_size_cur = lv.size.to_i / pe_size
 
         group = new_resource.group
@@ -182,8 +183,10 @@ class Chef
           lv_size_req = case type
                           when "VG"
                             ((percent.to_f / 100) * pe_count).to_i
+                          when "FREE"
+                            (((percent.to_f / 100) * pe_free) + pe_allocated).to_i
                           else
-                            Chef::Application.fatal!("Invalid type #{type} for resize. You can only resize using an explicit size or percentage of VG", 2)
+                            Chef::Application.fatal!("Invalid type #{type} for resize. You can only resize using an explicit size, percentage of VG or percentage of free VG space", 2)
                         end
         else
            Chef::Application.fatal!("Invalid size specification #{new_resource.size}", 2)
