@@ -192,6 +192,10 @@ Manages LVM volume groups.
     <td>:create</td>
     <td>(default) Creates a new volume group</td>
   </tr>
+  <tr>
+    <td>:extend</td>
+    <td>Extend an existing volume group to include new physical volumes</td>
+  </tr>
 </table>
 
 ##### Parameters
