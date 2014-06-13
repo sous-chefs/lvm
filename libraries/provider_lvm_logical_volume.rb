@@ -146,11 +146,14 @@ class Chef
         pe_allocated = pe_count - pe_free
         lv_size_cur = lv.size.to_i / pe_size
 
+        lv_size = new_resource.size
+        lv_size = "100%FREE" if new_resource.take_up_free_space
+
         group = new_resource.group
 
         
         # figure out how we should calculate extents
-        resize_type = case new_resource.size
+        resize_type = case lv_size
             when /^\d+[kKmMgGtT]$/
                 "byte"
             when /^(\d{1,2}|100)%(FREE|VG|PVS)$/
@@ -162,7 +165,7 @@ class Chef
         # calculate extents based off of an explicit size
         # if not suffix is supplied assume extents is what is being specified
         if resize_type == "byte" || resize_type == "extent"
-          lv_size_req = case new_resource.size
+          lv_size_req = case lv_size
                           when /^(\d+)(k|K)$/
                             ($1.to_i *1024) / pe_size
                           when /^(\d+)(m|M)$/
@@ -178,18 +181,19 @@ class Chef
                         end
         # calcuate the number of extents needed differently if specifying a percentage
         elsif resize_type == "percent"
-          percent,type = new_resource.size.scan(/(\d{1,2}|100)%(FREE|VG|PVS)/).first
+          percent,type = lv_size.scan(/(\d{1,2}|100)%(FREE|VG|PVS)/).first
           
           lv_size_req = case type
                           when "VG"
                             ((percent.to_f / 100) * pe_count).to_i
                           when "FREE"
-                            (((percent.to_f / 100) * pe_free) + pe_allocated).to_i
+                            Chef::Application.fatal!("Cannot percentage based off free space",2) unless new_resource.take_up_free_space
+                            (((percent.to_f / 100) * pe_free) + lv_size_cur).to_i
                           else
-                            Chef::Application.fatal!("Invalid type #{type} for resize. You can only resize using an explicit size, percentage of VG or percentage of free VG space", 2)
+                            Chef::Application.fatal!("Invalid type #{type} for resize. You can only resize using an explicit size, percentage of VG or by setting take_up_free_space to true", 2)
                         end
         else
-           Chef::Application.fatal!("Invalid size specification #{new_resource.size}", 2)
+           Chef::Application.fatal!("Invalid size specification #{lv_size}", 2)
         end
 
 

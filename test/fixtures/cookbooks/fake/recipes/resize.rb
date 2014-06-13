@@ -103,3 +103,16 @@ lvm_logical_volume 'percent_noresize_test' do
   filesystem  'ext3'
   mount_point '/mnt/percent_noresize'
 end
+
+# Resize a lv based off percent
+# Should stay the same size
+# 
+lvm_logical_volume 'remainder_resize' do
+  action      [:create, :resize]
+  name        'remainder_resize'
+  group       'vg-test'
+  size        '1'
+  filesystem  'ext3'
+  take_up_free_space true
+  mount_point '/mnt/remainder_resize'
+end

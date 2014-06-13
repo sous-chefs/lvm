@@ -227,6 +227,20 @@ class Chef
           :equal_to => [2..120, 'auto', 'none'].flatten!
         )
       end
+
+      # Attribute: take_up_free_space - whether to have the LV take up the remainder of free space on the VG
+      #
+      # @param arg [Boolean] whether to have the LV take up the remainder of free space
+      #
+      # @return [Boolean] if the LV should take the remainder of free space
+      #
+      def take_up_free_space(arg = nil)
+        set_or_return(
+          :take_up_free_space,
+          arg,
+          :kind_of => [TrueClass, FalseClass]
+        )
+      end
     end
   end
 end

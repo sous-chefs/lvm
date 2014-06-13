@@ -31,3 +31,15 @@ export PATH=$PATH:/sbin:/usr/sbin
   lvsize="$(lvdisplay /dev/mapper/vg--test-small_noresize|awk '/Current LE/ {print $3}')"
   [ "$lvsize" -ge "$num_extents" ]
 }
+
+@test "creates and resizes a logical volume that fills the VG" {
+  num_extents="36"
+  lvsize="$(lvdisplay /dev/mapper/vg--test-remainder_resize|awk '/Current LE/ {print $3}')"
+  [ "$lvsize" -ge "$num_extents" ]
+}
+
+@test "verifies the VG has no more extents left" {
+  num_extents="0"
+  lvsize="$(vgdisplay vg-test -c | cut -d: -f16)"
+  [ "$lvsize" -ge "$num_extents" ]
+}

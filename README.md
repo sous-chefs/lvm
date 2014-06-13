@@ -169,6 +169,11 @@ Manages LVM logical volumes.
     <td><tt>'auto'</tt></td>
     <td></td>
   </tr>
+  <td>take_up_free_space</td>
+    <td>whether to have the LV take up the remainder of free space on the VG. Only valid for resize action</td>
+    <td><tt>true</tt></td>
+    <td>false</td>
+  </tr>
 </table>
 
 ##### Examples
