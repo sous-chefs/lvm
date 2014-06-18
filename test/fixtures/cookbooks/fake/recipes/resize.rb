@@ -17,6 +17,21 @@
 # limitations under the License.
 #
 
+
+execute 'extend loop0 device' do
+  command <<-EOF
+dd if=/dev/zero bs=512 count=65536 >> /vfile0
+losetup -c /dev/loop0
+touch /vfile0.extended
+EOF
+  not_if { File.exist?('/vfile0.extended') }
+end
+
+lvm_physical_volume 'loop0_resize' do
+  name '/dev/loop0'
+  action :resize
+end
+
 # Create a LV to resize
 #
 lvm_logical_volume 'small_resize' do

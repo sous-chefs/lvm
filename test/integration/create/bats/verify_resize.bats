@@ -43,3 +43,10 @@ export PATH=$PATH:/sbin:/usr/sbin
   lvsize="$(vgdisplay vg-test -c | cut -d: -f16)"
   [ "$lvsize" -ge "$num_extents" ]
 }
+
+
+@test "resizes the PV to fill the remaining space" {
+  num_extents="39"
+  lvsize="$(pvdisplay /dev/loop0 -c | cut -d: -f9)"
+  [ "$lvsize" -eq "$num_extents" ]
+}
