@@ -18,6 +18,7 @@
 #
 
 require 'chef/provider'
+include Chef::Mixin::ShellOut
 
 class Chef
   class Provider
@@ -44,6 +45,39 @@ class Chef
           new_resource.updated_by_last_action(true)
         else
           Chef::Log.info "Physical volume '#{new_resource.name}' found. Not creating..."
+        end
+      end
+      def action_resize
+        require 'lvm'
+        lvm = LVM::LVM.new
+        pv = lvm.physical_volumes.select do |pvs|        
+          pvs.name == new_resource.name 
+        end
+        unless pv.empty?
+          # get the size the OS says the block device is
+          block_device_raw_size = pv[0].dev_size.to_i
+          # get the size LVM thinks the PV is
+          pv_size = pv[0].size.to_i
+          pe_size = pv_size / pv[0].pe_count
+          
+          # get the amount of space that cannot be allocated
+          non_allocatable_space = block_device_raw_size % pe_size
+          # if it's an exact amount LVM appears to just take 1 full extent
+          non_allocatable_space = pe_size if non_allocatable_space == 0
+
+          block_device_allocatable_size = block_device_raw_size - non_allocatable_space
+          
+          # don't resize unless they are not same
+          unless pv_size == block_device_allocatable_size
+            Chef::Log.info "Resizing physical volume '#{new_resource.name}'"
+            lvm.raw "pvresize #{new_resource.name}"
+            # broadcast that we did a resize
+            new_resource.updated_by_last_action true
+          else
+            Chef::Log.debug "Physical volume '#{new_resource.name}' is already the right size"
+          end
+        else
+          Chef::Log.info "Physical volume '#{new_resource.name}' found. Not resizing..."
         end
       end
     end

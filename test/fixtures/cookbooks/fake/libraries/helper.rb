@@ -27,7 +27,7 @@ module LvmTest
     def self.create_loop_devices(devices)
       Array(devices).each do |device|
         num = device.slice(/\d+/)
-        mk_vfile_cmd = "dd if=/dev/zero of=/vfile#{num} bs=1024 count=65536"
+        mk_vfile_cmd = "dd if=/dev/zero of=/vfile#{num} bs=2048 count=65536"
         Mixlib::ShellOut.new(mk_vfile_cmd).run_command.error!
         mk_loop_dev_cmd = "losetup #{device} /vfile#{num}"
         Mixlib::ShellOut.new(mk_loop_dev_cmd).run_command.error!

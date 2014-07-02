@@ -25,6 +25,10 @@ Manages LVM physical volumes.
     <td>:create</td>
     <td>(default) Creates a new physical volume</td>
   </tr>
+  <tr>
+    <td>:resize</td>
+    <td>Resize an existing physical volume</td>
+  </tr>
 </table>
 
 ##### Parameters
@@ -63,6 +67,10 @@ Manages LVM logical volumes.
   <tr>
     <td>:create</td>
     <td>(default) Creates a new logical volume</td>
+  </tr>
+  <tr>
+    <td>:resize</td>
+    <td>Resize an existing logical volume</td>
   </tr>
 </table>
 
@@ -160,6 +168,11 @@ Manages LVM logical volumes.
   between 2 and 120, 'auto', or 'none')</td>
     <td><tt>'auto'</tt></td>
     <td></td>
+  </tr>
+  <td>take_up_free_space</td>
+    <td>whether to have the LV take up the remainder of free space on the VG. Only valid for resize action</td>
+    <td><tt>true</tt></td>
+    <td>false</td>
   </tr>
 </table>
 
