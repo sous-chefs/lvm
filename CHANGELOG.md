@@ -3,6 +3,11 @@ lvm Cookbook CHANGELOG
 This file is used to list changes made in each version of the lvm cookbook.
 
 
+v1.2.2 (2014-07-02)
+-------------------
+No changes. Bumping for toolchain
+
+
 v1.2.0 (2014-07-02)
 -------------------
 COOK-2992: add support for resizing logical and physical volumes
