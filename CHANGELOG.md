@@ -3,6 +3,12 @@ lvm Cookbook CHANGELOG
 This file is used to list changes made in each version of the lvm cookbook.
 
 
+v1.3.0 (2014-07-09)
+-------------------
+- #32 - add support for resizing logical and physical volumes
+- #33 - [COOK-4701]: add ability to extend volume groups
+
+
 v1.2.2 (2014-07-02)
 -------------------
 No changes. Bumping for toolchain
