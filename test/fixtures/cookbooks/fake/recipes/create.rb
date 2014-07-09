@@ -65,9 +65,14 @@ lvm_volume_group 'vg-data' do
 end
 
 lvm_volume_group 'vg-test' do
-  physical_volumes ['/dev/loop4', '/dev/loop5', '/dev/loop6', '/dev/loop7']
+  physical_volumes ['/dev/loop4', '/dev/loop5', '/dev/loop6']
 end
 
+lvm_volume_group 'vg-test-extend' do
+  action :extend
+  name 'vg-test'
+  physical_volumes ['/dev/loop4', '/dev/loop5', '/dev/loop6', '/dev/loop7']
+end
 # Creates the logical volume
 #
 lvm_logical_volume 'test' do

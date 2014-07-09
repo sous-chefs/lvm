@@ -58,6 +58,45 @@ class Chef
         create_logical_volumes
       end
 
+      # The extend action
+      #
+      def action_extend
+        name = new_resource.name
+        physical_volume_list = [new_resource.physical_volumes].flatten
+        lvm = LVM::LVM.new
+
+        # verify that the volume group is valid
+        Chef::Application.fatal!("VG #{name} is not a valid volume group",2) if lvm.volume_groups[name].nil?
+
+        # get uuid of the volume group so we can compare it to the VG the PV belongs to
+        vg_uuid = lvm.volume_groups[name].uuid
+  
+        pvs_to_add = []
+        physical_volume_list.each do |pv_name|
+          pv = lvm.physical_volumes[pv_name]
+
+          # get the uuid of the VG the PV belongs to if it exists
+          # if we get "nil" then the PV does not belong to a VG
+          # per the vgextend man page the pv will be initalized if it isn't already pv
+          pv_vg_uuid = pv.nil? ? nil : pv.vg_uuid
+          if pv_vg_uuid.nil?
+            pvs_to_add.push pv_name
+          else
+            # raise an error if we attempt to add a PV that is already a member of a VG
+            Chef::Application.fatal!("PV #{pv} is already a member of another volume group. Cannot add to #{name}",2) unless pv_vg_uuid == vg_uuid
+          end
+        end
+
+        unless pvs_to_add.empty?
+          command = "vgextend #{name} #{pvs_to_add.join(" ")}"
+          Chef::Log.debug "Executing lvm command: '#{command}'"
+          output = lvm.raw command
+          Chef::Log.debug "Command output: '#{output}'"
+          new_resource.updated_by_last_action(true)
+        end
+
+      end
+
       private
 
       def create_mount_resource(physical_volume_list)
