@@ -95,7 +95,7 @@ class Chef
           new_resource.updated_by_last_action(true)
         end
         
-        resize_logical_volume
+        resize_logical_volumes
 
       end
 
