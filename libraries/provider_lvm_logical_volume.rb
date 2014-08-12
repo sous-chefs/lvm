@@ -137,6 +137,9 @@ class Chef
       def action_resize
         require 'lvm'
         lvm = LVM::LVM.new
+        name = new_resource.name
+        group = new_resource.group
+        device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
 
         vg = lvm.volume_groups[new_resource.group]
         # if doing a resize make sure that the volume exists before doing anything
@@ -159,8 +162,6 @@ class Chef
 
         lv_size = new_resource.size
         lv_size = "100%FREE" if new_resource.take_up_free_space
-
-        group = new_resource.group
 
         
         # figure out how we should calculate extents
@@ -221,7 +222,7 @@ class Chef
           stripe_size = new_resource.stripe_size ? "--stripesize #{new_resource.stripe_size}" : ''
           mirrors = new_resource.mirrors ? "--mirrors #{new_resource.mirrors}" : ''
 
-          command = "lvextend -l #{lv_size_req} #{resize_fs} #{stripes} #{stripe_size} #{mirrors} #{lv.path} "
+          command = "lvextend -l #{lv_size_req} #{resize_fs} #{stripes} #{stripe_size} #{mirrors} #{device_name} "
           Chef::Log.debug "Running command: #{command}"
           output = lvm.raw command
           Chef::Log.debug "Command output: #{output}"
