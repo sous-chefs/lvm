@@ -94,6 +94,8 @@ class Chef
           Chef::Log.debug "Command output: '#{output}'"
           new_resource.updated_by_last_action(true)
         end
+        
+        resize_logical_volume
 
       end
 
@@ -135,6 +137,16 @@ class Chef
         new_resource.logical_volumes.each do |lv|
           lv.group new_resource.name
           lv.run_action :create
+          updates << lv.updated?
+        end
+        new_resource.updated_by_last_action(updates.any?)
+      end
+      
+      def resize_logical_volumes
+        updates = []
+        new_resource.logical_volumes.each do |lv|
+          lv.group new_resource.name
+          lv.run_action :resize
           updates << lv.updated?
         end
         new_resource.updated_by_last_action(updates.any?)
