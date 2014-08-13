@@ -2,6 +2,9 @@ lvm Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the lvm cookbook.
 
+v1.2.4 (2014-08-13)
+-------------------
+Added custom matchers for :resize and :extend actions
 
 v1.2.2 (2014-07-02)
 -------------------
