@@ -93,9 +93,8 @@ class Chef
           output = lvm.raw command
           Chef::Log.debug "Command output: '#{output}'"
           new_resource.updated_by_last_action(true)
+          resize_logical_volumes
         end
-        
-        resize_logical_volumes
 
       end
 
