@@ -23,7 +23,7 @@ class Chef
   class Provider
     # The provider for lvm_logical_volume resource
     #
-    class LvmLogicalVolume < Chef::Provider
+    class LvmLogicalVolume < Chef::Provider # rubocop:disable ClassLength
       include Chef::Mixin::ShellOut
 
       # Loads the current resource attributes
@@ -72,7 +72,7 @@ class Chef
           Chef::Log.debug "Command output: '#{output}'"
           updates << true
         else
-          lv = vg.logical_volumes.select { |lv| lv.name == name }.first
+          lv = vg.logical_volumes.select { |l| l.name == name }.first
           if !lv.state.nil? && lv.state.to_sym == :active
             Chef::Log.info "Logical volume '#{name}' already exists and active. Not creating..."
           else
@@ -141,74 +141,71 @@ class Chef
         vg = lvm.volume_groups[new_resource.group]
         # if doing a resize make sure that the volume exists before doing anything
         if vg.nil?
-          Chef::Application.fatal!("Error volume group #{new_resource.group} does not exist", 2 )
+          Chef::Application.fatal!("Error volume group #{new_resource.group} does not exist", 2)
         else
           lv = vg.logical_volumes.select do |lvs|
             lvs.name == new_resource.name
           end
           # make sure that the LV specified exists in the VG specified
-          Chef::Application.fatal!("Error logical volume #{new_resource.name} does not exist", 2 ) if lv.empty?
+          Chef::Application.fatal!("Error logical volume #{new_resource.name} does not exist", 2) if lv.empty?
         end
 
         lv = lv.first
         pe_size = lvm.volume_groups[new_resource.group].extent_size.to_i
         pe_free = lvm.volume_groups[new_resource.group].free_count.to_i
         pe_count = lvm.volume_groups[new_resource.group].extent_count.to_i
-        pe_allocated = pe_count - pe_free
         lv_size_cur = lv.size.to_i / pe_size
 
         lv_size = new_resource.size
-        lv_size = "100%FREE" if new_resource.take_up_free_space
+        lv_size = '100%FREE' if new_resource.take_up_free_space
 
         group = new_resource.group
 
-        
         # figure out how we should calculate extents
         resize_type = case lv_size
-            when /^\d+[kKmMgGtT]$/
-                "byte"
-            when /^(\d{1,2}|100)%(FREE|VG|PVS)$/
-                "percent"
-            when /^(\d+)$/
-                "extent"
-        end
+                      when /^\d+[kKmMgGtT]$/
+                        'byte'
+                      when /^(\d{1,2}|100)%(FREE|VG|PVS)$/
+                        'percent'
+                      when /^(\d+)$/
+                        'extent'
+                      end
 
         # calculate extents based off of an explicit size
         # if not suffix is supplied assume extents is what is being specified
-        if resize_type == "byte" || resize_type == "extent"
+        if resize_type == 'byte' || resize_type == 'extent'
           lv_size_req = case lv_size
-                          when /^(\d+)(k|K)$/
-                            ($1.to_i *1024) / pe_size
-                          when /^(\d+)(m|M)$/
-                            ($1.to_i * 1048576) / pe_size
-                          when /^(\d+)(g|G)$/
-                            ($1.to_i * 1073741824) / pe_size
-                          when /^(\d+)(t|T)$/
-                            ($1.to_i * 1099511627776) / pe_size
-                          when /^(\d+)$/
-                            $1.to_i
-                          else
-                            Chef::Application.fatal!("Invalid size #{$1} for lvm resize", 2)
+                        when /^(\d+)(k|K)$/
+                          ($1.to_i * 1024) / pe_size
+                        when /^(\d+)(m|M)$/
+                          ($1.to_i * 1_048_576) / pe_size
+                        when /^(\d+)(g|G)$/
+                          ($1.to_i * 1_073_741_824) / pe_size
+                        when /^(\d+)(t|T)$/
+                          ($1.to_i * 1_099_511_627_776) / pe_size
+                        when /^(\d+)$/
+                          $1.to_i
+                        else
+                          Chef::Application.fatal!("Invalid size #{$1} for lvm resize", 2)
                         end
-        # calcuate the number of extents needed differently if specifying a percentage
-        elsif resize_type == "percent"
-          percent,type = lv_size.scan(/(\d{1,2}|100)%(FREE|VG|PVS)/).first
-          
+          # calcuate the number of extents needed differently if specifying a percentage
+        elsif resize_type == 'percent'
+          percent, type = lv_size.scan(/(\d{1,2}|100)%(FREE|VG|PVS)/).first
+
           lv_size_req = case type
-                          when "VG"
-                            ((percent.to_f / 100) * pe_count).to_i
-                          when "FREE"
-                            Chef::Application.fatal!("Cannot percentage based off free space",2) unless new_resource.take_up_free_space
-                            (((percent.to_f / 100) * pe_free) + lv_size_cur).to_i
-                          else
-                            Chef::Application.fatal!("Invalid type #{type} for resize. You can only resize using an explicit size, percentage of VG or by setting take_up_free_space to true", 2)
+                        when 'VG'
+                          ((percent.to_f / 100) * pe_count).to_i
+                        when 'FREE'
+                          Chef::Application.fatal!('Cannot percentage based off free space', 2) unless new_resource.take_up_free_space
+                          (((percent.to_f / 100) * pe_free) + lv_size_cur).to_i
+                        else
+                          Chef::Application.fatal!("Invalid type #{type} for resize. You can only resize using an explicit size, percentage of VG or by setting take_up_free_space to true", 2)
                         end
         else
-           Chef::Application.fatal!("Invalid size specification #{lv_size}", 2)
+          Chef::Application.fatal!("Invalid size specification #{lv_size}", 2)
         end
 
-
-        Chef::Application.fatal!("Error trying to extend logical volume #{lv.name} beyond the capacity of volume group #{group}", 2 ) if ( lv_size_req - lv_size_cur ) > pe_free
+        Chef::Application.fatal!("Error trying to extend logical volume #{lv.name} beyond the capacity of volume group #{group}", 2) if ( lv_size_req - lv_size_cur) > pe_free
 
         # don't resize if the current size is greater than or equal to the target size
         if lv_size_cur >= lv_size_req
@@ -216,7 +213,7 @@ class Chef
         else
           Chef::Log.debug "Resizing logical volume #{lv.name} from #{lv_size_cur} pe to #{lv_size_req} pe with #{pe_free} pe left in volume group #{group}"
 
-          resize_fs = "--resizefs"
+          resize_fs = '--resizefs'
           stripes = new_resource.stripes ? "--stripes #{new_resource.stripes}" : ''
           stripe_size = new_resource.stripe_size ? "--stripesize #{new_resource.stripe_size}" : ''
           mirrors = new_resource.mirrors ? "--mirrors #{new_resource.mirrors}" : ''
@@ -239,74 +236,71 @@ class Chef
         vg = lvm.volume_groups[new_resource.group]
         # if doing a resize make sure that the volume exists before doing anything
         if vg.nil?
-          Chef::Application.fatal!("Error volume group #{new_resource.group} does not exist", 2 )
+          Chef::Application.fatal!("Error volume group #{new_resource.group} does not exist", 2)
         else
           lv = vg.logical_volumes.select do |lvs|
             lvs.name == new_resource.name
           end
           # make sure that the LV specified exists in the VG specified
-          Chef::Application.fatal!("Error logical volume #{new_resource.name} does not exist", 2 ) if lv.empty?
+          Chef::Application.fatal!("Error logical volume #{new_resource.name} does not exist", 2) if lv.empty?
         end
 
         lv = lv.first
         pe_size = lvm.volume_groups[new_resource.group].extent_size.to_i
         pe_free = lvm.volume_groups[new_resource.group].free_count.to_i
         pe_count = lvm.volume_groups[new_resource.group].extent_count.to_i
-        pe_allocated = pe_count - pe_free
         lv_size_cur = lv.size.to_i / pe_size
 
         lv_size = new_resource.size
-        lv_size = "100%FREE" if new_resource.take_up_free_space
+        lv_size = '100%FREE' if new_resource.take_up_free_space
 
         group = new_resource.group
 
-        
         # figure out how we should calculate extents
         resize_type = case lv_size
-            when /^\d+[kKmMgGtT]$/
-                "byte"
-            when /^(\d{1,2}|100)%(FREE|VG|PVS)$/
-                "percent"
-            when /^(\d+)$/
-                "extent"
-        end
+                      when /^\d+[kKmMgGtT]$/
+                        'byte'
+                      when /^(\d{1,2}|100)%(FREE|VG|PVS)$/
+                        'percent'
+                      when /^(\d+)$/
+                        'extent'
+                      end
 
         # calculate extents based off of an explicit size
         # if not suffix is supplied assume extents is what is being specified
-        if resize_type == "byte" || resize_type == "extent"
+        if resize_type == 'byte' || resize_type == 'extent'
           lv_size_req = case lv_size
-                          when /^(\d+)(k|K)$/
-                            ($1.to_i *1024) / pe_size
-                          when /^(\d+)(m|M)$/
-                            ($1.to_i * 1048576) / pe_size
-                          when /^(\d+)(g|G)$/
-                            ($1.to_i * 1073741824) / pe_size
-                          when /^(\d+)(t|T)$/
-                            ($1.to_i * 1099511627776) / pe_size
-                          when /^(\d+)$/
-                            $1.to_i
-                          else
-                            Chef::Application.fatal!("Invalid size #{$1} for lvm resize", 2)
+                        when /^(\d+)(k|K)$/
+                          ($1.to_i * 1024) / pe_size
+                        when /^(\d+)(m|M)$/
+                          ($1.to_i * 1_048_576) / pe_size
+                        when /^(\d+)(g|G)$/
+                          ($1.to_i * 1_073_741_824) / pe_size
+                        when /^(\d+)(t|T)$/
+                          ($1.to_i * 1_099_511_627_776) / pe_size
+                        when /^(\d+)$/
+                          $1.to_i
+                        else
+                          Chef::Application.fatal!("Invalid size #{$1} for lvm resize", 2)
                         end
-        # calcuate the number of extents needed differently if specifying a percentage
-        elsif resize_type == "percent"
-          percent,type = lv_size.scan(/(\d{1,2}|100)%(FREE|VG|PVS)/).first
-          
+          # calcuate the number of extents needed differently if specifying a percentage
+        elsif resize_type == 'percent'
+          percent, type = lv_size.scan(/(\d{1,2}|100)%(FREE|VG|PVS)/).first
+
           lv_size_req = case type
-                          when "VG"
-                            ((percent.to_f / 100) * pe_count).to_i
-                          when "FREE"
-                            Chef::Application.fatal!("Cannot percentage based off free space",2) unless new_resource.take_up_free_space
-                            (((percent.to_f / 100) * pe_free) + lv_size_cur).to_i
-                          else
-                            Chef::Application.fatal!("Invalid type #{type} for resize. You can only resize using an explicit size, percentage of VG or by setting take_up_free_space to true", 2)
+                        when 'VG'
+                          ((percent.to_f / 100) * pe_count).to_i
+                        when 'FREE'
+                          Chef::Application.fatal!('Cannot percentage based off free space', 2) unless new_resource.take_up_free_space
+                          (((percent.to_f / 100) * pe_free) + lv_size_cur).to_i
+                        else
+                          Chef::Application.fatal!("Invalid type #{type} for resize. You can only resize using an explicit size, percentage of VG or by setting take_up_free_space to true", 2)
                         end
         else
-           Chef::Application.fatal!("Invalid size specification #{lv_size}", 2)
+          Chef::Application.fatal!("Invalid size specification #{lv_size}", 2)
         end
 
-
-        Chef::Application.fatal!("Error trying to extend logical volume #{lv.name} beyond the capacity of volume group #{group}", 2 ) if ( lv_size_req - lv_size_cur ) > pe_free
+        Chef::Application.fatal!("Error trying to extend logical volume #{lv.name} beyond the capacity of volume group #{group}", 2) if ( lv_size_req - lv_size_cur) > pe_free
 
         # don't resize if the current size is greater than or equal to the target size
         if lv_size_cur >= lv_size_req
@@ -314,7 +308,7 @@ class Chef
         else
           Chef::Log.debug "Resizing logical volume #{lv.name} from #{lv_size_cur} pe to #{lv_size_req} pe with #{pe_free} pe left in volume group #{group}"
 
-          resize_fs = "--resizefs"
+          resize_fs = '--resizefs'
           stripes = new_resource.stripes ? "--stripes #{new_resource.stripes}" : ''
           stripe_size = new_resource.stripe_size ? "--stripesize #{new_resource.stripe_size}" : ''
           mirrors = new_resource.mirrors ? "--mirrors #{new_resource.mirrors}" : ''

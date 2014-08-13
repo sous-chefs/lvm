@@ -23,7 +23,7 @@ class Chef
   class Resource
     # The lvm_logical_volume resource
     #
-    class LvmLogicalVolume < Chef::Resource
+    class LvmLogicalVolume < Chef::Resource # rubocop:disable ClassLength
       # Initializes the lvm_logical_volume resource
       #
       # @param name [String] name of the resource
