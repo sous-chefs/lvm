@@ -17,7 +17,6 @@
 # limitations under the License.
 #
 
-
 execute 'extend loop0 device' do
   command <<-EOF
 dd if=/dev/zero bs=512 count=65536 >> /vfile0
@@ -52,7 +51,6 @@ lvm_logical_volume 'small_resize_test' do
   filesystem  'ext3'
   mount_point '/mnt/small_resize'
 end
-
 
 # Create a LV to resize
 #
@@ -109,7 +107,7 @@ end
 
 # Resize a lv based off percent
 # Should stay the same size
-# 
+#
 lvm_logical_volume 'percent_noresize_test' do
   action      :resize
   name        'percent_noresize'
@@ -121,7 +119,7 @@ end
 
 # Resize a lv based off percent
 # Should stay the same size
-# 
+#
 lvm_logical_volume 'remainder_resize' do
   action      [:create, :resize]
   name        'remainder_resize'
