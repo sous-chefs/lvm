@@ -46,7 +46,7 @@ class Chef
         device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
         updates = []
 
-        vg = lvm.volume_groups[new_resource.group]
+        vg = lvm.volume_groups[group]
         # Create the logical volume
         if vg.nil? || vg.logical_volumes.select { |lv| lv.name == name }.empty?
           size =
@@ -141,22 +141,22 @@ class Chef
         group = new_resource.group
         device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
 
-        vg = lvm.volume_groups[new_resource.group]
+        vg = lvm.volume_groups[group]
         # if doing a resize make sure that the volume exists before doing anything
         if vg.nil?
-          Chef::Application.fatal!("Error volume group #{new_resource.group} does not exist", 2 )
+          Chef::Application.fatal!("Error volume group #{group} does not exist", 2 )
         else
           lv = vg.logical_volumes.select do |lvs|
-            lvs.name == new_resource.name
+            lvs.name == name
           end
           # make sure that the LV specified exists in the VG specified
-          Chef::Application.fatal!("Error logical volume #{new_resource.name} does not exist", 2 ) if lv.empty?
+          Chef::Application.fatal!("Error logical volume #{name} does not exist", 2 ) if lv.empty?
         end
 
         lv = lv.first
-        pe_size = lvm.volume_groups[new_resource.group].extent_size.to_i
-        pe_free = lvm.volume_groups[new_resource.group].free_count.to_i
-        pe_count = lvm.volume_groups[new_resource.group].extent_count.to_i
+        pe_size = lvm.volume_groups[group].extent_size.to_i
+        pe_free = lvm.volume_groups[group].free_count.to_i
+        pe_count = lvm.volume_groups[group].extent_count.to_i
         pe_allocated = pe_count - pe_free
         lv_size_cur = lv.size.to_i / pe_size
 
