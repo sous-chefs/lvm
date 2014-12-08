@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'lvm::default' do
   let(:chef_run) do
-    ChefSpec::Runner.new(:platform => 'ubuntu', :version => '12.04').converge('lvm::default')
+    ChefSpec::Runner.new(platform: 'ubuntu', version: '12.04').converge('lvm::default')
   end
 
   it 'installs lvm2' do

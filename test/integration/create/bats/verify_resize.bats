@@ -33,7 +33,7 @@ export PATH=$PATH:/sbin:/usr/sbin
 }
 
 @test "creates and resizes a logical volume that fills the VG" {
-  num_extents="36"
+  num_extents="25"
   lvsize="$(lvdisplay /dev/mapper/vg--test-remainder_resize|awk '/Current LE/ {print $3}')"
   [ "$lvsize" -ge "$num_extents" ]
 }
