@@ -17,7 +17,6 @@
 # limitations under the License.
 #
 
-
 execute 'extend loop0 device' do
   command <<-EOF
 dd if=/dev/zero bs=512 count=65536 >> /vfile0
@@ -35,53 +34,52 @@ end
 # Create a LV to resize
 #
 lvm_logical_volume 'small_resize' do
-  action      :create
-  group       'vg-test'
-  size        '8M'
-  filesystem  'ext3'
+  action :create
+  group 'vg-test'
+  size '8M'
+  filesystem 'ext3'
   mount_point '/mnt/small_resize'
 end
 
 # Resize a lv based off explicit size
 #
 lvm_logical_volume 'small_resize_test' do
-  action      :resize
-  name        'small_resize'
-  group       'vg-test'
-  size        '16M'
-  filesystem  'ext3'
+  action :resize
+  name 'small_resize'
+  group 'vg-test'
+  size '16M'
+  filesystem 'ext3'
   mount_point '/mnt/small_resize'
 end
-
 
 # Create a LV to resize
 #
 lvm_logical_volume 'percent_resize' do
-  action      :create
-  group       'vg-test'
-  size        '5%VG'
-  filesystem  'ext3'
+  action :create
+  group 'vg-test'
+  size '5%VG'
+  filesystem 'ext3'
   mount_point '/mnt/percent_resize'
 end
 
 # Resize a lv based off percent
 #
 lvm_logical_volume 'percent_resize_test' do
-  action      :resize
-  name        'percent_resize'
-  group       'vg-test'
-  size        '10%VG'
-  filesystem  'ext3'
+  action :resize
+  name 'percent_resize'
+  group 'vg-test'
+  size '10%VG'
+  filesystem 'ext3'
   mount_point '/mnt/percent_resize'
 end
 
 # Create a LV to resize
 #
 lvm_logical_volume 'small_noresize' do
-  action      :create
-  group       'vg-test'
-  size        '8M'
-  filesystem  'ext3'
+  action :create
+  group 'vg-test'
+  size '8M'
+  filesystem 'ext3'
   mount_point '/mnt/small_noresize'
 end
 
@@ -89,45 +87,45 @@ end
 # Should stay the same size
 #
 lvm_logical_volume 'small_noresize_test' do
-  action      :resize
-  name        'small_noresize'
-  group       'vg-test'
-  size        '8M'
-  filesystem  'ext3'
+  action :resize
+  name 'small_noresize'
+  group 'vg-test'
+  size '8M'
+  filesystem 'ext3'
   mount_point '/mnt/small_noresize'
 end
 
 # Create a LV to resize
 #
 lvm_logical_volume 'percent_noresize' do
-  action      :create
-  group       'vg-test'
-  size        '5%VG'
-  filesystem  'ext3'
+  action :create
+  group 'vg-test'
+  size '5%VG'
+  filesystem 'ext3'
   mount_point '/mnt/percent_noresize'
 end
 
 # Resize a lv based off percent
 # Should stay the same size
-# 
+#
 lvm_logical_volume 'percent_noresize_test' do
-  action      :resize
-  name        'percent_noresize'
-  group       'vg-test'
-  size        '5%VG'
-  filesystem  'ext3'
+  action :resize
+  name 'percent_noresize'
+  group 'vg-test'
+  size '5%VG'
+  filesystem 'ext3'
   mount_point '/mnt/percent_noresize'
 end
 
 # Resize a lv based off percent
 # Should stay the same size
-# 
+#
 lvm_logical_volume 'remainder_resize' do
-  action      [:create, :resize]
-  name        'remainder_resize'
-  group       'vg-test'
-  size        '1'
-  filesystem  'ext3'
+  action [:create, :resize]
+  name 'remainder_resize'
+  group 'vg-test'
+  size '1'
+  filesystem 'ext3'
   take_up_free_space true
   mount_point '/mnt/remainder_resize'
 end
