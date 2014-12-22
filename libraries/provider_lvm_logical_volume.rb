@@ -18,6 +18,7 @@
 #
 
 require 'chef/mixin/shell_out'
+require 'chef/dsl/recipe'
 
 class Chef
   class Provider
@@ -25,6 +26,7 @@ class Chef
     #
     class LvmLogicalVolume < Chef::Provider
       include Chef::Mixin::ShellOut
+      include Chef::DSL::Recipe
 
       # Loads the current resource attributes
       #
