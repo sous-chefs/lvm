@@ -24,6 +24,7 @@ class Chef
     # The provider for lvm_volume_group resource
     #
     class LvmVolumeGroup < Chef::Provider
+      include Chef::DSL::Recipe
       include Chef::Mixin::ShellOut
 
       # Loads the current resource attributes
