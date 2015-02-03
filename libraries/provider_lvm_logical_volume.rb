@@ -24,6 +24,7 @@ class Chef
     # The provider for lvm_logical_volume resource
     #
     class LvmLogicalVolume < Chef::Provider
+      include Chef::DSL::Recipe
       include Chef::Mixin::ShellOut
 
       # Loads the current resource attributes
