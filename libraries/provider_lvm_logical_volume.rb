@@ -44,6 +44,7 @@ class Chef
         name = new_resource.name
         group = new_resource.group
         fs_type = new_resource.filesystem
+        fs_params = new_resource.filesystem_params
         device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
         updates = []
 
@@ -92,7 +93,7 @@ class Chef
         elsif device_formatted?(device_name, fs_type)
           Chef::Log.info "Volume '#{device_name}' is already formatted. Not formatting..."
         else
-          shell_out!("yes | mkfs -t #{fs_type} #{device_name}")
+          shell_out!("yes | mkfs -t #{fs_type} #{fs_params} #{device_name}")
           updates << true
         end
 

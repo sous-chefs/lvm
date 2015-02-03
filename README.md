@@ -117,6 +117,12 @@ Manages LVM logical volumes.
     <td></td>
   </tr>
   <tr>
+    <td>filesystem_params</td>
+    <td>Optional parameters to use when formatting the file system</td>
+    <td><tt>'-j -L log -m 2 -i 10240 -J size=400 -b 4096'</tt></td>
+    <td></td>
+  </tr>
+  <tr>
     <td>mount_point</td>
     <td>
       Either a String containing the path to the mount point, or a Hash with the following keys:
