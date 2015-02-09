@@ -2,6 +2,10 @@ lvm Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the lvm cookbook.
 
+v1.3.1 (2015-02-09)
+-------------------
+- #46 - Unbreak cookbook on Chef Client 12
+- #34 - Add ability to specify optional filesystem parameters when formatting
 
 v1.3.0 (2014-07-09)
 -------------------

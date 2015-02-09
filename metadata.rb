@@ -1,9 +1,9 @@
 name              'lvm'
-maintainer        'Opscode, Inc.'
-maintainer_email  'cookbooks@opscode.com'
+maintainer        'Chef Software, Inc.'
+maintainer_email  'cookbooks@chef.io'
 license           'Apache 2.0'
-description       'Installs lvm2 package'
-version           '1.3.0'
+description       'Installs and manages Logical Volume Manager'
+version           '1.3.1'
 
 supports 'centos'
 supports 'debian'
