@@ -1,7 +1,7 @@
 ---
 driver_config:
   digitalocean_client_id: <%= ENV['DIGITAL_OCEAN_CLIENT_ID'] %>
-  digitalocean_api_token: <%= ENV['DIGITAL_OCEAN_ACCESS_TOKEN'] %>
+  digitalocean_access_token: <%= ENV['DIGITAL_OCEAN_ACCESS_TOKEN'] %>
   aws_access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %> 
   aws_secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
   aws_ssh_key_id: <%= ENV['AWS_KEYPAIR_NAME'] %>
