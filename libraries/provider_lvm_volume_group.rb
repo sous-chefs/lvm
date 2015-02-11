@@ -18,6 +18,7 @@
 #
 
 require 'chef/mixin/shell_out'
+require 'chef/dsl/recipe'
 
 class Chef
   class Provider
@@ -26,6 +27,7 @@ class Chef
     class LvmVolumeGroup < Chef::Provider
       include Chef::DSL::Recipe
       include Chef::Mixin::ShellOut
+      include Chef::DSL::Recipe
 
       # Loads the current resource attributes
       #
@@ -94,6 +96,7 @@ class Chef
           output = lvm.raw command
           Chef::Log.debug "Command output: '#{output}'"
           new_resource.updated_by_last_action(true)
+          resize_logical_volumes
         end
 
       end
@@ -136,6 +139,16 @@ class Chef
         new_resource.logical_volumes.each do |lv|
           lv.group new_resource.name
           lv.run_action :create
+          updates << lv.updated?
+        end
+        new_resource.updated_by_last_action(updates.any?)
+      end
+      
+      def resize_logical_volumes
+        updates = []
+        new_resource.logical_volumes.each do |lv|
+          lv.group new_resource.name
+          lv.run_action :resize
           updates << lv.updated?
         end
         new_resource.updated_by_last_action(updates.any?)
