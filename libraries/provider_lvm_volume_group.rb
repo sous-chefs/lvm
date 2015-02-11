@@ -63,17 +63,17 @@ class Chef
 
       # The extend action
       #
-      def action_extend
+      def action_extend # rubocop:disable Metrics/AbcSize
         name = new_resource.name
         physical_volume_list = [new_resource.physical_volumes].flatten
         lvm = LVM::LVM.new
 
         # verify that the volume group is valid
-        Chef::Application.fatal!("VG #{name} is not a valid volume group",2) if lvm.volume_groups[name].nil?
+        Chef::Application.fatal!("VG #{name} is not a valid volume group", 2) if lvm.volume_groups[name].nil?
 
         # get uuid of the volume group so we can compare it to the VG the PV belongs to
         vg_uuid = lvm.volume_groups[name].uuid
-  
+
         pvs_to_add = []
         physical_volume_list.each do |pv_name|
           pv = lvm.physical_volumes[pv_name]
@@ -86,28 +86,27 @@ class Chef
             pvs_to_add.push pv_name
           else
             # raise an error if we attempt to add a PV that is already a member of a VG
-            Chef::Application.fatal!("PV #{pv} is already a member of another volume group. Cannot add to #{name}",2) unless pv_vg_uuid == vg_uuid
+            Chef::Application.fatal!("PV #{pv} is already a member of another volume group. Cannot add to #{name}", 2) unless pv_vg_uuid == vg_uuid
           end
         end
 
-        unless pvs_to_add.empty?
-          command = "vgextend #{name} #{pvs_to_add.join(" ")}"
+        unless pvs_to_add.empty? # rubocop:disable Style/GuardClause
+          command = "vgextend #{name} #{pvs_to_add.join(' ')}"
           Chef::Log.debug "Executing lvm command: '#{command}'"
           output = lvm.raw command
           Chef::Log.debug "Command output: '#{output}'"
           new_resource.updated_by_last_action(true)
           resize_logical_volumes
         end
-
       end
 
       private
 
       def create_mount_resource(physical_volume_list)
-        physical_volume_list.select { |pv| ::File.exist?(pv) }.each do |pv|
-        # If the device is mounted, the mount point will be returned else nil will be returned.
-        # mount_point is required by the mount resource for umount and disable actions.
-        #
+        physical_volume_list.select { |pv| ::File.exist?(pv) }.each do |pv| # rubocop:disable Style/Next
+          # If the device is mounted, the mount point will be returned else nil will be returned.
+          # mount_point is required by the mount resource for umount and disable actions.
+          #
           mount_point = get_mount_point(pv)
           unless mount_point.nil?
             mount_resource = mount mount_point do
@@ -143,7 +142,7 @@ class Chef
         end
         new_resource.updated_by_last_action(updates.any?)
       end
-      
+
       def resize_logical_volumes
         updates = []
         new_resource.logical_volumes.each do |lv|
