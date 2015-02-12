@@ -2,6 +2,11 @@ lvm Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the lvm cookbook.
 
+v1.3.2 (2015-02-11)
+-------------------
+- #35 - Fixed lvm_volume_group(:extend) and lvm_logical_volume(:resize) issues
+- #47 - Ensure all unit and integration tests work and add back to Travis CI
+
 v1.3.1 (2015-02-09)
 -------------------
 - #46 - Unbreak cookbook on Chef Client 12
@@ -12,43 +17,35 @@ v1.3.0 (2014-07-09)
 - #32 - add support for resizing logical and physical volumes
 - #33 - [COOK-4701]: add ability to extend volume groups
 
-
 v1.2.2 (2014-07-02)
 -------------------
 No changes. Bumping for toolchain
 
-
 v1.2.0 (2014-07-02)
 -------------------
-COOK-2992: add support for resizing logical and physical volumes
-
+- [COOK-2992] add support for resizing logical and physical volumes
 
 v1.1.2 (2014-05-15)
 -------------------
 - [COOK-4609] Enable the logical volume if it is disabled
 
-
 v1.1.0 (2014-04-10)
 -------------------
 - [COOK-4539] - Change default mount mode to 0755
 
-
 v1.0.8 (2014-03-27)
 -------------------
 No change. Bumping version for toolchain
-
 
 v1.0.6 (2014-03-27)
 -------------------
 - [COOK-4486] - Add ChefSpec matchers for LVM resources
 - [COOK-4481] - The lvm_volume_group resource is not convergent
 
-
 v1.0.4 (2013-12-28)
 -------------------
 ### Bug
 - **[COOK-3987](https://tickets.opscode.com/browse/COOK-3987)** - Volumes are created with the wrong # of extents.  Size = '2%VG' is treated as a size of 2 extents.
-
 
 v1.0.2
 ------
@@ -56,7 +53,6 @@ v1.0.2
 - **[COOK-3935](https://tickets.opscode.com/browse/COOK-3935)** - fix minor typo
 - Fixing up style
 - Updating test harness
-
 
 v1.0.0
 ------
