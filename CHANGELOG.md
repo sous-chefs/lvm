@@ -2,10 +2,10 @@ lvm Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the lvm cookbook.
 
-v1.3.2 (2015-02-11)
+v1.3.3 (2015-02-17)
 -------------------
-- #35 - Fixed lvm_volume_group(:extend) and lvm_logical_volume(:resize) issues
-- #47 - Ensure all unit and integration tests work and add back to Travis CI
+- Being explicit about usage of the chef_gem's compile_time property.
+- Eliminating future deprecation warning in Chef 12.1.0
 
 v1.3.1 (2015-02-09)
 -------------------
