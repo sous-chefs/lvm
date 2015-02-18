@@ -45,27 +45,27 @@ v1.0.6 (2014-03-27)
 v1.0.4 (2013-12-28)
 -------------------
 ### Bug
-- **[COOK-3987](https://tickets.opscode.com/browse/COOK-3987)** - Volumes are created with the wrong # of extents.  Size = '2%VG' is treated as a size of 2 extents.
+- **[COOK-3987](https://tickets.chef.io/browse/COOK-3987)** - Volumes are created with the wrong # of extents.  Size = '2%VG' is treated as a size of 2 extents.
 
 v1.0.2
 ------
 ### Bug
-- **[COOK-3935](https://tickets.opscode.com/browse/COOK-3935)** - fix minor typo
+- **[COOK-3935](https://tickets.chef.io/browse/COOK-3935)** - fix minor typo
 - Fixing up style
 - Updating test harness
 
 v1.0.0
 ------
 ### Improvement
-- **[COOK-3357](https://tickets.opscode.com/browse/COOK-3357)** - Complete refactor into a heavy-weight provider with tests
+- **[COOK-3357](https://tickets.chef.io/browse/COOK-3357)** - Complete refactor into a heavy-weight provider with tests
 
 v0.8.12
 -------
 ### Improvement
-- **[COOK-2991](https://tickets.opscode.com/browse/COOK-2991)** - Add SLES support
+- **[COOK-2991](https://tickets.chef.io/browse/COOK-2991)** - Add SLES support
 
 ### Bug
-- **[COOK-2348](https://tickets.opscode.com/browse/COOK-2348)** - Fix `lvm_logical_volume` when `mount_point` parameter is a String
+- **[COOK-2348](https://tickets.chef.io/browse/COOK-2348)** - Fix `lvm_logical_volume` when `mount_point` parameter is a String
 
 v0.8.10
 -------

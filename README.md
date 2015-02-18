@@ -1,6 +1,6 @@
 lvm Cookbook
 ============
-[![Build Status](https://secure.travis-ci.org/opscode-cookbooks/lvm.png?branch=master)](http://travis-ci.org/opscode-cookbooks/lvm)
+[![Build Status](https://secure.travis-ci.org/chef-cookbooks/lvm.png?branch=master)](http://travis-ci.org/chef-cookbooks/lvm)
 
 Installs lvm2 package and includes resources for managing LVM. The default recipe simply installs LVM and the supporting Ruby gem. The cookbook includes providers for managing LVMs.
 
@@ -321,7 +321,7 @@ This section details "quick development" steps. For a detailed explanation, see 
 
 1. Clone this repository from GitHub:
 
-        $ git clone git@github.com:opscode-cookbooks/lvm.git
+        $ git clone git@github.com:chef-cookbooks/lvm.git
 
 2. Create a git branch
 
@@ -348,11 +348,11 @@ This section details "quick development" steps. For a detailed explanation, see 
 
 License and Authors
 -------------------
-- Author:: Joshua Timberman <joshua@opscode.com>
+- Author:: Joshua Timberman <joshua@chef.io>
 - Author:: Greg Symons <gsymons@drillinginfo.com>
 
 ```text
-Copyright:: 2011, Opscode, Inc
+Copyright:: 2011, Chef Software, Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
