@@ -18,4 +18,8 @@
 #
 
 package 'lvm2'
-chef_gem 'di-ruby-lvm'
+
+chef_gem 'di-ruby-lvm' do
+  compile_time true
+  action :install
+end
