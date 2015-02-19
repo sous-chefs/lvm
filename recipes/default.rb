@@ -20,6 +20,5 @@
 package 'lvm2'
 
 chef_gem 'di-ruby-lvm' do
-  compile_time true if Chef::Resource::ChefGem.method_defined?(:compile_time)
   action :install
 end
