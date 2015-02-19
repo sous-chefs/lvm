@@ -2,6 +2,10 @@ lvm Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the lvm cookbook.
 
+v1.3.5 (2015-02-18)
+-------------------
+- Fixing chef_gem with Chef::Resource::ChefGem.method_defined?(:compile_time)
+
 v1.3.4 (2015-02-18)
 -------------------
 - Fixing chef_gem for Chef below 12.1.0
