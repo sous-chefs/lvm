@@ -9,7 +9,11 @@ describe 'lvm::default' do
     expect(chef_run).to install_package('lvm2')
   end
 
+  it 'installs `di-ruby-lvm-attrib` as a Ruby gem' do
+    expect(chef_run).to install_chef_gem('di-ruby-lvm-attrib').with(version: '0.0.16')
+  end
+
   it 'installs `di-ruby-lvm` as a Ruby gem' do
-    expect(chef_run).to install_chef_gem('di-ruby-lvm')
+    expect(chef_run).to install_chef_gem('di-ruby-lvm').with(version: '0.1.3')
   end
 end
