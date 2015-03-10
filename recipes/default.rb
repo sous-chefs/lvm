@@ -21,4 +21,5 @@ package 'lvm2'
 
 chef_gem 'di-ruby-lvm' do
   action :install
+  version '> 0.0'
 end
