@@ -22,3 +22,13 @@ package 'lvm2'
 chef_gem 'di-ruby-lvm' do
   action :install
 end
+
+# Start+Enable the lvmetad service on RHEL7, it is required by default
+# but not automatically started
+if node['platform_family'] == 'rhel' && node['platform_version'].to_i >= 7
+  service 'lvm2-lvmetad' do
+    action [:enable, :start]
+    provider Chef::Provider::Service::Systemd
+    only_if '/sbin/lvm dumpconfig global/use_lvmetad | grep use_lvmetad=1'
+  end
+end
