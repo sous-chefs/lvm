@@ -21,6 +21,7 @@ package 'lvm2'
 
 chef_gem 'di-ruby-lvm' do
   action :install
+  version '> 0.0'
 end
 
 # Start+Enable the lvmetad service on RHEL7, it is required by default
