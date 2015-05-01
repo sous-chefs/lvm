@@ -76,7 +76,7 @@ class Chef
           Chef::Log.debug "Command output: '#{output}'"
           updates << true
         else
-          lv = vg.logical_volumes.select { |v| v.name == name }.first
+          lv = vg.logical_volumes.find { |v| v.name == name }
           if !lv.state.nil? && lv.state.to_sym == :active
             Chef::Log.info "Logical volume '#{name}' already exists and active. Not creating..."
           else
