@@ -79,6 +79,20 @@ class Chef
         )
       end
 
+      # Attribute: lv_params - additional parameters for lvcreate
+      #
+      # @param arg [String] the parameters
+      #
+      # @return [String] the parameters
+      #
+      def lv_params(arg = nil)
+        set_or_return(
+          :lv_params,
+          arg,
+          :kind_of => String
+        )
+      end
+
       # Attribute: size - size of the logical volume
       #
       # @param arg [String] the size of the logical volume
