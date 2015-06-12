@@ -45,6 +45,7 @@ class Chef
         lvm = LVM::LVM.new
         name = new_resource.name
         group = new_resource.group
+        lv_params = new_resource.lv_params
         fs_type = new_resource.filesystem
         fs_params = new_resource.filesystem_params
         device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
@@ -70,7 +71,7 @@ class Chef
           readahead = new_resource.readahead ? "--readahead #{new_resource.readahead}" : ''
           physical_volumes = [new_resource.physical_volumes].flatten.join ' ' if new_resource.physical_volumes
 
-          command = "lvcreate #{size} #{stripes} #{stripe_size} #{mirrors} #{contiguous} #{readahead} --name #{name} #{group} #{physical_volumes}"
+          command = "lvcreate #{size} #{stripes} #{stripe_size} #{mirrors} #{contiguous} #{readahead} #{lv_params} --name #{name} #{group} #{physical_volumes}"
           Chef::Log.debug "Executing lvm command: '#{command}'"
           output = lvm.raw(command)
           Chef::Log.debug "Command output: '#{output}'"
