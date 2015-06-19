@@ -141,7 +141,7 @@ class Chef
             ': location must be an absolute path!' => proc do |value|
               # this can be a string or a hash, so attempt to match either for
               # the regex
-              matches = value =~ /^\/[^\0]*/ || value[:location] =~ /^\/[^\0]*/
+              matches = value =~ %r{^/[^\0]*} || value[:location] =~ %r{^/[^\0]*}
               !matches.nil?
             end
           }
