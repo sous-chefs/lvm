@@ -2,6 +2,12 @@ lvm Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the lvm cookbook.
 
+v1.3.7 (2015-06-20)
+-------------------
+- Allow users to specify the exact versions of the lvm gems (#49)
+- Start/enable the lvmetad service on RHEL7. (#52)
+- Allow arbitrary parameters to be passed to lvcreate.
+
 v1.3.6 (2015-02-18)
 -------------------
 - Reverting chef_gem compile_time work
