@@ -21,11 +21,13 @@ package 'lvm2'
 
 chef_gem 'di-ruby-lvm-attrib' do
   action :install
+  compile_time false if Chef::Resource::ChefGem.method_defined?(:compile_time)
   version node['lvm']['di-ruby-lvm-attrib']['version']
 end
 
 chef_gem 'di-ruby-lvm' do
   action :install
+  compile_time false if Chef::Resource::ChefGem.method_defined?(:compile_time)
   version node['lvm']['di-ruby-lvm']['version']
 end
 
