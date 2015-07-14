@@ -22,11 +22,23 @@ if defined?(ChefSpec)
     ChefSpec::Matchers::ResourceMatcher.new(:lvm_logical_volume, :create, resource_name)
   end
 
+  def resize_lvm_logical_volume(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:lvm_logical_volume, :resize, resource_name)
+  end
+
   def create_lvm_physical_volume(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:lvm_physical_volume, :create, resource_name)
   end
 
+  def resize_lvm_physical_volume(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:lvm_physical_volume, :resize, resource_name)
+  end
+
   def create_lvm_volume_group(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:lvm_volume_group, :create, resource_name)
+  end
+
+  def extend_lvm_volume_group(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:lvm_volume_group, :extend, resource_name)
   end
 end
