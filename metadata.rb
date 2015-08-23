@@ -13,5 +13,5 @@ supports 'ubuntu'
 
 recipe 'lvm', 'Installs lvm2 package'
 
-source_url 'https://github.com/opscode-cookbooks/lvm'
-issues_url 'https://github.com/opscode-cookbooks/lvm/issues'
+source_url 'https://github.com/opscode-cookbooks/lvm' if respond_to?(:source_url)
+issues_url 'https://github.com/opscode-cookbooks/lvm/issues' if respond_to?(:issues_url)
