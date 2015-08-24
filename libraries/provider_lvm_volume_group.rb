@@ -64,6 +64,7 @@ class Chef
       # The extend action
       #
       def action_extend # rubocop:disable Metrics/AbcSize
+        require 'lvm'
         name = new_resource.name
         physical_volume_list = [new_resource.physical_volumes].flatten
         lvm = LVM::LVM.new
