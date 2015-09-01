@@ -13,7 +13,7 @@ Requirements
 
 Resources/Providers
 -------------------
-#### `lvm_physical_volume`
+#### lvm_physical_volume
 Manages LVM physical volumes.
 
 ##### Actions
@@ -56,7 +56,7 @@ lvm_physical_volume '/dev/sda'
 ---
 
 
-#### `lvm_logical_volume`
+#### lvm_logical_volume
 Manages LVM logical volumes.
 
 ##### Actions
@@ -199,7 +199,7 @@ end
 ---
 
 
-#### `lvm_volume_group`
+#### lvm_volume_group
 Manages LVM volume groups.
 
 ##### Actions
