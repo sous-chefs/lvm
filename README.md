@@ -1,13 +1,14 @@
 lvm Cookbook
 ============
 [![Build Status](https://travis-ci.org/opscode-cookbooks/lvm.svg?branch=master)](https://travis-ci.org/opscode-cookbooks/lvm)
+[![Cookbook Version](https://img.shields.io/cookbook/v/lvm.svg)](https://supermarket.chef.io/cookbooks/lvm)
 
 Installs lvm2 package and includes resources for managing LVM. The default recipe simply installs LVM and the supporting Ruby gem. The cookbook includes providers for managing LVMs.
 
 
 Requirements
 ------------
-- Chef 10 or higher
+- Chef 11 or higher
 
 
 Resources/Providers
@@ -352,7 +353,7 @@ License and Authors
 - Author:: Greg Symons <gsymons@drillinginfo.com>
 
 ```text
-Copyright:: 2011, Chef Software, Inc
+Copyright:: 2011-2015, Chef Software, Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
