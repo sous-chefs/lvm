@@ -1,6 +1,6 @@
 lvm Cookbook
 ============
-[![Build Status](https://travis-ci.org/opscode-cookbooks/lvm.svg?branch=master)](https://travis-ci.org/opscode-cookbooks/lvm)
+[![Build Status](https://travis-ci.org/chef-cookbooks/lvm.svg?branch=master)](https://travis-ci.org/chef-cookbooks/lvm)
 [![Cookbook Version](https://img.shields.io/cookbook/v/lvm.svg)](https://supermarket.chef.io/cookbooks/lvm)
 
 Installs lvm2 package and includes resources for managing LVM. The default recipe simply installs LVM and the supporting Ruby gem. The cookbook includes providers for managing LVMs.
