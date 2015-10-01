@@ -50,11 +50,11 @@ class Chef
         set_or_return(
           :name,
           arg,
-          :kind_of => String,
-          :regex => /[\w+.-]+/,
-          :name_attribute => true,
-          :required => true,
-          :callbacks => {
+          kind_of: String,
+          regex: /[\w+.-]+/,
+          name_attribute: true,
+          required: true,
+          callbacks: {
             "cannot be '.', '..', 'snapshot', or 'pvmove'" => proc do |value|
               !(value == '.' || value == '..' || value == 'snapshot' || value == 'pvmove')
             end,
@@ -75,7 +75,7 @@ class Chef
         set_or_return(
           :group,
           arg,
-          :kind_of => String
+          kind_of: String
         )
       end
 
@@ -89,7 +89,7 @@ class Chef
         set_or_return(
           :lv_params,
           arg,
-          :kind_of => String
+          kind_of: String
         )
       end
 
@@ -103,9 +103,9 @@ class Chef
         set_or_return(
           :size,
           arg,
-          :kind_of => String,
-          :regex => /^(\d+[kKmMgGtTpPeE]|(\d{1,2}|100)%(FREE|VG|PVS)|\d+)$/,
-          :required => true
+          kind_of: String,
+          regex: /^(\d+[kKmMgGtTpPeE]|(\d{1,2}|100)%(FREE|VG|PVS)|\d+)$/,
+          required: true
         )
       end
 
@@ -119,7 +119,7 @@ class Chef
         set_or_return(
           :filesystem,
           arg,
-          :kind_of => String
+          kind_of: String
         )
       end
 
@@ -133,7 +133,7 @@ class Chef
         set_or_return(
           :filesystem_params,
           arg,
-          :kind_of => String
+          kind_of: String
         )
       end
 
@@ -147,8 +147,8 @@ class Chef
         set_or_return(
           :mount_point,
           arg,
-          :kind_of => [String, Hash],
-          :callbacks => {
+          kind_of: [String, Hash],
+          callbacks: {
             ': location is required!' => proc do |value|
               value.class == String || (value[:location] && !value[:location].empty?)
             end,
@@ -172,7 +172,7 @@ class Chef
         set_or_return(
           :physical_volumes,
           arg,
-          :kind_of => [String, Array]
+          kind_of: [String, Array]
         )
       end
 
@@ -186,8 +186,8 @@ class Chef
         set_or_return(
           :stripes,
           arg,
-          :kind_of => Integer,
-          :callbacks => {
+          kind_of: Integer,
+          callbacks: {
             'must be greater than 0' => proc { |value| value > 0 }
           }
         )
@@ -203,8 +203,8 @@ class Chef
         set_or_return(
           :stripe_size,
           arg,
-          :kind_of => Integer,
-          :callbacks => {
+          kind_of: Integer,
+          callbacks: {
             'must be a power of 2' => proc { |value| Math.log2(value) % 1 == 0 }
           }
         )
@@ -220,8 +220,8 @@ class Chef
         set_or_return(
           :mirrors,
           arg,
-          :kind_of => Integer,
-          :callbacks => {
+          kind_of: Integer,
+          callbacks: {
             'must be greater than 0' => proc { |value| value > 0 }
           }
         )
@@ -237,7 +237,7 @@ class Chef
         set_or_return(
           :contiguous,
           arg,
-          :kind_of => [TrueClass, FalseClass]
+          kind_of: [TrueClass, FalseClass]
         )
       end
 
@@ -251,8 +251,8 @@ class Chef
         set_or_return(
           :readahead,
           arg,
-          :kind_of => [Integer, String],
-          :equal_to => [2..120, 'auto', 'none'].flatten!
+          kind_of: [Integer, String],
+          equal_to: [2..120, 'auto', 'none'].flatten!
         )
       end
 
@@ -266,7 +266,7 @@ class Chef
         set_or_return(
           :take_up_free_space,
           arg,
-          :kind_of => [TrueClass, FalseClass]
+          kind_of: [TrueClass, FalseClass]
         )
       end
     end

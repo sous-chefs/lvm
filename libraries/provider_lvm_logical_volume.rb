@@ -40,7 +40,7 @@ class Chef
 
       # The create action
       #
-      def action_create # rubocop:disable MethodLength,Metrics/PerceivedComplexity,Metrics/AbcSize
+      def action_create
         require 'lvm'
         lvm = LVM::LVM.new
         name = new_resource.name
@@ -103,7 +103,7 @@ class Chef
         # If the mount point is specified, mount the logical volume
         if new_resource.mount_point
           if new_resource.mount_point.is_a?(String)
-            mount_spec = { :location => new_resource.mount_point }
+            mount_spec = { location: new_resource.mount_point }
           else
             mount_spec = new_resource.mount_point
           end
@@ -139,7 +139,7 @@ class Chef
       end
 
       # Action to resize LV to specified size
-      def action_resize # rubocop:disable Metrics/AbcSize,Metrics/PerceivedComplexity,MethodLength
+      def action_resize
         require 'lvm'
         lvm = LVM::LVM.new
         name = new_resource.name

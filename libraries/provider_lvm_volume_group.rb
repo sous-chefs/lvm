@@ -63,7 +63,7 @@ class Chef
 
       # The extend action
       #
-      def action_extend # rubocop:disable Metrics/AbcSize
+      def action_extend
         require 'lvm'
         name = new_resource.name
         physical_volume_list = [new_resource.physical_volumes].flatten
@@ -104,12 +104,12 @@ class Chef
       private
 
       def create_mount_resource(physical_volume_list)
-        physical_volume_list.select { |pv| ::File.exist?(pv) }.each do |pv| # rubocop:disable Style/Next
+        physical_volume_list.select { |pv| ::File.exist?(pv) }.each do |pv|
           # If the device is mounted, the mount point will be returned else nil will be returned.
           # mount_point is required by the mount resource for umount and disable actions.
           #
           mount_point = get_mount_point(pv)
-          unless mount_point.nil?
+          unless mount_point.nil? # rubocop:disable Style/Next
             mount_resource = mount mount_point do
               device pv
               action :nothing

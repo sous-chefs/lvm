@@ -50,9 +50,9 @@ class Chef
         set_or_return(
           :name,
           arg,
-          :kind_of => String,
-          :name_attribute => true,
-          :required => true
+          kind_of: String,
+          name_attribute: true,
+          required: true
         )
       end
     end

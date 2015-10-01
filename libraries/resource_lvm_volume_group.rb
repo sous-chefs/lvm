@@ -56,11 +56,11 @@ class Chef
         set_or_return(
           :name,
           arg,
-          :kind_of => String,
-          :name_attribute => true,
-          :regex => /[\w+.-]+/,
-          :required => true,
-          :callbacks => {
+          kind_of: String,
+          name_attribute: true,
+          regex: /[\w+.-]+/,
+          required: true,
+          callbacks: {
             "cannot be '.' or '..'" => proc do |value|
               !(value == '.' || value == '..')
             end
@@ -78,8 +78,8 @@ class Chef
         set_or_return(
           :physical_volumes,
           arg,
-          :kind_of => [Array, String],
-          :required => true
+          kind_of: [Array, String],
+          required: true
         )
       end
 
@@ -93,8 +93,8 @@ class Chef
         set_or_return(
           :physical_extent_size,
           arg,
-          :kind_of => String,
-          :regex => /\d+[bBsSkKmMgGtTpPeE]?/
+          kind_of: String,
+          regex: /\d+[bBsSkKmMgGtTpPeE]?/
         )
       end
 

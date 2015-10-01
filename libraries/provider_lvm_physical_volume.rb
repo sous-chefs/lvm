@@ -2,7 +2,7 @@
 # Cookbook Name:: lvm
 # Library:: provider_lvm_physical_volume
 #
-# Copyright 2009-2013, Chef Software, Inc.
+# Copyright 2009-2015, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ class Chef
 
       # The create action
       #
-      def action_create # rubocop:disable Metrics/AbcSize
+      def action_create
         require 'lvm'
         lvm = LVM::LVM.new
         if lvm.physical_volumes[new_resource.name].nil?
@@ -48,7 +48,7 @@ class Chef
         end
       end
 
-      def action_resize # rubocop:disable Metrics/AbcSize
+      def action_resize
         require 'lvm'
         lvm = LVM::LVM.new
         pv = lvm.physical_volumes.select do |pvs|
