@@ -109,14 +109,14 @@ class Chef
           # mount_point is required by the mount resource for umount and disable actions.
           #
           mount_point = get_mount_point(pv)
-          unless mount_point.nil? # rubocop:disable Style/Next
-            mount_resource = mount mount_point do
-              device pv
-              action :nothing
-            end
-            mount_resource.run_action(:umount)
-            mount_resource.run_action(:disable)
+          next if mount_point.nil?
+
+          mount_resource = mount mount_point do
+            device pv
+            action :nothing
           end
+          mount_resource.run_action(:umount)
+          mount_resource.run_action(:disable)
         end
       end
 
