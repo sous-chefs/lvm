@@ -2,6 +2,23 @@ lvm Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the lvm cookbook.
 
+v1.4.0 (2015-10-22)
+-------------------
+- Updated the minimum supported Chef release from 10 -> 11 in the readme
+- Updated di-ruby-lvm-attrib gem from 0.0.16 -> 0.0.21
+- Added Chef 11 compatibility to the source_url and issues_url in the metadata
+- Added support for additional RHEL deritivites to the metadata
+- Added additional Chefspec matchers
+- Added chefignore file to limit what files are uploaded to the Chef server
+- Added Test Kitchen config
+- Updated .gitignore
+- Updated to use Chef standard rubocop config
+- Updated Travis config to test using ChefDK vs. Gems
+- Updated contributing and testing docs
+- Added maintainers.md and maintainers.toml files
+- Updated development dependencies in the Gemfile
+- Added cookbook version badge to the readme
+
 v1.3.7 (2015-06-20)
 -------------------
 - Allow users to specify the exact versions of the lvm gems (#49)
