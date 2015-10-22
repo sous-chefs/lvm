@@ -8,7 +8,15 @@ Installs lvm2 package and includes resources for managing LVM. The default recip
 
 Requirements
 ------------
-- Chef 11 or higher
+#### Platforms
+- Debian/Ubuntu
+- RHEL/CentOS/Scientific/Amazon/Oracle
+
+#### Chef
+- Chef 11+
+
+#### Cookbooks
+- none
 
 
 Resources/Providers
