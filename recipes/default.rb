@@ -22,11 +22,13 @@ package 'lvm2'
 chef_gem 'di-ruby-lvm-attrib' do
   action :install
   version node['lvm']['di-ruby-lvm-attrib']['version']
+  compile_time false if Chef::Resource::ChefGem.instance_methods(false).include?(:compile_time)
 end
 
 chef_gem 'di-ruby-lvm' do
   action :install
   version node['lvm']['di-ruby-lvm']['version']
+  compile_time false if Chef::Resource::ChefGem.instance_methods(false).include?(:compile_time)
 end
 
 # Start+Enable the lvmetad service on RHEL7, it is required by default
