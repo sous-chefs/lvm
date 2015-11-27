@@ -10,10 +10,29 @@ export PATH=$PATH:/sbin:/usr/sbin
   pvs | grep /dev/loop2
   pvs | grep /dev/loop3
   pvs | grep /dev/loop4
+  pvs | grep /dev/loop5
+  pvs | grep /dev/loop6
+  pvs | grep /dev/loop7
+}
+
+@test "detects notification for physical volume creation" {
+  [ $(grep 'pv for /dev/loop0 has been created' /tmp/test_notifications | wc -l) -eq 1 ]
+  [ $(grep 'pv for /dev/loop1 has been created' /tmp/test_notifications | wc -l) -eq 1 ]
+  [ $(grep 'pv for /dev/loop2 has been created' /tmp/test_notifications | wc -l) -eq 1 ]
+  [ $(grep 'pv for /dev/loop3 has been created' /tmp/test_notifications | wc -l) -eq 1 ]
+  [ $(grep 'pv for /dev/loop4 has been created' /tmp/test_notifications | wc -l) -eq 1 ]
+  [ $(grep 'pv for /dev/loop5 has been created' /tmp/test_notifications | wc -l) -eq 1 ]
+  [ $(grep 'pv for /dev/loop6 has been created' /tmp/test_notifications | wc -l) -eq 1 ]
+  [ $(grep 'pv for /dev/loop7 has been created' /tmp/test_notifications | wc -l) -eq 1 ]
 }
 
 @test "creates the volume group vg-data" {
   vgs | grep vg-data
+}
+
+@test "detects notification for creation of vg-data" {
+  grep 'vg-data has been created' /tmp/test_notifications
+  [ $(grep 'vg-data has been created' /tmp/test_notifications | wc -l) -eq 1 ]
 }
 
 @test "creates the logical volume logs on vg-data" {
@@ -29,6 +48,11 @@ export PATH=$PATH:/sbin:/usr/sbin
   mount | grep /dev/mapper/vg--data-logs | grep /mnt/logs
 }
 
+@test "detects notification for creation of logs volume" {
+  grep 'logs volume has been created' /tmp/test_notifications
+  [ $(grep 'logs volume has been created' /tmp/test_notifications | wc -l) -eq 1 ]
+}
+
 @test "creates the logical volume home on vg-data" {
   lvs | grep home | grep vg-data
 }
@@ -42,12 +66,27 @@ export PATH=$PATH:/sbin:/usr/sbin
   mount | grep /dev/mapper/vg--data-home | grep /mnt/home
 }
 
+@test "detects notification for creation of home volume" {
+  grep 'home volume has been created' /tmp/test_notifications
+  [ $(grep 'home volume has been created' /tmp/test_notifications | wc -l) -eq 1 ]
+}
+
 @test "creates the volume group vg-test" {
   vgs | grep vg-test
 }
 
+@test "detects notification for creation of vg-data" {
+  grep 'vg-test has been created' /tmp/test_notifications
+  [ $(grep 'vg-test has been created' /tmp/test_notifications | wc -l) -eq 1 ]
+}
+
 @test "creates the logical volume 'test' on 'vg-test'" {
   lvs | grep test | grep vg-test
+}
+
+@test "detects notification for creation of test volume" {
+  grep 'test volume has been created' /tmp/test_notifications
+  [ $(grep 'test volume has been created' /tmp/test_notifications | wc -l) -eq 1 ]
 }
 
 @test "logical volume 'test' is formatted as 'ext3' filesystem" {
@@ -57,6 +96,11 @@ export PATH=$PATH:/sbin:/usr/sbin
 @test "mounts the logical volume to /mnt/test" {
   mountpoint /mnt/test
   mount | grep /dev/mapper/vg--test-test | grep /mnt/test
+}
+
+@test "detects notification for creation of test volume" {
+  grep 'test volume has been created' /tmp/test_notifications
+  [ $(grep 'test volume has been created' /tmp/test_notifications | wc -l) -eq 1 ]
 }
 
 @test "creates the logical volume 'small' on 'vg-test'" {
@@ -91,4 +135,9 @@ export PATH=$PATH:/sbin:/usr/sbin
 @test "Remount works using fstab information" {
   mount /mnt/small
   mount | grep /dev/mapper/vg--test-small | grep /mnt/small
+}
+
+@test "detects notification for creation of small volume" {
+  grep 'small volume has been created' /tmp/test_notifications
+  [ $(grep 'small volume has been created' /tmp/test_notifications | wc -l) -eq 1 ]
 }

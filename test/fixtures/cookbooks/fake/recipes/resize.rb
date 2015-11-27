@@ -29,6 +29,13 @@ end
 lvm_physical_volume 'loop0_resize' do
   name '/dev/loop0'
   action :resize
+  notifies :run, 'script[note /dev/loop0 has been resized]', :immediately
+end
+
+script "note /dev/loop0 has been resized" do
+  interpreter 'bash'
+  code "echo '/dev/loop0 has been resized' >> /tmp/test_notifications"
+  action :nothing
 end
 
 # Create a LV to resize
@@ -39,6 +46,13 @@ lvm_logical_volume 'small_resize' do
   size '8M'
   filesystem 'ext3'
   mount_point '/mnt/small_resize'
+  notifies :run, 'script[note volume small_resize has been created]', :immediately
+end
+
+script "note volume small_resize has been created" do
+  interpreter 'bash'
+  code "echo 'volume small_resize has been created' >> /tmp/test_notifications"
+  action :nothing
 end
 
 # Resize a lv based off explicit size
@@ -50,6 +64,13 @@ lvm_logical_volume 'small_resize_test' do
   size '16M'
   filesystem 'ext3'
   mount_point '/mnt/small_resize'
+  notifies :run, 'script[note volume small_resize has been resized]', :immediately
+end
+
+script "note volume small_resize has been resized" do
+  interpreter 'bash'
+  code "echo 'volume small_resize has been resized' >> /tmp/test_notifications"
+  action :nothing
 end
 
 # Create a LV to resize
@@ -60,6 +81,13 @@ lvm_logical_volume 'percent_resize' do
   size '5%VG'
   filesystem 'ext3'
   mount_point '/mnt/percent_resize'
+  notifies :run, 'script[note volume percent_resize has been created]', :immediately
+end
+
+script "note volume percent_resize has been created" do
+  interpreter 'bash'
+  code "echo 'volume percent_resize has been created' >> /tmp/test_notifications"
+  action :nothing
 end
 
 # Resize a lv based off percent
@@ -71,6 +99,13 @@ lvm_logical_volume 'percent_resize_test' do
   size '10%VG'
   filesystem 'ext3'
   mount_point '/mnt/percent_resize'
+  notifies :run, 'script[note volume percent_resize has been resized]', :immediately
+end
+
+script "note volume percent_resize has been resized" do
+  interpreter 'bash'
+  code "echo 'volume percent_resize has been resized' >> /tmp/test_notifications"
+  action :nothing
 end
 
 # Create a LV to resize
@@ -81,6 +116,13 @@ lvm_logical_volume 'small_noresize' do
   size '8M'
   filesystem 'ext3'
   mount_point '/mnt/small_noresize'
+  notifies :run, 'script[note volume small_noresize has been created]', :immediately
+end
+
+script "note volume small_noresize has been created" do
+  interpreter 'bash'
+  code "echo 'volume small_noresize has been created' >> /tmp/test_notifications"
+  action :nothing
 end
 
 # Resize a lv based off explicit size
@@ -93,6 +135,13 @@ lvm_logical_volume 'small_noresize_test' do
   size '8M'
   filesystem 'ext3'
   mount_point '/mnt/small_noresize'
+  notifies :run, 'script[note volume small_noresize has been resized]', :immediately
+end
+
+script "note volume small_noresize has been resized" do
+  interpreter 'bash'
+  code "echo 'volume small_noresize has been resized' >> /tmp/test_notifications"
+  action :nothing
 end
 
 # Create a LV to resize
@@ -103,6 +152,13 @@ lvm_logical_volume 'percent_noresize' do
   size '5%VG'
   filesystem 'ext3'
   mount_point '/mnt/percent_noresize'
+  notifies :run, 'script[note volume percent_noresize has been created]', :immediately
+end
+
+script "note volume percent_noresize has been created" do
+  interpreter 'bash'
+  code "echo 'volume percent_noresize has been created' >> /tmp/test_notifications"
+  action :nothing
 end
 
 # Resize a lv based off percent
@@ -115,6 +171,13 @@ lvm_logical_volume 'percent_noresize_test' do
   size '5%VG'
   filesystem 'ext3'
   mount_point '/mnt/percent_noresize'
+  notifies :run, 'script[note volume percent_noresize has been resized]', :immediately
+end
+
+script "note volume percent_noresize has been resized" do
+  interpreter 'bash'
+  code "echo 'volume percent_noresize has been resized' >> /tmp/test_notifications"
+  action :nothing
 end
 
 # Resize a lv based off percent
@@ -128,4 +191,11 @@ lvm_logical_volume 'remainder_resize' do
   filesystem 'ext3'
   take_up_free_space true
   mount_point '/mnt/remainder_resize'
+  notifies :run, 'script[note volume remainder_resize has been created/resized]', :immediately
+end
+
+script "note volume remainder_resize has been created/resized" do
+  interpreter 'bash'
+  code "echo 'volume remainder_resize has been created/resized' >> /tmp/test_notifications"
+  action :nothing
 end

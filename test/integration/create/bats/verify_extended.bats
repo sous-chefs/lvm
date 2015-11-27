@@ -8,3 +8,6 @@ export PATH=$PATH:/sbin:/usr/sbin
   pvdisplay -c /dev/loop7 | cut -d: -f2 | grep -q "vg-test"
 }
 
+@test "detects notification for extention of vg-data" {
+  [ $(grep 'vg-test has been extended' /tmp/test_notifications | wc -l) -eq 1 ]
+}
