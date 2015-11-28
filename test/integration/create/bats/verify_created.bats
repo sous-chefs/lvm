@@ -16,6 +16,14 @@ export PATH=$PATH:/sbin:/usr/sbin
 }
 
 @test "detects notification for physical volume creation" {
+  grep 'pv for /dev/loop0 has been created' /tmp/test_notifications
+  grep 'pv for /dev/loop1 has been created' /tmp/test_notifications
+  grep 'pv for /dev/loop2 has been created' /tmp/test_notifications
+  grep 'pv for /dev/loop3 has been created' /tmp/test_notifications
+  grep 'pv for /dev/loop4 has been created' /tmp/test_notifications
+  grep 'pv for /dev/loop5 has been created' /tmp/test_notifications
+  grep 'pv for /dev/loop6 has been created' /tmp/test_notifications
+  grep 'pv for /dev/loop7 has been created' /tmp/test_notifications
   [ $(grep 'pv for /dev/loop0 has been created' /tmp/test_notifications | wc -l) -eq 1 ]
   [ $(grep 'pv for /dev/loop1 has been created' /tmp/test_notifications | wc -l) -eq 1 ]
   [ $(grep 'pv for /dev/loop2 has been created' /tmp/test_notifications | wc -l) -eq 1 ]
