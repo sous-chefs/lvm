@@ -97,7 +97,7 @@ class Chef
           end
         end
 
-        unless pvs_to_add.empty? # rubocop:disable Style/GuardClause
+        unless pvs_to_add.empty?
           command = "vgextend #{name} #{pvs_to_add.join(' ')}"
           Chef::Log.debug "Executing lvm command: '#{command}'"
           output = lvm.raw command
