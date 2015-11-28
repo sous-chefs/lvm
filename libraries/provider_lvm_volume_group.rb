@@ -41,6 +41,8 @@ class Chef
       # The create action
       #
       def action_create
+        @updates = []
+
         require 'lvm'
         name = new_resource.name
         physical_volume_list = [new_resource.physical_volumes].flatten
@@ -59,11 +61,15 @@ class Chef
 
         # Create the logical volumes specified as sub-resources
         create_logical_volumes
+
+        new_resource.updated_by_last_action(@updates.any?)
       end
 
       # The extend action
       #
       def action_extend
+        @updates = []
+
         require 'lvm'
         name = new_resource.name
         physical_volume_list = [new_resource.physical_volumes].flatten
@@ -96,9 +102,11 @@ class Chef
           Chef::Log.debug "Executing lvm command: '#{command}'"
           output = lvm.raw command
           Chef::Log.debug "Command output: '#{output}'"
-          new_resource.updated_by_last_action(true)
+          @updates << true
           resize_logical_volumes
         end
+
+        new_resource.updated_by_last_action(@updates.any?)
       end
 
       private
@@ -130,28 +138,24 @@ class Chef
           Chef::Log.debug "Executing lvm command: '#{command}'"
           output = lvm.raw command
           Chef::Log.debug "Command output: '#{output}'"
-          new_resource.updated_by_last_action(true)
+          @updates << true
         end
       end
 
       def create_logical_volumes
-        updates = []
         new_resource.logical_volumes.each do |lv|
           lv.group new_resource.name
           lv.run_action :create
-          updates << lv.updated?
+          @updates << lv.updated?
         end
-        new_resource.updated_by_last_action(updates.any?)
       end
 
       def resize_logical_volumes
-        updates = []
         new_resource.logical_volumes.each do |lv|
           lv.group new_resource.name
           lv.run_action :resize
-          updates << lv.updated?
+          @updates << lv.updated?
         end
-        new_resource.updated_by_last_action(updates.any?)
       end
 
       # Obtains the mount point of a device and returns nil if the device is not mounted
