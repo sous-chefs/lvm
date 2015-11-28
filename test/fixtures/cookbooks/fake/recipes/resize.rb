@@ -32,7 +32,7 @@ lvm_physical_volume 'loop0_resize' do
   notifies :run, 'script[note /dev/loop0 has been resized]', :immediately
 end
 
-script "note /dev/loop0 has been resized" do
+script 'note /dev/loop0 has been resized' do
   interpreter 'bash'
   code "echo '/dev/loop0 has been resized' >> /tmp/test_notifications"
   action :nothing
@@ -49,7 +49,7 @@ lvm_logical_volume 'small_resize' do
   notifies :run, 'script[note volume small_resize has been created]', :immediately
 end
 
-script "note volume small_resize has been created" do
+script 'note volume small_resize has been created' do
   interpreter 'bash'
   code "echo 'volume small_resize has been created' >> /tmp/test_notifications"
   action :nothing
@@ -67,7 +67,7 @@ lvm_logical_volume 'small_resize_test' do
   notifies :run, 'script[note volume small_resize has been resized]', :immediately
 end
 
-script "note volume small_resize has been resized" do
+script 'note volume small_resize has been resized' do
   interpreter 'bash'
   code "echo 'volume small_resize has been resized' >> /tmp/test_notifications"
   action :nothing
@@ -84,7 +84,7 @@ lvm_logical_volume 'percent_resize' do
   notifies :run, 'script[note volume percent_resize has been created]', :immediately
 end
 
-script "note volume percent_resize has been created" do
+script 'note volume percent_resize has been created' do
   interpreter 'bash'
   code "echo 'volume percent_resize has been created' >> /tmp/test_notifications"
   action :nothing
@@ -102,7 +102,7 @@ lvm_logical_volume 'percent_resize_test' do
   notifies :run, 'script[note volume percent_resize has been resized]', :immediately
 end
 
-script "note volume percent_resize has been resized" do
+script 'note volume percent_resize has been resized' do
   interpreter 'bash'
   code "echo 'volume percent_resize has been resized' >> /tmp/test_notifications"
   action :nothing
@@ -119,7 +119,7 @@ lvm_logical_volume 'small_noresize' do
   notifies :run, 'script[note volume small_noresize has been created]', :immediately
 end
 
-script "note volume small_noresize has been created" do
+script 'note volume small_noresize has been created' do
   interpreter 'bash'
   code "echo 'volume small_noresize has been created' >> /tmp/test_notifications"
   action :nothing
@@ -138,7 +138,7 @@ lvm_logical_volume 'small_noresize_test' do
   notifies :run, 'script[note volume small_noresize has been resized]', :immediately
 end
 
-script "note volume small_noresize has been resized" do
+script 'note volume small_noresize has been resized' do
   interpreter 'bash'
   code "echo 'volume small_noresize has been resized' >> /tmp/test_notifications"
   action :nothing
@@ -155,7 +155,7 @@ lvm_logical_volume 'percent_noresize' do
   notifies :run, 'script[note volume percent_noresize has been created]', :immediately
 end
 
-script "note volume percent_noresize has been created" do
+script 'note volume percent_noresize has been created' do
   interpreter 'bash'
   code "echo 'volume percent_noresize has been created' >> /tmp/test_notifications"
   action :nothing
@@ -174,7 +174,7 @@ lvm_logical_volume 'percent_noresize_test' do
   notifies :run, 'script[note volume percent_noresize has been resized]', :immediately
 end
 
-script "note volume percent_noresize has been resized" do
+script 'note volume percent_noresize has been resized' do
   interpreter 'bash'
   code "echo 'volume percent_noresize has been resized' >> /tmp/test_notifications"
   action :nothing
@@ -194,7 +194,7 @@ lvm_logical_volume 'remainder_resize' do
   notifies :run, 'script[note volume remainder_resize has been created/resized]', :immediately
 end
 
-script "note volume remainder_resize has been created/resized" do
+script 'note volume remainder_resize has been created/resized' do
   interpreter 'bash'
   code "echo 'volume remainder_resize has been created/resized' >> /tmp/test_notifications"
   action :nothing

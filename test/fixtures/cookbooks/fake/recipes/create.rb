@@ -77,19 +77,19 @@ lvm_volume_group 'vg-data' do
   end
 end
 
-script "note vg-data has been created" do
+script 'note vg-data has been created' do
   interpreter 'bash'
   code "echo 'vg-data has been created' >> /tmp/test_notifications"
   action :nothing
 end
 
-script "note logs volume has been created" do
+script 'note logs volume has been created' do
   interpreter 'bash'
   code "echo 'logs volume has been created' >> /tmp/test_notifications"
   action :nothing
 end
 
-script "note home volume has been created" do
+script 'note home volume has been created' do
   interpreter 'bash'
   code "echo 'home volume has been created' >> /tmp/test_notifications"
   action :nothing
@@ -100,7 +100,7 @@ lvm_volume_group 'vg-test' do
   notifies :run, 'script[note vg-test has been created]', :immediately
 end
 
-script "note vg-test has been created" do
+script 'note vg-test has been created' do
   interpreter 'bash'
   code "echo 'vg-test has been created' >> /tmp/test_notifications"
   action :nothing
