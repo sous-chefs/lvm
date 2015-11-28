@@ -71,11 +71,10 @@ export PATH=$PATH:/sbin:/usr/sbin
   blkid /dev/mapper/vg--data-home | grep "TYPE=\"ext2\""
 }
 
-# TODO: Fix This
-# @test "mounts the logical volume home to /mnt/home" {
-#   mountpoint /mnt/home
-#   mount | grep /dev/mapper/vg--data-home | grep /mnt/home
-# }
+@test "mounts the logical volume home to /mnt/home" {
+  mountpoint /mnt/home
+  mount | grep /dev/mapper/vg--data-home | grep /mnt/home
+}
 
 # TODO: Fix This
 # @test "detects notification for creation of home volume" {
