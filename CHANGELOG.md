@@ -2,6 +2,10 @@ lvm Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the lvm cookbook.
 
+v1.4.1 (2015-11-17)
+-------------------
+- Change chef_gem installs to not install at compile_time on Chef 12 to avoid warnings
+
 v1.4.0 (2015-10-22)
 -------------------
 - Updated the minimum supported Chef release from 10 -> 11 in the readme
