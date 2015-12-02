@@ -34,6 +34,9 @@ platforms:
       - /usr/bin/apt-get install apt-transport-https net-tools -y
 
 suites:
-  - name: default
+  - name: create
     run_list:
-      - recipe[lvm::default]
+      - recipe[test::create]
+  - name: resize
+    run_list:
+      - recipe[test::resize]

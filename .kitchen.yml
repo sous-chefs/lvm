@@ -19,6 +19,9 @@ platforms:
     run_list: apt::default
 
 suites:
-  - name: default
+  - name: create
     run_list:
-      - recipe[lvm::default]
+      - recipe[test::create]
+  - name: resize
+    run_list:
+      - recipe[test::resize]
