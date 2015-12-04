@@ -155,7 +155,7 @@ class Chef
             ': location must be an absolute path!' => proc do |value|
               # this can be a string or a hash, so attempt to match either for
               # the regex
-              matches = case value.class
+              matches = case value
                         when String
                           value =~ %r{^/[^\0]*}
                         when Hash
