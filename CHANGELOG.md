@@ -1,6 +1,11 @@
 # lvm Cookbook CHANGELOG
 This file is used to list changes made in each version of the lvm cookbook.
 
+## v1.5.0 (2015-12-09)
+- Update the di-ruby-lvm and di-ruby-lvm-attrib gems to the latest release to improve speed and the supported versions of LVM
+- Add testing of the resizing to Travis CI and the Kitchen config
+- Resolve issues when running under Chefspec
+
 ## v1.4.1 (2015-11-17)
 - Change chef_gem installs to not install at compile_time on Chef 12 to avoid warnings
 
