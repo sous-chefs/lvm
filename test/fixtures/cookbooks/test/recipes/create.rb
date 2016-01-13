@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+include_recipe 'lvm'
+
 # The test device to use
 devices = [
   '/dev/loop0',

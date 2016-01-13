@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+include_recipe 'lvm'
+
 execute 'extend loop0 device' do
   command <<-EOF
 dd if=/dev/zero bs=512 count=65536 >> /vfile0
