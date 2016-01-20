@@ -102,11 +102,12 @@ class Chef
 
         # If the mount point is specified, mount the logical volume
         if new_resource.mount_point
-          if new_resource.mount_point.is_a?(String)
-            mount_spec = { location: new_resource.mount_point }
-          else
-            mount_spec = new_resource.mount_point
-          end
+
+          mount_spec = if new_resource.mount_point.is_a?(String)
+                         { location: new_resource.mount_point }
+                       else
+                         new_resource.mount_point
+                       end
 
           # Create the mount point
           dir_resource = directory mount_spec[:location] do
