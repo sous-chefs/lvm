@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-# On CentOS 5.9, most of the commands used here are not in PATH. So add them
+# On CentOS 5, most of the commands used here are not in PATH. So add them
 # here.
 export PATH=$PATH:/sbin:/usr/sbin
 
