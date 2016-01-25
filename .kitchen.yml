@@ -25,4 +25,5 @@ suites:
       - recipe[test::create]
   - name: resize
     run_list:
+      - recipe[test::create]
       - recipe[test::resize]
