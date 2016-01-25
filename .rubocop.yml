@@ -3,29 +3,27 @@ AllCops:
     - vendor/**/*
     - Guardfile
 
-AlignParameters:
-  Enabled: false
-ClassLength:
-  Enabled: false
-CyclomaticComplexity:
-  Enabled: false
-Documentation:
-  Enabled: false
-Encoding:
-  Enabled: false
-Style/FileName:
-  Enabled: false
-LineLength:
-  Enabled: false
-MethodLength:
-  Enabled: false
 Metrics/AbcSize:
   Enabled: false
-PerceivedComplexity:
+Metrics/ClassLength:
   Enabled: false
-SingleSpaceBeforeFirstArg:
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/LineLength:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+Style/AlignParameters:
   Enabled: false
 Style/ClassAndModuleChildren:
   Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/Encoding:
+  Enabled: false
 Style/FileName:
+  Enabled: false
+Style/SpaceBeforeFirstArg:
   Enabled: false
