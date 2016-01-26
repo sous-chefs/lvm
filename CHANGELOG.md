@@ -1,6 +1,11 @@
 # lvm Cookbook CHANGELOG
 This file is used to list changes made in each version of the lvm cookbook.
 
+## v1.5.1 (2016-01-26)
+- Added attributes to allow installing the lvm gems at compile time
+- Removed yum cookbook from the Berksfile as it wasn't being used
+- Improved testing with chefspec and test kitchen
+
 ## v1.5.0 (2015-12-09)
 - Update the di-ruby-lvm and di-ruby-lvm-attrib gems to the latest release to improve speed and the supported versions of LVM
 - Add testing of the resizing to Travis CI and the Kitchen config
