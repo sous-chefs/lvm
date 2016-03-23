@@ -47,7 +47,6 @@ class Chef
         lvm = LVM::LVM.new
         name = new_resource.name
         group = new_resource.group
-        lv_params = new_resource.lv_params
         fs_type = new_resource.filesystem
         fs_params = new_resource.filesystem_params
         device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
@@ -56,24 +55,7 @@ class Chef
         vg = lvm.volume_groups[group]
         # Create the logical volume
         if vg.nil? || vg.logical_volumes.select { |lv| lv.name == name }.empty?
-          size =
-            case new_resource.size
-            when /\d+[kKmMgGtT]/
-              "--size #{new_resource.size}"
-            when /(\d{1,2}|100)%(FREE|VG|PVS)/
-              "--extents #{new_resource.size}"
-            when /(\d+)/
-              "--size #{$1}" # rubocop:disable PerlBackrefs
-            end
-
-          stripes = new_resource.stripes ? "--stripes #{new_resource.stripes}" : ''
-          stripe_size = new_resource.stripe_size ? "--stripesize #{new_resource.stripe_size}" : ''
-          mirrors = new_resource.mirrors ? "--mirrors #{new_resource.mirrors}" : ''
-          contiguous = new_resource.contiguous ? '--contiguous y' : ''
-          readahead = new_resource.readahead ? "--readahead #{new_resource.readahead}" : ''
-          physical_volumes = [new_resource.physical_volumes].flatten.join ' ' if new_resource.physical_volumes
-
-          command = "lvcreate #{size} #{stripes} #{stripe_size} #{mirrors} #{contiguous} #{readahead} #{lv_params} --name #{name} #{group} #{physical_volumes}"
+          command = create_command
           Chef::Log.debug "Executing lvm command: '#{command}'"
           output = lvm.raw(command)
           Chef::Log.debug "Command output: '#{output}'"
@@ -147,7 +129,6 @@ class Chef
         lvm = LVM::LVM.new
         name = new_resource.name
         group = new_resource.group
-        device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
 
         vg = lvm.volume_groups[group]
         # if doing a resize make sure that the volume exists before doing anything
@@ -168,7 +149,7 @@ class Chef
         lv_size_cur = lv.size.to_i / pe_size
 
         lv_size = new_resource.size
-        lv_size = '100%FREE' if new_resource.take_up_free_space
+        lv_size = '100%FREE' if new_resource.respond_to?(:take_up_free_space) && new_resource.take_up_free_space
 
         # figure out how we should calculate extents
         resize_type = case lv_size
@@ -214,7 +195,7 @@ class Chef
           Chef::Application.fatal!("Invalid size specification #{lv_size}", 2)
         end
 
-        Chef::Application.fatal!("Error trying to extend logical volume #{lv.name} beyond the capacity of volume group #{group}", 2) if (lv_size_req - lv_size_cur) > pe_free
+        Chef::Application.fatal!("Error trying to extend logical volume #{lv.name} beyond the capacity of volume group #{group}", 2) if !thin_volume? && (lv_size_req - lv_size_cur) > pe_free
 
         # don't resize if the current size is greater than or equal to the target size
         if lv_size_cur >= lv_size_req
@@ -222,12 +203,7 @@ class Chef
         else
           Chef::Log.debug "Resizing logical volume #{lv.name} from #{lv_size_cur} pe to #{lv_size_req} pe with #{pe_free} pe left in volume group #{group}"
 
-          resize_fs = '--resizefs'
-          stripes = new_resource.stripes ? "--stripes #{new_resource.stripes}" : ''
-          stripe_size = new_resource.stripe_size ? "--stripesize #{new_resource.stripe_size}" : ''
-          mirrors = new_resource.mirrors ? "--mirrors #{new_resource.mirrors}" : ''
-
-          command = "lvextend -l #{lv_size_req} #{resize_fs} #{stripes} #{stripe_size} #{mirrors} #{device_name} "
+          command = resize_command(lv_size_req)
           Chef::Log.debug "Running command: #{command}"
           output = lvm.raw command
           Chef::Log.debug "Command output: #{output}"
@@ -235,6 +211,48 @@ class Chef
           # broadcast that we did a resize
           new_resource.updated_by_last_action true
         end
+      end
+
+      protected
+
+      def thin_volume?
+        false
+      end
+
+      def create_command
+        size =
+          case new_resource.size
+          when /\d+[kKmMgGtT]/
+            "--size #{new_resource.size}"
+          when /(\d{1,2}|100)%(FREE|VG|PVS)/
+            "--extents #{new_resource.size}"
+          when /(\d+)/
+            "--size #{$1}" # rubocop:disable PerlBackrefs
+          end
+
+        stripes = new_resource.stripes ? "--stripes #{new_resource.stripes}" : ''
+        stripe_size = new_resource.stripe_size ? "--stripesize #{new_resource.stripe_size}" : ''
+        mirrors = new_resource.mirrors ? "--mirrors #{new_resource.mirrors}" : ''
+        contiguous = new_resource.contiguous ? '--contiguous y' : ''
+        readahead = new_resource.readahead ? "--readahead #{new_resource.readahead}" : ''
+        lv_params = new_resource.lv_params
+        name = new_resource.name
+        group = new_resource.group
+        physical_volumes = [new_resource.physical_volumes].flatten.join ' ' if new_resource.physical_volumes
+
+        "lvcreate #{size} #{stripes} #{stripe_size} #{mirrors} #{contiguous} #{readahead} #{lv_params} --name #{name} #{group} #{physical_volumes}"
+      end
+
+      def resize_command(lv_size_req)
+        name = new_resource.name
+        group = new_resource.group
+        device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
+        resize_fs = '--resizefs'
+        stripes = new_resource.stripes ? "--stripes #{new_resource.stripes}" : ''
+        stripe_size = new_resource.stripe_size ? "--stripesize #{new_resource.stripe_size}" : ''
+        mirrors = new_resource.mirrors ? "--mirrors #{new_resource.mirrors}" : ''
+
+        "lvextend -l #{lv_size_req} #{resize_fs} #{stripes} #{stripe_size} #{mirrors} #{device_name}"
       end
 
       private
