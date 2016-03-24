@@ -1,7 +1,10 @@
 # lvm Cookbook CHANGELOG
 This file is used to list changes made in each version of the lvm cookbook.
 
-## v.1.5.2 (2016-03-23)
+## v1.6.0 (2016-03-23)
+- Add a wipe_signatures option to LVM volume group
+
+## v1.5.2 (2016-03-23)
 - Update di-ruby-lvm-attrib to 0.0.25
 
 ## v1.5.1 (2016-01-26)
