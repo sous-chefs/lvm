@@ -258,12 +258,19 @@ Manages LVM volume groups.
     <td></td>
     <td></td>
   </tr>
+  <tr>
+    <td>wipe_signatures</td>
+    <td>Force the creation of the Volume Group, even if `lvm` detects existing non-LVM data on disk</td>
+    <td>`true`</td>
+    <td>`false`</td>
+  </tr>
 </table>
 
 ##### Examples
 ```ruby
 lvm_volume_group 'vg00' do
   physical_volumes ['/dev/sda', '/dev/sdb', '/dev/sdc']
+  wipe_signatures true
 
   logical_volume 'logs' do
     size        '1G'
