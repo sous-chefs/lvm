@@ -10,7 +10,7 @@ Installs lvm2 package and includes custom resources (providers) for managing LVM
 - RHEL/CentOS/Scientific/Amazon/Oracle
 
 ### Chef
-- Chef 11+
+- Chef 12+
 
 ### Cookbooks
 - none
