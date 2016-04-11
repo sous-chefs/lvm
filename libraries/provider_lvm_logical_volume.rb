@@ -17,8 +17,10 @@
 # limitations under the License.
 #
 
+require 'chef/provider'
 require 'chef/mixin/shell_out'
 require 'chef/dsl/recipe'
+require File.join(File.dirname(__FILE__), 'lvm')
 
 class Chef
   class Provider
@@ -27,7 +29,7 @@ class Chef
     class LvmLogicalVolume < Chef::Provider
       include Chef::DSL::Recipe
       include Chef::Mixin::ShellOut
-      include Chef::DSL::Recipe
+      include LVMCookbook
 
       # Loads the current resource attributes
       #
@@ -41,7 +43,7 @@ class Chef
       # The create action
       #
       def action_create
-        require 'lvm'
+        require_lvm_gems
         lvm = LVM::LVM.new
         name = new_resource.name
         group = new_resource.group
@@ -141,7 +143,7 @@ class Chef
 
       # Action to resize LV to specified size
       def action_resize
-        require 'lvm'
+        require_lvm_gems
         lvm = LVM::LVM.new
         name = new_resource.name
         group = new_resource.group

@@ -1,30 +1,26 @@
-lvm Cookbook
-============
+# lvm Cookbook
 [![Build Status](https://travis-ci.org/chef-cookbooks/lvm.svg?branch=master)](https://travis-ci.org/chef-cookbooks/lvm)
 [![Cookbook Version](https://img.shields.io/cookbook/v/lvm.svg)](https://supermarket.chef.io/cookbooks/lvm)
 
-Installs lvm2 package and includes resources for managing LVM. The default recipe simply installs LVM and the supporting Ruby gem. The cookbook includes providers for managing LVMs.
+Installs lvm2 package and includes custom resources (providers) for managing LVM.
 
-
-Requirements
-------------
-#### Platforms
+## Requirements
+### Platforms
 - Debian/Ubuntu
 - RHEL/CentOS/Scientific/Amazon/Oracle
 
-#### Chef
+### Chef
 - Chef 11+
 
-#### Cookbooks
+### Cookbooks
 - none
 
+## Resources/Providers
 
-Resources/Providers
--------------------
-#### lvm_physical_volume
+### lvm_physical_volume
 Manages LVM physical volumes.
 
-##### Actions
+#### Actions
 <table>
   <tr>
     <th>Action</th>
@@ -40,7 +36,7 @@ Manages LVM physical volumes.
   </tr>
 </table>
 
-##### Parameters
+#### Parameters
 <table>
   <tr>
     <th>Parameter</th>
@@ -56,7 +52,7 @@ Manages LVM physical volumes.
   </tr>
 </table>
 
-##### Examples
+#### Examples
 ```ruby
 lvm_physical_volume '/dev/sda'
 ```
@@ -64,10 +60,10 @@ lvm_physical_volume '/dev/sda'
 ---
 
 
-#### lvm_logical_volume
+### lvm_logical_volume
 Manages LVM logical volumes.
 
-##### Actions
+#### Actions
 <table>
   <tr>
     <th>Action</th>
@@ -83,7 +79,7 @@ Manages LVM logical volumes.
   </tr>
 </table>
 
-##### Parameters
+#### Parameters
 <table>
   <tr>
     <th>Attribute</th>
@@ -191,7 +187,7 @@ Manages LVM logical volumes.
   </tr>
 </table>
 
-##### Examples
+#### Examples
 
 ```ruby
 lvm_logical_volume 'home' do
@@ -207,10 +203,10 @@ end
 ---
 
 
-#### lvm_volume_group
+### lvm_volume_group
 Manages LVM volume groups.
 
-##### Actions
+#### Actions
 <table>
   <tr>
     <th>Action</th>
@@ -226,7 +222,7 @@ Manages LVM volume groups.
   </tr>
 </table>
 
-##### Parameters
+#### Parameters
 <table>
   <tr>
     <th>Attribute</th>
@@ -266,7 +262,7 @@ Manages LVM volume groups.
   </tr>
 </table>
 
-##### Examples
+#### Examples
 ```ruby
 lvm_volume_group 'vg00' do
   physical_volumes ['/dev/sda', '/dev/sdb', '/dev/sdc']
@@ -290,8 +286,8 @@ end
 ```
 
 
-Usage
------
+## Usage
+
 If you're using [Berkshelf](http://berkshelf.com), just add this cookbook to your `Berksfile`:
 
 ```ruby
@@ -320,8 +316,7 @@ depends 'lvm'
 ```
 
 
-Caveats
--------
+## Caveats
 This cookbook depends on the [di-ruby-lvm](https://github.com/DrillingInfo/di-ruby-lvm) and [di-ruby-lvm-attrib](https://github.com/DrillingInfo/di-ruby-lvm-attrib) gems. The di-ruby-lvm-attrib gem in particular is a common cause of failures when using the providers. If you get a failure with an error message similar to
 
 ```text
@@ -331,8 +326,8 @@ No such file or directory - /opt/chef/.../di-ruby-lvm-attrib-0.0.3/lib/lvm/attri
 then you are running a version of lvm that the gems do not support. However, getting support added is usually pretty easy. Just follow the instructions on "Adding Attributes" in the [di-ruby-lvm-attrib README](https://github.com/DrillingInfo/di-ruby-lvm-attrib).
 
 
-License and Authors
--------------------
+## License and Authors
+
 - Author:: Joshua Timberman <joshua@chef.io>
 - Author:: Greg Symons <gsymons@drillinginfo.com>
 

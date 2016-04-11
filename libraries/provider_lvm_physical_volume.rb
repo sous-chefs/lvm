@@ -18,13 +18,19 @@
 #
 
 require 'chef/provider'
-include Chef::Mixin::ShellOut
+require 'chef/mixin/shell_out'
+require 'chef/dsl/recipe'
+require File.join(File.dirname(__FILE__), 'lvm')
 
 class Chef
   class Provider
     # The provider for lvm_physical_volume resource
     #
     class LvmPhysicalVolume < Chef::Provider
+      include Chef::DSL::Recipe
+      include Chef::Mixin::ShellOut
+      include LVMCookbook
+
       # Loads the current resource attributes
       #
       # @return [Chef::Resource::LvmPhysicalVolume] the lvm_physical_volume resource
@@ -37,7 +43,7 @@ class Chef
       # The create action
       #
       def action_create
-        require 'lvm'
+        require_lvm_gems
         lvm = LVM::LVM.new
         if lvm.physical_volumes[new_resource.name].nil?
           Chef::Log.info "Creating physical volume '#{new_resource.name}'"
@@ -49,7 +55,7 @@ class Chef
       end
 
       def action_resize
-        require 'lvm'
+        require_lvm_gems
         lvm = LVM::LVM.new
         pv = lvm.physical_volumes.select do |pvs|
           pvs.name == new_resource.name
