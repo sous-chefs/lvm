@@ -203,6 +203,247 @@ end
 ---
 
 
+### lvm_thin_pool
+Manages LVM thin pools (which are simply logical volumes created with the --thinpool argument to lvcreate).
+
+#### Actions
+<table>
+  <tr>
+    <th>Action</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>:create</td>
+    <td>(default) Create a new thin pool logical volume</td>
+  </tr>
+  <tr>
+    <td>:resize</td>
+    <td>Resize an existing thin pool logical volume</td>
+  </tr>
+</table>
+
+#### Parameters
+<table>
+  <tr>
+    <th>Attribute</th>
+    <th>Description</th>
+    <th>Example</th>
+    <th>Default</th>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>(name attribute) Name of the logical volume</td>
+    <td><tt>bacon</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>group</td>
+    <td>(required) Volume group in which to create the new volume (not required if the volume is declared inside of an `lvm_volume_group` block)</td>
+    <td><tt>bits</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>size</td>
+    <td>(required) Size of the volume.
+      <ul>
+        <li>It can be the size of the volume with units (k, K, m, M, g, G, t, T)</li>
+        <li>It can be specified as the percentage of the size of the volume group</li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li><tt>10G</tt></li>
+        <li><tt>25%VG</tt></li>
+      </ul>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>filesystem</td>
+    <td>The format for the file system</td>
+    <td><tt>'ext4'</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>filesystem_params</td>
+    <td>Optional parameters to use when formatting the file system</td>
+    <td><tt>'-j -L log -m 2 -i 10240 -J size=400 -b 4096'</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>mount_point</td>
+    <td>
+      Either a String containing the path to the mount point, or a Hash with the following keys:
+      <ul>
+        <li><tt>location<tt> - (required) the directory to mount the volume on</li>
+        <li><tt>options</tt> - the mount options for the volume</li>
+        <li><tt>dump</tt> - the <tt>dump</tt> field for the fstab entry</li>
+        <li><tt>pass</tt> - the <tt>pass</tt> field for the fstab entry</li>
+      </ul>
+    </td>
+    <td><tt>'/var/my/mount'</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>physical_volumes</td>
+    <td>Array of physical volumes that the volume will be
+  restricted to</td>
+    <td><tt>['/dev/sda', '/dev/sdb']</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>stripes</td>
+    <td>Number of stripes for the volume</td>
+    <td><tt>5</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>stripe_size</td>
+    <td>Number of kilobytes per stripe segment (must be a power of 2 less than or equal to the physical extent size for the volume group)</td>
+    <td><tt>24</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>mirrors</td>
+    <td>Number of mirrors for the volume</td>
+    <td><tt>5</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>contiguous</td>
+    <td>Whether or not volume should use the contiguous allocation
+  policy</td>
+    <td><tt>true</tt></td>
+    <td><tt>false</tt></td>
+  </tr>
+  <tr>
+    <td>readahead</td>
+    <td>The readahead sector count for the volume (can be a value
+  between 2 and 120, 'auto', or 'none')</td>
+    <td><tt>'auto'</tt></td>
+    <td></td>
+  </tr>
+  <td>take_up_free_space</td>
+    <td>whether to have the LV take up the remainder of free space on the VG. Only valid for resize action</td>
+    <td><tt>true</tt></td>
+    <td>false</td>
+  </tr>
+  <tr>
+    <td>thin_volume</td>
+    <td>Shortcut for creating a new `lvm_thin_volume` definition (the volumes will be created in the order they are declared)</td>
+    <td></td>
+    <td></td>
+ </tr>
+</table>
+
+---
+
+
+### lvm_thin_volume
+Manages LVM thin volumes (which are simply logical volumes created with the --thin argument to lvcreate and are contained inside of
+other logical volumes that were created with the --thinpool option to lvcreate).
+
+#### Actions
+<table>
+  <tr>
+    <th>Action</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>:create</td>
+    <td>(default) Create a new thin logical volume</td>
+  </tr>
+  <tr>
+    <td>:resize</td>
+    <td>Resize an existing thin logical volume</td>
+  </tr>
+</table>
+
+#### Parameters
+<table>
+  <tr>
+    <th>Attribute</th>
+    <th>Description</th>
+    <th>Example</th>
+    <th>Default</th>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>(name attribute) Name of the logical volume</td>
+    <td><tt>bacon</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>group</td>
+    <td>(required) Volume group in which to create the new volume (not required if the volume is declared inside of an `lvm_volume_group` block)</td>
+    <td><tt>bits</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>pool</td>
+    <td>(required) Thin pool volume in which to create the new volume (not required if the volume is declared inside of an `lvm_thin_pool` block)</td>
+    <td><tt>bits</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>size</td>
+    <td>(required) Size of the volume.
+      <ul>
+        <li>It can be the size of the volume with units (k, K, m, M, g, G, t, T)</li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li><tt>10G</tt></li>
+      </ul>
+    </td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>filesystem</td>
+    <td>The format for the file system</td>
+    <td><tt>'ext4'</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>filesystem_params</td>
+    <td>Optional parameters to use when formatting the file system</td>
+    <td><tt>'-j -L log -m 2 -i 10240 -J size=400 -b 4096'</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>mount_point</td>
+    <td>
+      Either a String containing the path to the mount point, or a Hash with the following keys:
+      <ul>
+        <li><tt>location<tt> - (required) the directory to mount the volume on</li>
+        <li><tt>options</tt> - the mount options for the volume</li>
+        <li><tt>dump</tt> - the <tt>dump</tt> field for the fstab entry</li>
+        <li><tt>pass</tt> - the <tt>pass</tt> field for the fstab entry</li>
+      </ul>
+    </td>
+    <td><tt>'/var/my/mount'</tt></td>
+    <td></td>
+  </tr>
+</table>
+
+
+#### Examples
+
+```ruby
+lvm_thin_volume 'thin01' do
+  group       'vg00'
+  pool        'lv-thin-pool'
+  size        '5G'
+  filesystem  'ext4'
+  mount_point location: '/var/thin01', options: 'noatime,nodiratime'
+end
+```
+
+
+---
+
+
 ### lvm_volume_group
 Manages LVM volume groups.
 
@@ -260,6 +501,12 @@ Manages LVM volume groups.
     <td>`true`</td>
     <td>`false`</td>
   </tr>
+  <tr>
+    <td>thin_pool</td>
+    <td>Shortcut for creating a new `lvm_thin_pool` definition (the logical volumes will be created in the order they are declared)</td>
+    <td></td>
+    <td></td>
+ </tr>
 </table>
 
 #### Examples
@@ -282,6 +529,17 @@ lvm_volume_group 'vg00' do
     stripes     3
     mirrors     2
   end
+  
+  thin_pool "lv-thin-pool" do
+    size '5G'
+    stripes 2
+    
+    thin_volume "thin01" do
+      size '10G'
+      filesystem  'ext4'
+      mount_point location: '/var/thin01', options: 'noatime,nodiratime'
+    end
+  end  
 end
 ```
 

@@ -127,6 +127,20 @@ class Chef
           default: false
         )
       end
+
+      # A shortcut for creating a thin pool (which is just a special type of logical volume) when creating the volume group
+      #
+      # @param name [String] the name of the thin pool
+      # @param block [Proc] the block defining the lvm_thin_pool resource
+      #
+      # @return [Chef::Resource::LvmThinPool] the lvm_thin_pool resource
+      #
+      def thin_pool(name, &block)
+        volume = lvm_thin_pool(name, &block)
+        volume.action :nothing
+        @logical_volumes << volume
+        volume
+      end
     end
   end
 end
