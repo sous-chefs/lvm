@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## v.2.1.0 (2016-05-11)
+- Added lvm_thin_pool and lvm_thin_volume resources
+
 ## v.2.0.0 (2016-04-11)
 
 - The gems are now installed when the provider is first used instead of in the default recipe. For users that already have the LVM package installed there is no need to include the default recipe on their run_list now
