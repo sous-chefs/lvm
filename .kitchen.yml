@@ -25,7 +25,22 @@ suites:
   - name: create
     run_list:
       - recipe[test::create]
+  - name: create_thin
+    excludes:
+    - centos-5.11
+    - debian-7.9
+    - ubuntu-12.04
+    run_list:
+      - recipe[test::create_thin]
   - name: resize
     run_list:
       - recipe[test::create]
       - recipe[test::resize]
+  - name: resize_thin
+    excludes:
+    - centos-5.11
+    - debian-7.9
+    - ubuntu-12.04
+    run_list:
+      - recipe[test::create_thin]
+      - recipe[test::resize_thin]
