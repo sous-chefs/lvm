@@ -28,7 +28,7 @@ suites:
   - name: create_thin
     excludes:
     - centos-5.11
-    - debian-7.9
+    - debian-7.10
     - ubuntu-12.04
     run_list:
       - recipe[test::create_thin]
@@ -39,7 +39,7 @@ suites:
   - name: resize_thin
     excludes:
     - centos-5.11
-    - debian-7.9
+    - debian-7.10
     - ubuntu-12.04
     run_list:
       - recipe[test::create_thin]
