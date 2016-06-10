@@ -2,16 +2,21 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
-## v.2.1.0 (2016-05-11)
+## v2.1.1 (2016-06-10)
+
+- Update di-ruby-lvm-attrib to 0.0.26
+
+## v2.1.0 (2016-05-11)
+
 - Added lvm_thin_pool and lvm_thin_volume resources
 
-## v.2.0.0 (2016-04-11)
+## v2.0.0 (2016-04-11)
 
 - The gems are now installed when the provider is first used instead of in the default recipe. For users that already have the LVM package installed there is no need to include the default recipe on their run_list now
 - Due to how the gem is installed now this recipe now requires Chef 12.0+
 - Added RHEL 7.0 specs for the default recipe
 
-## v.1.6.1 (2016-03-23)
+## v1.6.1 (2016-03-23)
 
 - Fixed compile time installs of di-ruby-lvm
 
@@ -59,7 +64,7 @@ This file is used to list changes made in each version of the lvm cookbook.
 ## v1.3.7 (2015-06-20)
 
 - Allow users to specify the exact versions of the lvm gems (#49)
-- Start/enable the lvmetad service on RHEL7. (#52)
+- Start/enable the lvmetad service on RHEL7\. (#52)
 - Allow arbitrary parameters to be passed to lvcreate.
 
 ## v1.3.6 (2015-02-18)
@@ -118,7 +123,7 @@ No change. Bumping version for toolchain
 
 ### Bug
 
-- **[COOK-3987](https://tickets.chef.io/browse/COOK-3987)** - Volumes are created with the wrong # of extents.  Size = '2%VG' is treated as a size of 2 extents.
+- **[COOK-3987](https://tickets.chef.io/browse/COOK-3987)** - Volumes are created with the wrong # of extents. Size = '2%VG' is treated as a size of 2 extents.
 
 ## v1.0.2
 
