@@ -22,8 +22,6 @@ require_relative 'resource_lvm_logical_volume'
 
 class Chef
   class Resource
-    include Chef::DSL::Recipe
-
     # The lvm_thin_pool resource
     #
     # A thin pool is a logical volume that can contain thin volumes (which are also logical volumes but are "thin")
