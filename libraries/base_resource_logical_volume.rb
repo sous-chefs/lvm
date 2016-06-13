@@ -24,6 +24,8 @@ class Chef
     # Base class that contains common attributes for all logical volume resources
     #
     class BaseLogicalVolume < Chef::Resource
+      include Chef::DSL::Recipe
+
       # Initializes a BaseLogicalVolume object.  This class is only meant to
       # be used as a base class for other resources.
       #
