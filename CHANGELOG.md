@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## v2.1.2 (2016-06-14)
+
+- Prevent failures in other cookbooks utilizing the lvm resources
+
 ## v2.1.1 (2016-06-10)
 
 - Update di-ruby-lvm-attrib to 0.0.26
