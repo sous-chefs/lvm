@@ -18,6 +18,12 @@
 #
 
 if defined?(ChefSpec)
+  # Per the comment on https://github.com/sethvargo/chefspec/issues/241#issuecomment-26725772 runner_methods have to be defined
+  # if this isn't done you cannot test if resource A notifies resource B
+  [:lvm_logical_volume, :lvm_physical_volume, :lvm_volume_group].each do |method|
+    ChefSpec.define_matcher method
+  end
+
   def create_lvm_logical_volume(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:lvm_logical_volume, :create, resource_name)
   end
