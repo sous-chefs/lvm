@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 3.0.0 (2016-09-16)
+- Testing updates
+- update to add chefspec runner methods
+- Require Chef 12.1+
+
 ## v2.1.2 (2016-06-14)
 
 - Prevent failures in other cookbooks utilizing the lvm resources
