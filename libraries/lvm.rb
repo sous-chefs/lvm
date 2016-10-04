@@ -28,13 +28,13 @@ module LVMCookbook
     chef_gem 'di-ruby-lvm-attrib' do
       action :install
       version node['lvm']['di-ruby-lvm-attrib']['version']
-      compile_time true if Chef::Resource::ChefGem.method_defined?(:compile_time)
+      compile_time true
     end
 
     chef_gem 'di-ruby-lvm' do
       action :install
       version node['lvm']['di-ruby-lvm']['version']
-      compile_time true if Chef::Resource::ChefGem.method_defined?(:compile_time)
+      compile_time true
     end
 
     require 'lvm'
