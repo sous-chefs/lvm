@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 3.1.0 (2016-10-26)
+- Remove chef 11 compatibility from chef_gem install
+- Update to di-ruby-lvm-attrib 0.0.27
+
 ## 3.0.0 (2016-09-16)
 - Testing updates
 - update to add chefspec runner methods
