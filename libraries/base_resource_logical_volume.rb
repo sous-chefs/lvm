@@ -164,19 +164,6 @@ class Chef
           }
         )
       end
-      # Attribute: yes - answer yes to all questions
-      #
-      # @param arg [Bool] true, false
-      #
-      # @return [Bool] true, false
-      #
-      def yes(arg = nil)
-        set_or_return(
-          :yes,
-          arg,
-          kind_of: Bool
-        )
-      end
     end
   end
 end

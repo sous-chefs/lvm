@@ -148,6 +148,7 @@ class Chef
           kind_of: [TrueClass, FalseClass]
         )
       end
+
       # Attribute: wipe_signature -
       #
       # @param arg [Boolean] whether to automatically wipe any preexisting signatures

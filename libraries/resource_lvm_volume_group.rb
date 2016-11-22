@@ -141,19 +141,6 @@ class Chef
         @logical_volumes << volume
         volume
       end
-      # Attribute: answeryes - answer yes to all questions
-      #
-      # @param arg [Boolean] whether to answer yes to all questions
-      #
-      # @return [Boolean] if answer yes to all questions
-      #
-      def answeryes(arg = nil)
-        set_or_return(
-          :answeryes,
-          arg,
-          kind_of: [TrueClass, FalseClass]
-        )
-      end
     end
   end
 end

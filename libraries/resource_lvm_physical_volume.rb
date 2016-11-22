@@ -55,6 +55,7 @@ class Chef
           required: true
         )
       end
+
       # Attribute: wipe_signature -
       #
       # @param arg [Boolean] whether to automatically wipe any preexisting signatures
