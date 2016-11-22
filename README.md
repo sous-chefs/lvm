@@ -50,6 +50,12 @@ Manages LVM physical volumes.
     <td><tt>'/dev/sda'</tt></td>
     <td></td>
   </tr>
+  <tr>
+    <td>wipe_signatures</td>
+    <td>Force the creation of the Logical Volume, even if `lvm` detects existing PV signatures/td>
+    <td>`true`</td>
+    <td>`false`</td>
+  </tr>
 </table>
 
 #### Examples
@@ -184,6 +190,12 @@ Manages LVM logical volumes.
     <td>whether to have the LV take up the remainder of free space on the VG. Only valid for resize action</td>
     <td><tt>true</tt></td>
     <td>false</td>
+  </tr>
+  <tr>
+    <td>wipe_signatures</td>
+    <td>Force the creation of the Logical Volume, even if `lvm` detects existing LV signatures/td>
+    <td>`true`</td>
+    <td>`false`</td>
   </tr>
 </table>
 
