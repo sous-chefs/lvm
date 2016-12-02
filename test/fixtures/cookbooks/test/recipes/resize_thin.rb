@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: test
+# Cookbook:: test
 # Recipe:: resize_thin
 #
-# Copyright (C) 2016 Ontario Systems, LLC
+# Copyright:: 2016, Ontario Systems, LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
