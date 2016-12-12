@@ -148,6 +148,21 @@ class Chef
           kind_of: [TrueClass, FalseClass]
         )
       end
+
+      # Attribute: wipe_signature -
+      #
+      # @param arg [Boolean] whether to automatically wipe any preexisting signatures
+      #
+      # @return [Boolean] the wipe_signature setting
+      #
+      def wipe_signatures(arg = nil)
+        set_or_return(
+          :wipe_signatures,
+          arg,
+          kind_of: [TrueClass, FalseClass],
+          default: false
+        )
+      end
     end
   end
 end

@@ -235,12 +235,13 @@ class Chef
         mirrors = new_resource.mirrors ? "--mirrors #{new_resource.mirrors}" : ''
         contiguous = new_resource.contiguous ? '--contiguous y' : ''
         readahead = new_resource.readahead ? "--readahead #{new_resource.readahead}" : ''
+        yes_flag = new_resource.wipe_signatures == true ? '--yes' : ''
         lv_params = new_resource.lv_params
         name = new_resource.name
         group = new_resource.group
         physical_volumes = [new_resource.physical_volumes].flatten.join ' ' if new_resource.physical_volumes
 
-        "lvcreate #{size} #{stripes} #{stripe_size} #{mirrors} #{contiguous} #{readahead} #{lv_params} --name #{name} #{group} #{physical_volumes}"
+        "lvcreate #{size} #{stripes} #{stripe_size} #{mirrors} #{contiguous} #{readahead} #{lv_params} --name #{name} #{group} #{physical_volumes} #{yes_flag}"
       end
 
       def resize_command(lv_size_req)
