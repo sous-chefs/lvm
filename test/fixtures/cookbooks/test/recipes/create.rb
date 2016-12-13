@@ -17,6 +17,7 @@
 # limitations under the License.
 #
 
+apt_update 'update' if platform_family?('debian')
 include_recipe 'lvm'
 
 # The test device to use
