@@ -29,7 +29,7 @@ devices = [
   '/dev/loop4',
   '/dev/loop5',
   '/dev/loop6',
-  '/dev/loop7'
+  '/dev/loop7',
 ]
 
 extend Chef::Mixin::ShellOut
