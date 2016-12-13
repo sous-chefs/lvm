@@ -111,7 +111,11 @@ Action  | Description
     <td>
       Either a String containing the path to the mount point, or a Hash with the following keys:
       <ul>
-        <li><tt>location<tt> - (required) the directory to mount the volume on</li>
+        <li>driver:
+  name: dokken
+  privileged: true # because Docker and SystemD/Upstart
+  chef_image: chef/chef
+  chef_version: current - (required) the directory to mount the volume on</li>
         <li><tt>options</tt> - the mount options for the volume</li>
         <li><tt>dump</tt> - the <tt>dump</tt> field for the fstab entry</li>
         <li><tt>pass</tt> - the <tt>pass</tt> field for the fstab entry</li>
@@ -260,7 +264,11 @@ Manages LVM thin pools (which are simply logical volumes created with the --thin
     <td>
       Either a String containing the path to the mount point, or a Hash with the following keys:
       <ul>
-        <li><tt>location<tt> - (required) the directory to mount the volume on</li>
+        <li>driver:
+  name: dokken
+  privileged: true # because Docker and SystemD/Upstart
+  chef_image: chef/chef
+  chef_version: current - (required) the directory to mount the volume on</li>
         <li><tt>options</tt> - the mount options for the volume</li>
         <li><tt>dump</tt> - the <tt>dump</tt> field for the fstab entry</li>
         <li><tt>pass</tt> - the <tt>pass</tt> field for the fstab entry</li>
@@ -401,7 +409,11 @@ other logical volumes that were created with the --thinpool option to lvcreate).
     <td>
       Either a String containing the path to the mount point, or a Hash with the following keys:
       <ul>
-        <li><tt>location<tt> - (required) the directory to mount the volume on</li>
+        <li>driver:
+  name: dokken
+  privileged: true # because Docker and SystemD/Upstart
+  chef_image: chef/chef
+  chef_version: current - (required) the directory to mount the volume on</li>
         <li><tt>options</tt> - the mount options for the volume</li>
         <li><tt>dump</tt> - the <tt>dump</tt> field for the fstab entry</li>
         <li><tt>pass</tt> - the <tt>pass</tt> field for the fstab entry</li>
