@@ -2,6 +2,18 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.0.0 (2016-12-12)
+
+### Breaking changes
+
+- This cookbook has switched from the di-ruby-lvm/di-ruby-lvm-attrib gems to chef-ruby-lvm/chef-ruby-lvm-attrib forks. This was done to ensure that the latest lvm releases are always supported by the cookbooks and brings with it support for RHEL 7.3. If you have previously pinned gem versions you will need to update to the new attributes.
+
+## Other changes
+- Added "yes_flag" also to PV and LV create"
+- Format and reword the readme
+- Remove need for apt for testing
+- Fix Suse support if using ext filesystems by installing the e2fsprogs package if necessary
+
 ## 3.1.0 (2016-10-26)
 - Remove chef 11 compatibility from chef_gem install
 - Update to di-ruby-lvm-attrib 0.0.27
