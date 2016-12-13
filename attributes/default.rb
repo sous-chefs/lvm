@@ -17,5 +17,5 @@
 # limitations under the License.
 #
 
-default['lvm']['di-ruby-lvm']['version'] = '0.2.1'
-default['lvm']['di-ruby-lvm-attrib']['version'] = '0.0.27'
+default['lvm']['chef-ruby-lvm']['version'] = '0.2.2'
+default['lvm']['chef-ruby-lvm-attrib']['version'] = '0.0.28'

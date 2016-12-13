@@ -515,13 +515,13 @@ depends 'lvm'
 
 ## Caveats
 
-This cookbook depends on the [di-ruby-lvm](https://github.com/DrillingInfo/di-ruby-lvm) and [di-ruby-lvm-attrib](https://github.com/DrillingInfo/di-ruby-lvm-attrib) gems. The di-ruby-lvm-attrib gem in particular is a common cause of failures when using the providers. If you get a failure with an error message similar to
+This cookbook depends on the [chef-ruby-lvm](https://github.com/chef/chef-ruby-lvm) and [chef-ruby-lvm-attrib](https://github.com/chef/chef-ruby-lvm-attrib) gems. The chef-ruby-lvm-attrib gem in particular is a common cause of failures when using the providers. If you get a failure with an error message similar to
 
 ```text
-No such file or directory - /opt/chef/.../di-ruby-lvm-attrib-0.0.3/lib/lvm/attributes/2.02.86(2)/lvs.yaml
+No such file or directory - /opt/chef/.../chef-ruby-lvm-attrib-0.0.3/lib/lvm/attributes/2.02.300(2)/lvs.yaml
 ```
 
-then you are running a version of lvm that the gems do not support. However, getting support added is usually pretty easy. Just follow the instructions on "Adding Attributes" in the [di-ruby-lvm-attrib README](https://github.com/DrillingInfo/di-ruby-lvm-attrib).
+then you are running a version of lvm that the gems do not support. However, getting support added is usually pretty easy. Just follow the instructions on "Adding Attributes" in the [chef-ruby-lvm-attrib README](https://github.com/chef/chef-ruby-lvm-attrib).
 
 ## License and Authors
 
@@ -529,7 +529,7 @@ then you are running a version of lvm that the gems do not support. However, get
 - Author:: Greg Symons [gsymons@drillinginfo.com](mailto:gsymons@drillinginfo.com)
 
 ```text
-Copyright:: 2011-2015, Chef Software, Inc
+Copyright:: 2011-2016, Chef Software, Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

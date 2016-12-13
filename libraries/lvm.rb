@@ -17,23 +17,25 @@
 
 module LVMCookbook
   def require_lvm_gems
+    raise 'The previous di-ruby-lvm and di-ruby-lvm-attrib gems have been replaced with chef maintained forks. You have set the legacy attributes for pinning installed gem versions. You will need to remove these attributes and instead set the new chef varients. See the attributes file for the latest attributes.' if node['lvm']['di-ruby-lvm'] || node['lvm']['di-ruby-lvm-attrib']
+
     # require attribute specified gems
-    gem 'di-ruby-lvm-attrib', node['lvm']['di-ruby-lvm-attrib']['version']
-    gem 'di-ruby-lvm', node['lvm']['di-ruby-lvm']['version']
+    gem 'chef-ruby-lvm-attrib', node['lvm']['chef-ruby-lvm-attrib']['version']
+    gem 'chef-ruby-lvm', node['lvm']['chef-ruby-lvm']['version']
     require 'lvm'
-    Chef::Log.debug("Node had di-ruby-lvm-attrib #{node['lvm']['di-ruby-lvm-attrib']['version']} and di-ruby-lvm #{node['lvm']['di-ruby-lvm']['version']} installed. No need to install gems.")
+    Chef::Log.debug("Node had chef-ruby-lvm-attrib #{node['lvm']['chef-ruby-lvm-attrib']['version']} and chef-ruby-lvm #{node['lvm']['chef-ruby-lvm']['version']} installed. No need to install gems.")
   rescue LoadError
     Chef::Log.debug('Did not find lvm gems of the specified versions installed. Installing now')
 
-    chef_gem 'di-ruby-lvm-attrib' do
+    chef_gem 'chef-ruby-lvm-attrib' do
       action :install
-      version node['lvm']['di-ruby-lvm-attrib']['version']
+      version node['lvm']['chef-ruby-lvm-attrib']['version']
       compile_time true
     end
 
-    chef_gem 'di-ruby-lvm' do
+    chef_gem 'chef-ruby-lvm' do
       action :install
-      version node['lvm']['di-ruby-lvm']['version']
+      version node['lvm']['chef-ruby-lvm']['version']
       compile_time true
     end
 
