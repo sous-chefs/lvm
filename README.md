@@ -480,23 +480,11 @@ lvm_volume_group 'vg00' do
       filesystem  'ext4'
       mount_point location: '/var/thin01', options: 'noatime,nodiratime'
     end
-  end  
+  end
 end
 ```
 
 ## Usage
-
-If you're using [Berkshelf](http://berkshelf.com), just add this cookbook to your `Berksfile`:
-
-```ruby
-cookbook 'lvm'
-```
-
-You can also install it from the community site:
-
-```ruby
-knife cookbook site install lvm
-```
 
 Include the default recipe in your run list on a node, in a role, or in another recipe:
 
