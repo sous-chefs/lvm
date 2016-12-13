@@ -63,7 +63,7 @@ class Chef
           callbacks: {
             "cannot be '.' or '..'" => proc do |value|
               !(value == '.' || value == '..')
-            end
+            end,
           }
         )
       end

@@ -67,7 +67,7 @@ class Chef
           arg,
           kind_of: Integer,
           callbacks: {
-            'must be greater than 0' => proc { |value| value > 0 }
+            'must be greater than 0' => proc { |value| value > 0 },
           }
         )
       end
@@ -84,7 +84,7 @@ class Chef
           arg,
           kind_of: Integer,
           callbacks: {
-            'must be a power of 2' => proc { |value| Math.log2(value) % 1 == 0 }
+            'must be a power of 2' => proc { |value| Math.log2(value) % 1.zero? },
           }
         )
       end
@@ -101,7 +101,7 @@ class Chef
           arg,
           kind_of: Integer,
           callbacks: {
-            'must be greater than 0' => proc { |value| value > 0 }
+            'must be greater than 0' => proc { |value| value > 0 },
           }
         )
       end

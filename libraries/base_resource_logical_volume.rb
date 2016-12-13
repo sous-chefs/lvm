@@ -58,7 +58,7 @@ class Chef
             end,
             "cannot contain the strings '_mlog' or '_mimage'" => proc do |value|
               !value.match(/.*(_mlog|_mimage).*/)
-            end
+            end,
           }
         )
       end
@@ -160,7 +160,7 @@ class Chef
                           value[:location] =~ %r{^/[^\0]*}
                         end
               !matches.nil?
-            end
+            end,
           }
         )
       end
