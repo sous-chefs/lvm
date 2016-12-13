@@ -44,6 +44,8 @@ class Chef
       #
       def action_create
         require_lvm_gems
+        install_filesystem_deps
+
         lvm = LVM::LVM.new
         name = new_resource.name
         group = new_resource.group
@@ -214,6 +216,17 @@ class Chef
       end
 
       protected
+
+      def install_filesystem_deps
+        if platform_family?('suse') && /^ext/.match(new_resource.filesystem)
+          Chef::Log.debug('Installing e2fsprogs to create the filesystem')
+          package 'e2fsprogs' do
+            action :nothing
+          end.run_action(:install)
+        else
+          Chef::Log.debug('Not installing any packages to configure the filesystem')
+        end
+      end
 
       def thin_volume?
         false
