@@ -4,7 +4,7 @@ maintainer_email 'cookbooks@chef.io'
 license 'Apache 2.0'
 description 'Installs and manages Logical Volume Manager'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version '4.0.1'
+version '4.0.2'
 
 %w(amazon centos fedora freebsd oracle redhat scientific sles ubuntu).each do |os|
   supports os
