@@ -18,6 +18,12 @@
 #
 
 apt_update 'update' if platform_family?('debian')
+
+# install the old gems to make sure the uninstall works
+chef_gem ['di-chef-ruby-lvm-attrib', 'di-chef-ruby-lvm'] do
+  compile_time true
+end
+
 include_recipe 'lvm'
 
 # The test device to use
@@ -29,7 +35,7 @@ devices = [
   '/dev/loop4',
   '/dev/loop5',
   '/dev/loop6',
-  '/dev/loop7'
+  '/dev/loop7',
 ]
 
 extend Chef::Mixin::ShellOut
