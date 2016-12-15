@@ -4,6 +4,10 @@
 
 Installs lvm2 package and includes custom resources (providers) for managing LVM.
 
+## Note on LVM gems
+
+This cookbook has used multiple varients of the ruby-lvm and ruby-lvm-attrib gems for interacting with LVM. Most recently we used di-ruby-lvm and di-ruby-lvm-attrib gems, which are no longer being maintained. As of the 4.0 release this cookbook uses new Chef maintained gems: chef-ruby-lvm and chef-ruby-lvm-attrib. The cookbook will first remove the old gems before load/installing the new gems, in order to prevent gem conflicts. If you previously used attributes to control the version of the gems to install, you will need to update to the latest attribute names to maintain that functionality.
+
 ## Requirements
 
 ### Platforms
