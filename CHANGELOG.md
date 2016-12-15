@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.0.1 (2016-12-14)
+
+- Uninstall the previous lvm gems to prevent failures installing the new chef forks
+
 ## 4.0.0 (2016-12-12)
 
 ### Breaking changes
