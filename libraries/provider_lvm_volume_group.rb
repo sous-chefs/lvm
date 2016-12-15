@@ -93,14 +93,13 @@ class Chef
           end
         end
 
-        unless pvs_to_add.empty?
-          command = "vgextend #{name} #{pvs_to_add.join(' ')}"
-          Chef::Log.debug "Executing lvm command: '#{command}'"
-          output = lvm.raw command
-          Chef::Log.debug "Command output: '#{output}'"
-          new_resource.updated_by_last_action(true)
-          resize_logical_volumes
-        end
+        return if pvs_to_add.empty?
+        command = "vgextend #{name} #{pvs_to_add.join(' ')}"
+        Chef::Log.debug "Executing lvm command: '#{command}'"
+        output = lvm.raw command
+        Chef::Log.debug "Command output: '#{output}'"
+        new_resource.updated_by_last_action(true)
+        resize_logical_volumes
       end
 
       private

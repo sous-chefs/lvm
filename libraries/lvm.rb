@@ -19,6 +19,18 @@ module LVMCookbook
   def require_lvm_gems
     raise 'The previous di-ruby-lvm and di-ruby-lvm-attrib gems have been replaced with chef maintained forks. You have set the legacy attributes for pinning installed gem versions. You will need to remove these attributes and instead set the new chef varients. See the attributes file for the latest attributes.' if node['lvm']['di-ruby-lvm'] || node['lvm']['di-ruby-lvm-attrib']
 
+    if node['lvm']['cleanup_old_gems']
+      chef_gem 'di-ruby-lvm-attrib' do
+        action :remove
+        compile_time true
+      end
+
+      chef_gem 'di-ruby-lvm' do
+        action :remove
+        compile_time true
+      end
+    end
+
     # require attribute specified gems
     gem 'chef-ruby-lvm-attrib', node['lvm']['chef-ruby-lvm-attrib']['version']
     gem 'chef-ruby-lvm', node['lvm']['chef-ruby-lvm']['version']

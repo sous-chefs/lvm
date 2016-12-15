@@ -20,7 +20,11 @@
 apt_update 'update' if platform_family?('debian')
 
 # install the old gems to make sure the uninstall works
-chef_gem ['di-chef-ruby-lvm-attrib', 'di-chef-ruby-lvm'] do
+chef_gem 'di-ruby-lvm' do
+  compile_time true
+end
+
+chef_gem 'di-ruby-lvm-attrib' do
   compile_time true
 end
 
