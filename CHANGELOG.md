@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.0.3 (2016-12-19)
+
+- Include platformintrospection dsl to fix suse check failures
+
 ## 4.0.2 (2016-12-15)
 
 - Warn if the attributes are set vs. a hard failure
