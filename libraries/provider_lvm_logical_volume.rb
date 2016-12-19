@@ -20,6 +20,7 @@
 require 'chef/provider'
 require 'chef/mixin/shell_out'
 require 'chef/dsl/recipe'
+require 'chef/dsl/platform_introspection'
 require File.join(File.dirname(__FILE__), 'lvm')
 
 class Chef
@@ -29,6 +30,7 @@ class Chef
     class LvmLogicalVolume < Chef::Provider
       include Chef::DSL::Recipe
       include Chef::Mixin::ShellOut
+      include Chef::DSL::PlatformIntrospection
       include LVMCookbook
 
       # Loads the current resource attributes
