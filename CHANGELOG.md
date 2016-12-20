@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.0.4 (2016-12-20)
+- Remove deprecation notices introduced in 4.0.1
+
 ## 4.0.3 (2016-12-19)
 
 - Include platformintrospection dsl to fix suse check failures
