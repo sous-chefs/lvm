@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.0.5 (2017-01-09)
+
+- fix false coerce float error
+
+
 ## 4.0.4 (2016-12-20)
 - Remove deprecation notices introduced in 4.0.1
 
