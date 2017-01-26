@@ -6,17 +6,14 @@ provisioner:
   deprecations_as_errors: true
 
 platforms:
-  - name: centos-5.11
   - name: centos-6.8
-  - name: centos-7.2
+  - name: centos-7.3
   - name: debian-7.11
   - name: oracle-7.3
   - name: debian-8.6
   - name: fedora-25
-    run_list: yum::dnf_yum_compat
   - name: opensuse-13.2
-  - name: opensuse-leap-42.1
-  - name: ubuntu-12.04
+  - name: opensuse-leap-42.2
   - name: ubuntu-14.04
   - name: ubuntu-16.04
 
@@ -26,9 +23,7 @@ suites:
       - recipe[test::create]
   - name: create_thin
     excludes:
-    - centos-5.11
     - debian-7.11
-    - ubuntu-12.04
     run_list:
       - recipe[test::create_thin]
   - name: resize
@@ -37,9 +32,7 @@ suites:
       - recipe[test::resize]
   - name: resize_thin
     excludes:
-    - centos-5.11
     - debian-7.11
-    - ubuntu-12.04
     run_list:
       - recipe[test::create_thin]
       - recipe[test::resize_thin]

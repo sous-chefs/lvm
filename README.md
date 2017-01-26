@@ -118,7 +118,6 @@ Action  | Description
         <li>driver:
   name: dokken
   privileged: true # because Docker and SystemD/Upstart
-  chef_image: chef/chef
   chef_version: current - (required) the directory to mount the volume on</li>
         <li><tt>options</tt> - the mount options for the volume</li>
         <li><tt>dump</tt> - the <tt>dump</tt> field for the fstab entry</li>
@@ -271,7 +270,6 @@ Manages LVM thin pools (which are simply logical volumes created with the --thin
         <li>driver:
   name: dokken
   privileged: true # because Docker and SystemD/Upstart
-  chef_image: chef/chef
   chef_version: current - (required) the directory to mount the volume on</li>
         <li><tt>options</tt> - the mount options for the volume</li>
         <li><tt>dump</tt> - the <tt>dump</tt> field for the fstab entry</li>
@@ -416,7 +414,6 @@ other logical volumes that were created with the --thinpool option to lvcreate).
         <li>driver:
   name: dokken
   privileged: true # because Docker and SystemD/Upstart
-  chef_image: chef/chef
   chef_version: current - (required) the directory to mount the volume on</li>
         <li><tt>options</tt> - the mount options for the volume</li>
         <li><tt>dump</tt> - the <tt>dump</tt> field for the fstab entry</li>
