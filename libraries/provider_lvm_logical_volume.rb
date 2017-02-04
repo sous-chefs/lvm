@@ -242,7 +242,7 @@ class Chef
           when /(\d{1,2}|100)%(FREE|VG|PVS)/
             "--extents #{new_resource.size}"
           when /(\d+)/
-            "--size #{$1}" # rubocop:disable PerlBackrefs
+            "--extents #{$1}" # rubocop:disable PerlBackrefs
           end
 
         stripes = new_resource.stripes ? "--stripes #{new_resource.stripes}" : ''
