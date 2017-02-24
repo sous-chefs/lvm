@@ -300,7 +300,7 @@ class Chef
         # Do not raise when there is an error in running the blkid command. If the exitstatus is not 0,
         # the device is perhaps not formatted.
         blkid = shell_out("blkid -o value -s TYPE #{device_name}")
-        blkid.exitstatus.zero? && blkid.stdout.strip == fs_type.strip
+        blkid.exitstatus == 0 && blkid.stdout.strip == fs_type.strip
       end
     end
   end

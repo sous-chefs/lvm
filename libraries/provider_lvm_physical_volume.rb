@@ -71,7 +71,7 @@ class Chef
           # get the amount of space that cannot be allocated
           non_allocatable_space = block_device_raw_size % pe_size
           # if it's an exact amount LVM appears to just take 1 full extent
-          non_allocatable_space = pe_size if non_allocatable_space.zero?
+          non_allocatable_space = pe_size if non_allocatable_space == 0
 
           block_device_allocatable_size = block_device_raw_size - non_allocatable_space
 

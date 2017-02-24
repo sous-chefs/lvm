@@ -84,7 +84,7 @@ class Chef
           arg,
           kind_of: Integer,
           callbacks: {
-            'must be a power of 2' => proc { |value| (Math.log2(value) % 1).zero? },
+            'must be a power of 2' => proc { |value| (Math.log2(value) % 1) == 0 },
           }
         )
       end
