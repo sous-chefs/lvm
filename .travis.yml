@@ -24,4 +24,4 @@ before_script:
   - /opt/chefdk/embedded/bin/foodcritic --version
 
 script:
-  - /opt/chefdk/bin/chef exec rake
+  - /opt/chefdk/bin/chef exec delivery local all
