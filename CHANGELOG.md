@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.0.6 (2017-03-29)
+
+- Only cleanup gems once in a chef run
+
 ## 4.0.5 (2017-01-09)
 
 - fix false coerce float error
