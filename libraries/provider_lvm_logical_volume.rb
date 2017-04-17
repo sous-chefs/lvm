@@ -78,6 +78,20 @@ class Chef
           end
         end
 
+        vg = lvm.volume_groups[new_resource.group]
+        # If logical volume is not activated, activate it
+        if vg.nil? || lvol = vg.logical_volumes.find { |lv| lv.name == name }
+          if lvol.active
+            Chef::Log.info "Logical volume '#{name}' already activated."
+          else
+            Chef::Log.info "Activating logical volume '#{name}'"
+            command = "lvchange -aly #{lvol.path}"
+            Chef::Log.debug "Executing lvm command: '#{command}'"
+            output = lvm.raw(command)
+            Chef::Log.debug "Command output: '#{output}'"
+          end
+        end
+
         # If file system is specified, format the logical volume
         if fs_type.nil?
           Chef::Log.info 'File system type is not set. Not formatting...'
