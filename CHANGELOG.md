@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.1.0 (2017-04-26)
+
+- Fix invalid platform sles in metadata
+- Allowing a different source for gem install
+
 ## 4.0.6 (2017-03-29)
 
 - Only cleanup gems once in a chef run
