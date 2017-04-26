@@ -46,12 +46,16 @@ module LVMCookbook
     chef_gem 'chef-ruby-lvm-attrib' do
       action :install
       version node['lvm']['chef-ruby-lvm-attrib']['version']
+      source node['lvm']['rubysource']
+      clear_sources true
       compile_time true
     end
 
     chef_gem 'chef-ruby-lvm' do
       action :install
       version node['lvm']['chef-ruby-lvm']['version']
+      source node['lvm']['rubysource']
+      clear_sources true
       compile_time true
     end
 
