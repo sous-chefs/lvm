@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.1.1 (2017-06-20)
+
+- Adding source for the air gaped environment use case.
+- Don't start lvm2-lvmetad on amazon linux when on Chef < 13
+
 ## 4.1.0 (2017-04-26)
 
 - Fix invalid platform sles in metadata
