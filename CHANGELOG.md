@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.1.2 (2017-06-20)
+
+- Ensure metadata parsing doesn't fail on older chef 12 releases
+
 ## 4.1.1 (2017-06-20)
 
 - Adding source for the air gaped environment use case.
