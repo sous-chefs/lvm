@@ -14,4 +14,4 @@ recipe 'lvm', 'Installs lvm2 package'
 
 source_url 'https://github.com/chef-cookbooks/lvm'
 issues_url 'https://github.com/chef-cookbooks/lvm/issues'
-chef_version '>= 12.1'
+chef_version '>= 12.1' if respond_to?(:chef_version)
