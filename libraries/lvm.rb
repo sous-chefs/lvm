@@ -26,12 +26,14 @@ module LVMCookbook
         package_name 'di-ruby-lvm-attrib'
         action :remove
         compile_time true
+        source node['lvm']['rubysource']
       end
 
       chef_gem "#{new_resource.name}_di-ruby-lvm_removal" do
         package_name 'di-ruby-lvm'
         action :remove
         compile_time true
+        source node['lvm']['rubysource']
       end
     end
 
