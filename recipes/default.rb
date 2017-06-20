@@ -21,7 +21,7 @@ package 'lvm2'
 
 # Start+Enable the lvmetad service on RHEL7, it is required by default
 # but not automatically started
-if node['platform_family'] == 'rhel' && node['platform_version'].to_i >= 7
+if node['platform_family'] == 'rhel' && node['platform_version'].to_i >= 7 && !platform?('amazon')
   service 'lvm2-lvmetad' do
     action [:enable, :start]
     provider Chef::Provider::Service::Systemd
