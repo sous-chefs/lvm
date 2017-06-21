@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.1.3 (2017-06-21)
+
+- Require the latest chef-ruby-lvm-attrib gem to support recent distros like RHEL 7.2/7.3
+
 ## 4.1.2 (2017-06-20)
 
 - Ensure metadata parsing doesn't fail on older chef 12 releases
