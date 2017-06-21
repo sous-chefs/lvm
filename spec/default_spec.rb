@@ -36,7 +36,7 @@ end
 
 describe 'lvm::default on Amazon Linux' do
   cached(:chef_run_amazon) do
-    ChefSpec::SoloRunner.new(platform: 'amazon', version: '2017.03').converge('lvm::default')
+    ChefSpec::SoloRunner.new(platform: 'amazon', version: '2016.03').converge('lvm::default')
   end
 
   before(:each) do
