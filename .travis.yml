@@ -18,10 +18,10 @@ branches:
 
 # Ensure we make ChefDK's Ruby the default
 before_script:
-  - eval "$(/opt/chefdk/bin/chef shell-init bash)"
-  - /opt/chefdk/embedded/bin/chef --version
-  - /opt/chefdk/embedded/bin/cookstyle --version
-  - /opt/chefdk/embedded/bin/foodcritic --version
+  - eval "$(chef shell-init bash)"
+  - chef --version
+  - cookstyle --version
+  - foodcritic --version
 
 script:
-  - /opt/chefdk/bin/chef exec delivery local all
+  - chef exec delivery local all
