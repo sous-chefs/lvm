@@ -20,7 +20,13 @@
 if defined?(ChefSpec)
   # Per the comment on https://github.com/sethvargo/chefspec/issues/241#issuecomment-26725772 runner_methods have to be defined
   # if this isn't done you cannot test if resource A notifies resource B
-  [:lvm_logical_volume, :lvm_physical_volume, :lvm_volume_group].each do |method|
+  %i(
+    lvm_logical_volume
+    lvm_physical_volume
+    lvm_volume_group
+    lvm_thin_pool
+    lvm_thin_volume
+  ).each do |method|
     ChefSpec.define_matcher method
   end
 
@@ -46,5 +52,21 @@ if defined?(ChefSpec)
 
   def extend_lvm_volume_group(resource_name)
     ChefSpec::Matchers::ResourceMatcher.new(:lvm_volume_group, :extend, resource_name)
+  end
+
+  def create_lvm_thin_pool(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:lvm_thin_pool, :create, resource_name)
+  end
+
+  def resize_lvm_thin_pool(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:lvm_thin_pool, :resize, resource_name)
+  end
+
+  def create_lvm_thin_volume(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:lvm_thin_volume, :create, resource_name)
+  end
+
+  def resize_lvm_thin_volume(resource_name)
+    ChefSpec::Matchers::ResourceMatcher.new(:lvm_thin_volume, :resize, resource_name)
   end
 end
