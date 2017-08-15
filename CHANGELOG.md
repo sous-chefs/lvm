@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.1.5 (2017-08-15)
+
+- Add missing matchers for lvm thin pools and volumes
+
 ## 4.1.4 (2017-06-21)
 
 - Require the latest lvm gem which allows for the latest attrib gem
