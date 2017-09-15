@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.1.7 (2017-09-15)
+
+- Require latest lvm-attrib gem
+
 ## 4.1.6 (2017-08-15)
 
 - Fix for size in extents --extents should be used
