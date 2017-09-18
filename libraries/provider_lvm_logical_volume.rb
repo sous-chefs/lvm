@@ -224,7 +224,7 @@ class Chef
           Chef::Log.debug('Installing e2fsprogs to create the filesystem')
           package 'e2fsprogs' do
             action :nothing
-          end.run_action(:install)
+          end
         else
           Chef::Log.debug('Not installing any packages to configure the filesystem')
         end
