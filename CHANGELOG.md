@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.1.8 (2017-09-28)
+
+- Raise on errors instead of calling Application fatal so we can ignore failures on the LVM resources
+
 ## 4.1.7 (2017-09-15)
 
 - Require latest lvm-attrib gem
