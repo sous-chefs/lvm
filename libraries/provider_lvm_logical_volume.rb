@@ -222,9 +222,7 @@ class Chef
       def install_filesystem_deps
         if platform_family?('suse') && /^ext/.match(new_resource.filesystem)
           Chef::Log.debug('Installing e2fsprogs to create the filesystem')
-          package 'e2fsprogs' do
-            action :nothing
-          end
+          package 'e2fsprogs'
         else
           Chef::Log.debug('Not installing any packages to configure the filesystem')
         end
