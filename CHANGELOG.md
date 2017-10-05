@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.1.9 (2017-10-04)
+
+- Remove end.run_action resource declaration from e2fsprogs package installation on SUSE platform.
+
 ## 4.1.8 (2017-09-28)
 
 - Raise on errors instead of calling Application fatal so we can ignore failures on the LVM resources

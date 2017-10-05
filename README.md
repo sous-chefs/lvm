@@ -14,6 +14,7 @@ This cookbook has used multiple variants of the ruby-lvm and ruby-lvm-attrib gem
 
 - Debian/Ubuntu
 - RHEL/CentOS/Scientific/Amazon/Oracle
+- SLES
 
 ### Chef
 
