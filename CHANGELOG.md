@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.1.10 (2017-11-26)
+
+- updating to version 0.2.2 of chef-ruby-lvm-attrib
+
 ## 4.1.9 (2017-10-04)
 
 - Remove end.run_action resource declaration from e2fsprogs package installation on SUSE platform.
