@@ -137,13 +137,13 @@ class Chef
         vg = lvm.volume_groups[group]
         # if doing a resize make sure that the volume exists before doing anything
 
-        raise("Error volume group #{group} does not exist", 2) if vg.nil?
+        raise("Error volume group #{group} does not exist") if vg.nil?
 
         lv = vg.logical_volumes.select do |lvs|
           lvs.name == name
         end
         # make sure that the LV specified exists in the VG specified
-        raise("Error logical volume #{name} does not exist", 2) if lv.empty?
+        raise("Error logical volume #{name} does not exist") if lv.empty?
 
         lv = lv.first
         pe_size = lvm.volume_groups[group].extent_size.to_i
@@ -179,7 +179,7 @@ class Chef
                         when /^(\d+)$/
                           Regexp.last_match[1].to_i
                         else
-                          raise("Invalid size #{Regexp.last_match[1]} for lvm resize", 2)
+                          raise("Invalid size #{Regexp.last_match[1]} for lvm resize")
                         end
         # calculate the number of extents needed differently if specifying a percentage
         elsif resize_type == 'percent'
@@ -189,16 +189,16 @@ class Chef
                         when 'VG'
                           ((percent.to_f / 100) * pe_count).to_i
                         when 'FREE'
-                          raise('Cannot percentage based off free space', 2) unless new_resource.take_up_free_space
+                          raise('Cannot percentage based off free space') unless new_resource.take_up_free_space
                           (((percent.to_f / 100) * pe_free) + lv_size_cur).to_i
                         else
-                          raise("Invalid type #{type} for resize. You can only resize using an explicit size, percentage of VG or by setting take_up_free_space to true", 2)
+                          raise("Invalid type #{type} for resize. You can only resize using an explicit size, percentage of VG or by setting take_up_free_space to true")
                         end
         else
-          raise("Invalid size specification #{lv_size}", 2)
+          raise("Invalid size specification #{lv_size}")
         end
 
-        raise("Error trying to extend logical volume #{lv.name} beyond the capacity of volume group #{group}", 2) if !thin_volume? && (lv_size_req - lv_size_cur) > pe_free
+        raise("Error trying to extend logical volume #{lv.name} beyond the capacity of volume group #{group}") if !thin_volume? && (lv_size_req - lv_size_cur) > pe_free
 
         # don't resize if the current size is greater than or equal to the target size
         if lv_size_cur >= lv_size_req
