@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.1.11 (2018-03-09)
+
+- Correct raise syntax to remove the invalid second argument, fixes #141
+
 ## 4.1.10 (2017-11-26)
 
 - updating to version 0.2.2 of chef-ruby-lvm-attrib
