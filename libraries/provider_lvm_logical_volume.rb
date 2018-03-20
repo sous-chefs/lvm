@@ -113,8 +113,8 @@ class Chef
           # Mount the logical volume
           mount_resource = mount mount_spec[:location] do
             options mount_spec[:options]
-            dump mount_spec[:dump]
-            pass mount_spec[:pass]
+            dump mount_spec[:dump] if mount_spec[:dump]
+            pass mount_spec[:pass] if mount_spec[:pass]
             device device_name
             fstype fs_type
             action :nothing
