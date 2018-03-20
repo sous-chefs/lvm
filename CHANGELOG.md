@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.1.12 (2018-03-19)
+
+- Fix passing nils to Chef 14
+
 ## 4.1.11 (2018-03-09)
 
 - Correct raise syntax to remove the invalid second argument, fixes #141
