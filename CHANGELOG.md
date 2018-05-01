@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.1.13 (2018-05-01)
+
+- Update chef-ruby-lvm-attrib to 0.2.3
+
 ## 4.1.12 (2018-03-19)
 
 - Fix passing nils to Chef 14
