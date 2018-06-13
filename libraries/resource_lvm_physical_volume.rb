@@ -24,6 +24,11 @@ class Chef
     # The lvm_physical_volume resource
     #
     class LvmPhysicalVolume < Chef::Resource
+      resource_name :lvm_physical_volume
+
+      default_action :create
+      allowed_actions :create, :resize
+
       # Initializes lvm_physical_volume resource
       #
       # @param name [String] name of the resource
@@ -33,10 +38,6 @@ class Chef
       #
       def initialize(name, run_context = nil)
         super
-        @resource_name = :lvm_physical_volume
-        @action = :create
-        @allowed_actions.push :create
-        @allowed_actions.push :resize
         @provider = Chef::Provider::LvmPhysicalVolume
       end
 

@@ -26,6 +26,11 @@ class Chef
     class LvmVolumeGroup < Chef::Resource
       include Chef::DSL::Recipe
 
+      resource_name :lvm_volume_group
+
+      default_action :create
+      allowed_actions :create, :extend
+
       # Logical volumes to be created in the volume group
       attr_reader :logical_volumes
 
@@ -38,10 +43,6 @@ class Chef
       #
       def initialize(name, run_context = nil)
         super
-        @resource_name = :lvm_volume_group
-        @action = :create
-        @allowed_actions.push :create
-        @allowed_actions.push :extend
         @logical_volumes = []
         @provider = Chef::Provider::LvmVolumeGroup
       end

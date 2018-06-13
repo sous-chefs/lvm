@@ -26,12 +26,13 @@ class Chef
     #
     # A thin pool is a logical volume that can contain thin volumes (which are also logical volumes but are "thin")
     class LvmThinPool < Chef::Resource::LvmLogicalVolume
+      resource_name :lvm_thin_pool
+
       # Thin Logical volumes to be created in the thin pool
       attr_reader :thin_volumes
 
       def initialize(name, run_context = nil)
         super
-        @resource_name = :lvm_thin_pool
         @provider = Chef::Provider::LvmThinPool
         @thin_volumes = []
       end
