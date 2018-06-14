@@ -17,7 +17,8 @@
 # limitations under the License.
 #
 
-apt_update 'update' if platform_family?('debian')
+apt_update 'update'
+
 include_recipe 'lvm'
 
 execute 'extend loop0 device' do

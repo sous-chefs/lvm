@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-apt_update 'update' if platform_family?('debian')
+apt_update 'update'
 
 # install the old gems to make sure the uninstall works
 chef_gem 'di-ruby-lvm' do
