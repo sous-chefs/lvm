@@ -37,9 +37,9 @@ Action  | Description
 :create | (default) Creates a new physical volume
 :resize | Resize an existing physical volume
 
-#### Parameters
+#### Properties
 
-Parameter       | Description                                                                                | Example  | Default
+Property        | Description                                                                                | Example  | Default
 --------------- | ------------------------------------------------------------------------------------------ | -------- | -------
 name            | (required) The device to create the new physical volume on                                 | /dev/sda |
 wipe_signatures | Force the creation of the Logical Volume, even if `lvm` detects existing PV signatures/td> | `true`   | `false`
@@ -197,6 +197,7 @@ end
 
 
 ### lvm_thin_pool
+
 Manages LVM thin pools (which are simply logical volumes created with the --thinpool argument to lvcreate).
 
 #### Actions
@@ -336,8 +337,8 @@ Manages LVM thin pools (which are simply logical volumes created with the --thin
 
 
 ### lvm_thin_volume
-Manages LVM thin volumes (which are simply logical volumes created with the --thin argument to lvcreate and are contained inside of
-other logical volumes that were created with the --thinpool option to lvcreate).
+
+Manages LVM thin volumes (which are simply logical volumes created with the --thin argument to lvcreate and are contained inside of other logical volumes that were created with the --thinpool option to lvcreate).
 
 #### Actions
 <table>
@@ -452,9 +453,9 @@ Action  | Description
 :create | (default) Creates a new volume group
 :extend | Extend an existing volume group to include new physical volumes
 
-#### Parameters
+#### Properties
 
-Attribute            | Description                                                                                                                                                                | Example                           | Default
+Property             | Description                                                                                                                                                                | Example                           | Default
 -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | -------
 name                 | (required) Name of the volume group                                                                                                                                        | <tt>'bacon'</tt>                  |
 physical_volumes     | (required) The device or list of devices to use as physical volumes (if they haven't already been initialized as physical volumes, they will be initialized automatically) | <tt>['/dev/sda', '/dev/sdb']</tt> |
