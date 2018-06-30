@@ -25,6 +25,11 @@ class Chef
     # The lvm_logical_volume resource
     #
     class LvmLogicalVolume < Chef::Resource::BaseLogicalVolume
+      resource_name :lvm_logical_volume
+
+      default_action :create
+      allowed_actions :create, :resize
+
       # Initializes the lvm_logical_volume resource
       #
       # @param name [String] name of the resource
@@ -34,10 +39,6 @@ class Chef
       #
       def initialize(name, run_context = nil)
         super
-        @resource_name = :lvm_logical_volume
-        @action = :create
-        @allowed_actions.push :create
-        @allowed_actions.push :resize
         @provider = Chef::Provider::LvmLogicalVolume
       end
 
