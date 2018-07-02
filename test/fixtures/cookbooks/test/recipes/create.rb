@@ -42,9 +42,9 @@ devices = [
   '/dev/loop7',
 ]
 
-extend Chef::Mixin::ShellOut
-# Creates the loop back device
-LvmTest::Helper.create_loop_devices(devices) unless shell_out('pvs | grep -c /dev/loop1').stdout.to_i == 1
+loop_devices devices do
+  action :create
+end
 
 # Creates the physical device
 

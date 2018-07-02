@@ -28,9 +28,9 @@ devices = [
   '/dev/loop3',
 ]
 
-extend Chef::Mixin::ShellOut
-
-LvmTest::Helper.create_loop_devices(devices) unless shell_out('pvs | grep -c /dev/loop1').stdout.to_i == 1
+loop_devices devices do
+  action :create
+end
 
 log 'Creating physical volume for test'
 devices.each do |device|
