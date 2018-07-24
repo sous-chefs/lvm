@@ -22,11 +22,14 @@ property :volume_name, String, name_property: true
 # whether to automatically wipe any preexisting signatures
 property :wipe_signatures, [TrueClass, FalseClass], default: false
 
+# whether to ignore skipped cluster VGs during LVM commands
+property :ignore_skipped_cluster, [TrueClass, FalseClass], default: false
+
 # The create action
 #
 action :create do
   require_lvm_gems
-  lvm = LVM::LVM.new
+  lvm = LVM::LVM.new(lvm_options)
   if lvm.physical_volumes[new_resource.name].nil?
     yes_flag = new_resource.wipe_signatures == true ? '--yes' : ''
 
@@ -38,7 +41,7 @@ end
 
 action :resize do
   require_lvm_gems
-  lvm = LVM::LVM.new
+  lvm = LVM::LVM.new(lvm_options)
   pv = lvm.physical_volumes.select do |pvs|
     pvs.name == new_resource.name
   end
@@ -69,4 +72,8 @@ end
 
 action_class do
   include LVMCookbook
+
+  def lvm_options
+    new_resource.ignore_skipped_cluster ? { additional_arguments: '--ignoreskippedcluster' } : {}
+  end
 end

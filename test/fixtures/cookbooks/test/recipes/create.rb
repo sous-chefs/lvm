@@ -93,6 +93,7 @@ lvm_logical_volume 'test' do
   size '50%VG'
   filesystem 'ext3'
   mount_point '/mnt/test'
+  ignore_skipped_cluster true
 end
 
 # Creates a small logical volume

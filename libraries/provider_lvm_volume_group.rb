@@ -55,7 +55,7 @@ class Chef
         # The notifications should be set if the lvm_volume_group or any of its sub lvm_logical_volume resources are
         # updated.
 
-        lvm = LVM::LVM.new
+        lvm = LVM::LVM.new(lvm_options)
         # Create the volume group
         create_volume_group(lvm, physical_volume_list, name)
 
@@ -69,7 +69,7 @@ class Chef
         require_lvm_gems
         name = new_resource.name
         physical_volume_list = [new_resource.physical_volumes].flatten
-        lvm = LVM::LVM.new
+        lvm = LVM::LVM.new(lvm_options)
 
         # verify that the volume group is valid
         raise("VG #{name} is not a valid volume group") if lvm.volume_groups[name].nil?
@@ -103,6 +103,10 @@ class Chef
       end
 
       private
+
+      def lvm_options
+        new_resource.ignore_skipped_cluster ? { additional_arguments: '--ignoreskippedcluster' } : {}
+      end
 
       def create_mount_resource(physical_volume_list)
         physical_volume_list.select { |pv| ::File.exist?(pv) }.each do |pv|
