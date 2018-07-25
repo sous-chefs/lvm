@@ -39,10 +39,11 @@ Action  | Description
 
 #### Properties
 
-Property        | Description                                                                                | Example  | Default
---------------- | ------------------------------------------------------------------------------------------ | -------- | -------
-name            | (required) The device to create the new physical volume on                                 | /dev/sda |
-wipe_signatures | Force the creation of the Logical Volume, even if `lvm` detects existing PV signatures/td> | `true`   | `false`
+Property               | Description                                                                            | Example  | Default
+---------------------- | -------------------------------------------------------------------------------------- | -------- | -------
+name                   | (required) The device to create the new physical volume on                             | /dev/sda |
+wipe_signatures        | Force the creation of the Logical Volume, even if `lvm` detects existing PV signatures | `true`   | `false`
+ignore_skipped_cluster | Continue execution even if `lvm` detects skipped clustered volume groups               | `true`   | `false`
 
 #### Examples
 
@@ -170,13 +171,19 @@ Action  | Description
   <td>take_up_free_space</td>
     <td>whether to have the LV take up the remainder of free space on the VG. Only valid for resize action</td>
     <td><tt>true</tt></td>
-    <td>false</td>
+    <td><tt>false</tt></td>
   </tr>
   <tr>
     <td>wipe_signatures</td>
-    <td>Force the creation of the Logical Volume, even if `lvm` detects existing LV signatures/td>
-    <td>`true`</td>
-    <td>`false`</td>
+    <td>Force the creation of the Logical Volume, even if `lvm` detects existing LV signatures</td>
+    <td><tt>true</tt></td>
+    <td><tt>false</tt></td>
+  </tr>
+  <tr>
+    <td>ignore_skipped_cluster</td>
+    <td>Continue execution even if `lvm` detects skipped clustered volume groups</td>
+    <td><tt>true</tt></td>
+    <td><tt>false</tt></td>
   </tr>
 </table>
 
@@ -455,14 +462,15 @@ Action  | Description
 
 #### Properties
 
-Property             | Description                                                                                                                                                                | Example                           | Default
--------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | -------
-name                 | (required) Name of the volume group                                                                                                                                        | <tt>'bacon'</tt>                  |
-physical_volumes     | (required) The device or list of devices to use as physical volumes (if they haven't already been initialized as physical volumes, they will be initialized automatically) | <tt>['/dev/sda', '/dev/sdb']</tt> |
-physical_extent_size | The physical extent size for the volume group                                                                                                                              |                                   |
-logical_volume       | Shortcut for creating a new `lvm_logical_volume` definition (the logical volumes will be created in the order they are declared)                                           |                                   |
-wipe_signatures      | Force the creation of the Volume Group, even if `lvm` detects existing non-LVM data on disk                                                                                | `true`                            | `false`
-thin_pool            | Shortcut for creating a new `lvm_thin_pool` definition (the logical volumes will be created in the order they are declared)                                                |                                   |
+Property               | Description                                                                                                                                                                | Example                           | Default
+---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | -------
+name                   | (required) Name of the volume group                                                                                                                                        | <tt>'bacon'</tt>                  |
+physical_volumes       | (required) The device or list of devices to use as physical volumes (if they haven't already been initialized as physical volumes, they will be initialized automatically) | <tt>['/dev/sda', '/dev/sdb']</tt> |
+physical_extent_size   | The physical extent size for the volume group                                                                                                                              |                                   |
+logical_volume         | Shortcut for creating a new `lvm_logical_volume` definition (the logical volumes will be created in the order they are declared)                                           |                                   |
+wipe_signatures        | Force the creation of the Volume Group, even if `lvm` detects existing non-LVM data on disk                                                                                | `true`                            | `false`
+thin_pool              | Shortcut for creating a new `lvm_thin_pool` definition (the logical volumes will be created in the order they are declared)                                                |                                   |
+ignore_skipped_cluster | Continue execution even if `lvm` detects skipped clustered volume groups                                                | `true`                            | `false`
 
 #### Examples
 

@@ -48,7 +48,7 @@ class Chef
         require_lvm_gems
         install_filesystem_deps
 
-        lvm = LVM::LVM.new
+        lvm = LVM::LVM.new(lvm_options)
         name = new_resource.name
         group = new_resource.group
         fs_type = new_resource.filesystem
@@ -130,7 +130,7 @@ class Chef
       # Action to resize LV to specified size
       def action_resize
         require_lvm_gems
-        lvm = LVM::LVM.new
+        lvm = LVM::LVM.new(lvm_options)
         name = new_resource.name
         group = new_resource.group
 
@@ -217,6 +217,10 @@ class Chef
       end
 
       protected
+
+      def lvm_options
+        new_resource.ignore_skipped_cluster ? { additional_arguments: '--ignoreskippedcluster' } : {}
+      end
 
       def install_filesystem_deps
         if platform_family?('suse') && /^ext/.match(new_resource.filesystem)
