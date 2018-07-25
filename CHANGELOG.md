@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.2.0 (2018-07-24)
+
+- Convert physical_volume to a custom resource
+- Add support for the ignore_skipped_cluster property, fixes #156
+
 ## 4.1.15 (2018-06-29)
 
 - Fix resources so ChefSpec matchers are auto-generated
