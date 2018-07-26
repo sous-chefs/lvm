@@ -499,6 +499,70 @@ lvm_volume_group 'vg00' do
 end
 ```
 
+### lvm_thin_pool_meta_data
+
+Manages LVM thin pool metadata size.
+
+#### Actions
+
+Action  | Description
+------- | ---------------------------------------------------------------
+:resize | Resize an existing thin pool metadata volume
+
+#### Properties
+
+<table>
+  <tr>
+    <th>Attribute</th>
+    <th>Description</th>
+    <th>Example</th>
+    <th>Default</th>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>(name attribute) Name of the thin pool metadata volume</td>
+    <td><tt>bacon</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>group</td>
+    <td>(required) Name of volume group in which thin pool metadata volume exist.</td>
+    <td><tt>bits</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>pool</td>
+    <td>(required) Name of thin pool volume in which thin pool metadata volume exist.</td>
+    <td><tt>bits</tt></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>size</td>
+    <td>(required) Size of the thin pool metadata volume.
+      <ul>
+        <li>It can be the size of the volume with units (k, K, m, M, g, G, t, T)</li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <tt>2M</tt>
+      </ul>
+    </td>
+    <td></td>
+  </tr>
+</table>
+
+#### Examples
+
+```ruby
+lvm_thin_pool_meta_data 'lv-thin-pool_tmeta' do
+  group       'vg00'
+  pool        'lv-thin-pool'q
+  size        '2M'
+  action      :resize
+end
+```
+
 ## Usage
 
 Include the default recipe in your run list on a node, in a role, or in another recipe:
