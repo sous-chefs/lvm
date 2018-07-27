@@ -39,3 +39,9 @@ suites:
     run_list:
       - recipe[test::create_thin]
       - recipe[test::resize_thin]
+  - name: resize_thin_pool_meta_data
+    excludes:
+    - debian-8
+    run_list:
+      - recipe[test::create_thin]
+      - recipe[test::resize_thin_pool_meta_data]
