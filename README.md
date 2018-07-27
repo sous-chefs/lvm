@@ -511,46 +511,13 @@ Action  | Description
 
 #### Properties
 
-<table>
-  <tr>
-    <th>Attribute</th>
-    <th>Description</th>
-    <th>Example</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td>name</td>
-    <td>(name attribute) Name of the thin pool metadata volume</td>
-    <td><tt>bacon</tt></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>group</td>
-    <td>(required) Name of volume group in which thin pool metadata volume exist.</td>
-    <td><tt>bits</tt></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>pool</td>
-    <td>(required) Name of thin pool volume in which thin pool metadata volume exist.</td>
-    <td><tt>bits</tt></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>size</td>
-    <td>(required) Size of the thin pool metadata volume.
-      <ul>
-        <li>It can be the size of the volume with units (k, K, m, M, g, G, t, T)</li>
-      </ul>
-    </td>
-    <td>
-      <ul>
-        <tt>2M</tt>
-      </ul>
-    </td>
-    <td></td>
-  </tr>
-</table>
+
+Property            | Description                                                                   | Example  | Default
+--------------------| ------------------------------------------------------------------------------| -------- | -------
+name                | (name attribute) Name of the thin pool metadata volume                        | bacon    |
+group               | (required) Name of volume group in which thin pool metadata volume exist.     | bits     |
+pool                | (required) Name of thin pool volume in which thin pool metadata volume exist. | bits     |
+size                | (required) Size of the thin pool metadata volume. It can be the size of the volume with units (k, K, m, M, g, G, t, T) | 2M |
 
 #### Examples
 
