@@ -42,7 +42,8 @@ devices = [
   '/dev/loop7',
 ]
 
-loop_devices devices do
+loop_devices 'loop_devices' do
+  devices devices
   action :create
 end
 
