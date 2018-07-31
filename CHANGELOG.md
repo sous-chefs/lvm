@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.3.0 (2018-07-31)
+
+- Added new lvm_thin_pool_meta_data resource
+
 ## 4.2.0 (2018-07-24)
 
 - Convert physical_volume to a custom resource
