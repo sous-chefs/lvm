@@ -266,12 +266,19 @@ class Chef
         name = new_resource.name
         group = new_resource.group
         device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
-        resize_fs = '--resizefs'
+        resize_fs =
+          case new_resource.filesystem
+          when /raw/i
+            ''
+          else
+            '--resizefs'
+          end
         stripes = new_resource.stripes ? "--stripes #{new_resource.stripes}" : ''
         stripe_size = new_resource.stripe_size ? "--stripesize #{new_resource.stripe_size}" : ''
         mirrors = new_resource.mirrors ? "--mirrors #{new_resource.mirrors}" : ''
+        lv_params = new_resource.lv_params
 
-        "lvextend -l #{lv_size_req} #{resize_fs} #{stripes} #{stripe_size} #{mirrors} #{device_name}"
+        "lvextend -l #{lv_size_req} #{resize_fs} #{stripes} #{stripe_size} #{mirrors} #{device_name} #{lv_params}"
       end
 
       private

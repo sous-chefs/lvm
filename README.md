@@ -185,6 +185,12 @@ Action  | Description
     <td><tt>true</tt></td>
     <td><tt>false</tt></td>
   </tr>
+  <tr>
+    <td>lv_params</td>
+    <td>Optional parameters to be passed to LVM</td>
+    <td><tt>'--nofsck'</tt></td>
+    <td><tt></tt></td>
+  </tr>
 </table>
 
 #### Examples
