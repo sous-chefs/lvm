@@ -544,6 +544,7 @@ lvm_thin_pool_meta_data 'lv-thin-pool_tmeta' do
 end
 ```
 
+
 ## Usage
 
 Include the default recipe in your run list on a node, in a role, or in another recipe:
