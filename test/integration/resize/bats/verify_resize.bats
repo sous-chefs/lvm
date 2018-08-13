@@ -32,8 +32,15 @@ export PATH=$PATH:/sbin:/usr/sbin
   [ "$lvsize" -ge "$num_extents" ]
 }
 
+@test "creates the raw logical volume at 8MB and resizes to 16MB" {
+  # 8MB LV size / 4MB default extent size
+  num_extents="4"
+  lvsize="$(lvdisplay /dev/mapper/vg--test-small_resize_raw|awk '/Current LE/ {print $3}')"
+  [ "$lvsize" -ge "$num_extents" ]
+}
+
 @test "creates and resizes a logical volume that fills the VG" {
-  num_extents="36"
+  num_extents="32"
   lvsize="$(lvdisplay /dev/mapper/vg--test-remainder_resize|awk '/Current LE/ {print $3}')"
   [ "$lvsize" -ge "$num_extents" ]
 }

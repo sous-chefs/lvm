@@ -20,6 +20,14 @@ describe 'test::resize' do
     it 'Resize logical volume' do
       expect(chef_run).to resize_lvm_logical_volume('small_resize')
     end
+
+    it 'Create RAW logical volume' do
+      expect(chef_run).to create_lvm_logical_volume('small_resize_raw')
+    end
+
+    it 'Resize RAW logical volume' do
+      expect(chef_run).to resize_lvm_logical_volume('small_resize_raw')
+    end
   end
 
   context 'on RHEL 7' do
@@ -41,6 +49,14 @@ describe 'test::resize' do
     it 'Resize logical volume' do
       expect(chef_run).to resize_lvm_logical_volume('small_resize')
     end
+
+    it 'Create RAW logical volume' do
+      expect(chef_run).to create_lvm_logical_volume('small_resize_raw')
+    end
+
+    it 'Resize RAW logical volume' do
+      expect(chef_run).to resize_lvm_logical_volume('small_resize_raw')
+    end
   end
 
   context 'on Amazon Linux' do
@@ -61,6 +77,14 @@ describe 'test::resize' do
 
     it 'Resize logical volume' do
       expect(chef_run).to resize_lvm_logical_volume('small_resize')
+    end
+
+    it 'Create RAW logical volume' do
+      expect(chef_run).to create_lvm_logical_volume('small_resize_raw')
+    end
+
+    it 'Resize RAW logical volume' do
+      expect(chef_run).to resize_lvm_logical_volume('small_resize_raw')
     end
   end
 end

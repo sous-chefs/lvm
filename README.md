@@ -62,7 +62,7 @@ Manages LVM logical volumes.
 Action  | Description
 ------- | --------------------------------------
 :create | (default) Creates a new logical volume
-:resize | Resize an existing logical volume
+:resize | Resize an existing logical volume (resizing only handles extending existing, this action will not shrink volumes due to the 'lvextend' command being passed)
 
 #### Parameters
 <table>
@@ -185,6 +185,12 @@ Action  | Description
     <td><tt>true</tt></td>
     <td><tt>false</tt></td>
   </tr>
+  <tr>
+    <td>lv_params</td>
+    <td>Optional parameters to be passed to LVM</td>
+    <td><tt>'--nofsck'</tt></td>
+    <td><tt></tt></td>
+  </tr>
 </table>
 
 #### Examples
@@ -219,7 +225,7 @@ Manages LVM thin pools (which are simply logical volumes created with the --thin
   </tr>
   <tr>
     <td>:resize</td>
-    <td>Resize an existing thin pool logical volume</td>
+    <td>Resize an existing thin pool logical volume (resizing only handles extending existing, this action will not shrink volumes due to the 'lvextend' command being passed)</td>
   </tr>
 </table>
 
@@ -359,7 +365,7 @@ Manages LVM thin volumes (which are simply logical volumes created with the --th
   </tr>
   <tr>
     <td>:resize</td>
-    <td>Resize an existing thin logical volume</td>
+    <td>Resize an existing thin logical volume (resizing only handles extending existing, this action will not shrink volumes due to the 'lvextend' command being passed)</td>
   </tr>
 </table>
 
@@ -515,7 +521,7 @@ Manages LVM thin pool metadata size.
 
 Action  | Description
 ------- | ---------------------------------------------------------------
-:resize | Resize an existing thin pool metadata volume
+:resize | Resize an existing thin pool metadata volume (resizing only handles extending existing, this action will not shrink volumes due to the 'lvextend' command being passed)
 
 #### Properties
 
@@ -537,6 +543,7 @@ lvm_thin_pool_meta_data 'lv-thin-pool_tmeta' do
   action      :resize
 end
 ```
+
 
 ## Usage
 

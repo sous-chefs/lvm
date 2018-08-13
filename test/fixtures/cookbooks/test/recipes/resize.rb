@@ -121,6 +121,27 @@ lvm_logical_volume 'percent_noresize_test' do
   mount_point '/mnt/percent_noresize'
 end
 
+# Create a LV to resize for later option test
+# RAW volume (no filesystem)
+#
+lvm_logical_volume 'small_resize_raw' do
+  action :create
+  group 'vg-test'
+  size '8M'
+end
+
+# Resize a lv based off explicit size using an option parameter
+# RAW volume (no filesystem)
+#
+lvm_logical_volume 'small_resize_raw_test' do
+  action :resize
+  name 'small_resize_raw'
+  group 'vg-test'
+  size '16M'
+  filesystem 'RAW'
+  lv_params '--nofsck'
+end
+
 # Resize a lv based off percent
 # Should stay the same size
 #

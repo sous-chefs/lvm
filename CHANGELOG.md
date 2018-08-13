@@ -2,6 +2,12 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.4.0 (2018-08-10)
+
+- Added 'lv_params' to be handled as part of lvm_logical_volume :resize, as it was available only for :create - to resolve GH-159
+- Added logic to not pass '--resizefs' if the filesystem is 'RAW'
+- Added missing documentation on the hidden option of sending 'lv_params' to the resource for both :create and :resize
+
 ## 4.3.0 (2018-07-31)
 
 - Added new lvm_thin_pool_meta_data resource
