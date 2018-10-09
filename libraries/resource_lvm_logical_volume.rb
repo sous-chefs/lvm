@@ -28,7 +28,7 @@ class Chef
       resource_name :lvm_logical_volume
 
       default_action :create
-      allowed_actions :create, :resize
+      allowed_actions :create, :resize, :remove
 
       # Initializes the lvm_logical_volume resource
       #
@@ -177,6 +177,20 @@ class Chef
           arg,
           kind_of: [TrueClass, FalseClass],
           default: false
+        )
+      end
+
+      # Attribute: remove_mount_point - whether to remove the mount location/directory
+      #
+      # @param arg [Boolean] whether to have the resource clean up/delete the mount location/directory
+      #
+      # @return [Boolean] if the mount location should be cleaned up/deleted
+      #
+      def remove_mount_point(arg = nil)
+        set_or_return(
+          :remove_mount_point,
+          arg,
+          kind_of: [TrueClass, FalseClass]
         )
       end
     end

@@ -2,6 +2,12 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.5.0 (2018-09-11)
+
+- Added the ability to remove a logical volume, fixes #124
+- Added documentation on :remove action for lvm_logical_volume resource within the readme
+- Documented integration tests unable to function unless minimal Chef 13.x due to ruby 2.4.x dependency (development impact only, not operational impact)
+
 ## 4.4.0 (2018-08-10)
 
 - Added 'lv_params' to be handled as part of lvm_logical_volume :resize, as it was available only for :create - to resolve GH-159

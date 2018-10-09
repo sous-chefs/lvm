@@ -216,6 +216,72 @@ class Chef
         end
       end
 
+      # The remove action
+      # must specify the volume group name - as the umount passes a full path
+      # if mount_point specified, then unmount first
+      # if remove_mount_point specificed, then the directory will be removed
+      def action_remove
+        require_lvm_gems
+        install_filesystem_deps
+
+        lvm = LVM::LVM.new(lvm_options)
+        name = new_resource.name
+        group = new_resource.group
+        # fs_type = new_resource.filesystem
+        # fs_params = new_resource.filesystem_params
+        mount_point = new_resource.mount_point
+        remove_mount_point = new_resource.remove_mount_point
+        device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
+        updates = []
+
+        # If the mount point is specified, umount the logical volume
+        if mount_point
+          mount_spec = if mount_point.is_a?(String)
+                         { location: mount_point }
+                       else
+                         mount_point
+                       end
+
+          # Umount the logical volume
+          mount_resource = mount mount_spec[:location] do
+            options mount_spec[:options]
+            dump mount_spec[:dump] if mount_spec[:dump]
+            pass mount_spec[:pass] if mount_spec[:pass]
+            device device_name
+            action :nothing
+          end
+          mount_resource.run_action(:umount)
+          mount_resource.run_action(:disable)
+          # Mark the resource as updated if the mount resource is updated
+          updates << mount_resource.updated?
+
+          # If specified, remove the mount point
+          if remove_mount_point
+            dir_resource = directory mount_spec[:location] do
+              recursive true
+              action :nothing
+              not_if { Pathname.new(mount_spec[:location]).mountpoint? }
+            end
+            dir_resource.run_action(:delete)
+            # Mark the resource as updated if the directory resource is updated
+            updates << dir_resource.updated?
+          end
+        end
+
+        vg = lvm.volume_groups[group]
+        # Remove the logical volume
+        if vg.logical_volumes.select { |lv| lv.name == name }
+          command = remove_command
+          Chef::Log.debug "Executing lvm command: '#{command}'"
+          output = lvm.raw(command)
+          Chef::Log.debug "Command output: '#{output}'"
+        else
+          Chef::Log.info "Logical volume '#{name}' unable to be removed. Not removing..."
+        end
+        updates << true
+        new_resource.updated_by_last_action(updates.any?)
+      end
+
       protected
 
       def lvm_options
@@ -279,6 +345,18 @@ class Chef
         lv_params = new_resource.lv_params
 
         "lvextend -l #{lv_size_req} #{resize_fs} #{stripes} #{stripe_size} #{mirrors} #{device_name} #{lv_params}"
+      end
+
+      def remove_command
+        lv_params = new_resource.lv_params
+        name = new_resource.name
+        group = new_resource.group
+
+        # this version will only support handling logical volumes that were created by this cookbook - conforming to the naming convention of this cookbook
+        # a future enhancement should allow to optionally delete based on a user-specified device_name
+        device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
+
+        "lvremove #{device_name} #{lv_params} --force"
       end
 
       private
