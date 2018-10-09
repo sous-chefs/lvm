@@ -63,6 +63,7 @@ Action  | Description
 ------- | --------------------------------------
 :create | (default) Creates a new logical volume
 :resize | Resize an existing logical volume (resizing only handles extending existing, this action will not shrink volumes due to the 'lvextend' command being passed)
+:remove | Remove an existing logical volume (optionally clean up the mount location/directory)
 
 #### Parameters
 <table>
@@ -189,7 +190,12 @@ Action  | Description
     <td>lv_params</td>
     <td>Optional parameters to be passed to LVM</td>
     <td><tt>'--nofsck'</tt></td>
-    <td><tt></tt></td>
+  </tr>
+  <tr>
+    <td>remove_mount_point</td>
+    <td>Optional parameter to be passed to LVM during a :remove event to clean up the directory</td>
+    <td><tt>true</tt></td>
+    <td><tt>false</tt></td>
   </tr>
 </table>
 
@@ -203,6 +209,13 @@ lvm_logical_volume 'home' do
   mount_point '/home'
   stripes     3
   mirrors     2
+end
+
+lvm_logical_volume 'test' do
+  group               'vg01'
+  mount_point         '/mnt/test'
+  remove_mount_point  true
+  action              :remove
 end
 ```
 
