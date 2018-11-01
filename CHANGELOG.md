@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.5.1 (2018-11-01)
+
+- Update the attributes gem version from 0.2.3 to 0.2.5
+
 ## 4.5.0 (2018-09-11)
 
 - Added the ability to remove a logical volume, fixes #124
