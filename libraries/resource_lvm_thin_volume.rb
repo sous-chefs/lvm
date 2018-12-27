@@ -73,6 +73,21 @@ class Chef
           required: true
         )
       end
+
+      # Attribute: ignore_skipped_cluster -
+      #
+      # @param arg [Boolean] whether to ignore skipped cluster VGs during LVM commands
+      #
+      # @return [Boolean] the ignore_skipped_cluster setting
+      #
+      def ignore_skipped_cluster(arg = nil)
+        set_or_return(
+          :ignore_skipped_cluster,
+          arg,
+          kind_of: [TrueClass, FalseClass],
+          default: false
+        )
+      end
     end
   end
 end
