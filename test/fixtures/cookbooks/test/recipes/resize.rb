@@ -26,7 +26,7 @@ execute 'extend loop0 device' do
 dd if=/dev/zero bs=512 count=65536 >> /vfile0
 losetup -c /dev/loop0
 touch /vfile0.extended
-EOF
+  EOF
   not_if { File.exist?('/vfile0.extended') }
 end
 

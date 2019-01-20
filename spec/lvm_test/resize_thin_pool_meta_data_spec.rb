@@ -1,4 +1,3 @@
-
 require 'spec_helper'
 
 describe 'test::resize_thin' do
