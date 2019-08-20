@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.5.4 (2019-08-20)
+
+- Update the attributes gem version from 0.2.6 to 0.2.8
+
 ## 4.5.3 (2018-12-26)
 
 - Add support for the ignore_skipped_cluster property, fixes #170 - [msgarbossa](https://github.com/msgarbossa)
