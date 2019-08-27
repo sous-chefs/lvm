@@ -2,12 +2,12 @@ services:
   - docker
 
 install:
-  - docker pull chef/chefdk
+  - docker pull chef/chef-workstaton
 
 branches:
   only:
     - master
 
 script:
-  - docker run -t chef/chefdk chef -v
-  - docker run -v $PWD:/cookbook -w /cookbook -t chef/chefdk delivery local all
+  - docker run -t chef/chef-workstaton chef -v
+  - docker run -v $PWD:/cookbook -w /cookbook -t chef/chef-workstaton delivery local all
