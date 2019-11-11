@@ -2,7 +2,7 @@
 # Cookbook:: lvm
 # Library:: provider_lvm_logical_volume
 #
-# Copyright:: 2009-2017, Chef Software, Inc.
+# Copyright:: 2009-2019, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -311,7 +311,7 @@ class Chef
           when /(\d{1,2}|100)%(FREE|VG|PVS)/
             "--extents #{new_resource.size}"
           when /(\d+)/
-            "--extents #{$1}" # rubocop:disable PerlBackrefs
+            "--extents #{$1}" # rubocop:disable Style/PerlBackrefs
           end
 
         stripes = new_resource.stripes ? "--stripes #{new_resource.stripes}" : ''

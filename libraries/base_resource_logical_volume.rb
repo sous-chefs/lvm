@@ -2,7 +2,7 @@
 # Cookbook:: lvm
 # Library:: base_resource_logical_volume
 #
-# Copyright:: 2009-2017, Chef Software, Inc.
+# Copyright:: 2009-2019, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ class Chef
     class BaseLogicalVolume < Chef::Resource
       include Chef::DSL::Recipe
 
-      # Initializes a BaseLogicalVolume object.  This class is only meant to
+      # Initializes a BaseLogicalVolume object. This class is only meant to
       # be used as a base class for other resources.
       #
       # @param name [String] name of the resource

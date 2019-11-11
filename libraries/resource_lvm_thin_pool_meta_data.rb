@@ -2,7 +2,7 @@
 # Cookbook:: lvm
 # Library:: resource_lvm_thin_pool_meta_data
 #
-# Copyright:: 2016-2017, Ontario Systems, LLC.
+# Copyright:: 2016-2019, Ontario Systems, LLC.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
