@@ -27,7 +27,7 @@ dd if=/dev/zero bs=512 count=65536 >> /vfile0
 losetup -c /dev/loop0
 touch /vfile0.extended
   EOF
-  not_if { File.exist?('/vfile0.extended') }
+  not_if { ::File.exist?('/vfile0.extended') }
 end
 
 lvm_physical_volume 'loop0_resize' do
