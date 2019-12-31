@@ -20,10 +20,10 @@
 property :volume_name, String, name_property: true
 
 # whether to automatically wipe any preexisting signatures
-property :wipe_signatures, [TrueClass, FalseClass], default: false
+property :wipe_signatures, [true, false], default: false
 
 # whether to ignore skipped cluster VGs during LVM commands
-property :ignore_skipped_cluster, [TrueClass, FalseClass], default: false
+property :ignore_skipped_cluster, [true, false], default: false
 
 # The create action
 #
