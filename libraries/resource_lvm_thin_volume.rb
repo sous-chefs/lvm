@@ -29,6 +29,7 @@ class Chef
       resource_name :lvm_thin_volume
 
       default_action :create
+      allowed_actions :create, :resize
 
       # Initializes the lvm_logical_volume resource
       #

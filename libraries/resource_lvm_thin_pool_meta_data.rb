@@ -29,6 +29,7 @@ class Chef
       resource_name :lvm_thin_pool_meta_data
 
       default_action :resize
+      allowed_actions :resize
 
       # Initializes the lvm_thin_pool_meta_data resource
       #

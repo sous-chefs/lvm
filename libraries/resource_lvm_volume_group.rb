@@ -2,7 +2,7 @@
 # Cookbook:: lvm
 # Library:: resource_lvm_volume_group
 #
-# Copyright:: 2009-2019, Chef Software, Inc.
+# Copyright:: 2009-2017, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ class Chef
       resource_name :lvm_volume_group
 
       default_action :create
+      allowed_actions :create, :extend
 
       # Logical volumes to be created in the volume group
       attr_reader :logical_volumes
