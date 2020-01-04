@@ -18,7 +18,7 @@ This cookbook has used multiple variants of the ruby-lvm and ruby-lvm-attrib gem
 
 ### Chef
 
-- Chef 12.1+
+- Chef 12.15+
 
 ### Cookbooks
 
