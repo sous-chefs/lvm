@@ -31,7 +31,7 @@ describe 'test::create_thin' do
 
   context 'on RHEL 7' do
     let(:platform) { 'centos' }
-    let(:version) { '7.3.1611' }
+    let(:version) { '7' }
 
     before(:each) do
       stub_command('/sbin/lvm dumpconfig global/use_lvmetad | grep use_lvmetad=1').and_return(true)

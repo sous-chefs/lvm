@@ -17,7 +17,7 @@ end
 
 describe 'lvm::default on RHEL 7' do
   cached(:chef_run_rhel) do
-    ChefSpec::SoloRunner.new(platform: 'centos', version: '7.3.1611').converge('lvm::default')
+    ChefSpec::SoloRunner.new(platform: 'centos', version: '7').converge('lvm::default')
   end
 
   before(:each) do

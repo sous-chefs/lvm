@@ -6,6 +6,8 @@ describe 'test::remove' do
   end
 
   before do
+    stub_command("/opt/chef/embedded/bin/gem list | grep \"chef-ruby-lvm \"\"").and_return(true)
+    stub_command("/opt/chef/embedded/bin/gem list | grep chef-ruby-lvm-attrib").and_return(true)
     allow_any_instance_of(Chef::Recipe).to receive(:shell_out).and_call_original
     pvs = double('pvs', stdout: '1')
     allow_any_instance_of(Chef::Recipe).to receive(:shell_out).with('pvs | grep -c /dev/loop1').and_return(pvs)
@@ -38,7 +40,7 @@ describe 'test::remove' do
 
   context 'on RHEL 7' do
     let(:platform) { 'centos' }
-    let(:version) { '7.3.1611' }
+    let(:version) { '7' }
 
     before(:each) do
       stub_command('/sbin/lvm dumpconfig global/use_lvmetad | grep use_lvmetad=1').and_return(true)

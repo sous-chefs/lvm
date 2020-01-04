@@ -16,7 +16,7 @@ describe 'test::resize_thin' do
 
   describe 'on RHEL 7' do
     let(:platform) { 'centos' }
-    let(:version) { '7.3.1611' }
+    let(:version) { '7' }
 
     it 'resizes logical volume' do
       expect(chef_run).to resize_lvm_thin_pool_meta_data('lv-thin_tmeta')
