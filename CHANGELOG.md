@@ -2,6 +2,17 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.6.0 (2020-01-04)
+
+- Remove extra metadata from the metadata.rb - [@tas50](https://github.com/tas50)
+- Remove the foodcritic config - [@tas50](https://github.com/tas50)
+- Update copyrights - [@tas50](https://github.com/tas50)
+- Use ::File not File in the conditionals - [@tas50](https://github.com/tas50)
+- Simplify types in the resources - [@tas50](https://github.com/tas50)
+- Switch testing to Github actions - [@tas50](https://github.com/tas50)
+- Require Chef 12.15+ - [@tas50](https://github.com/tas50)
+- Fix the failing specs - [@tas50](https://github.com/tas50)
+
 ## 4.5.4 (2019-08-20)
 
 - Update the attributes gem version from 0.2.6 to 0.2.8
