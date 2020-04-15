@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 4.6.1 (2020-04-15)
+
+- Require the chef-ruby-lvm-attrib 0.3.1 gem - [@tas50](https://github.com/tas50)
+
 ## 4.6.0 (2020-01-04)
 
 - Remove extra metadata from the metadata.rb - [@tas50](https://github.com/tas50)
