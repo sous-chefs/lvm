@@ -9,14 +9,14 @@ provisioner:
 platforms:
   - name: centos-6
   - name: centos-7
+  - name: centos-8
+  - name: oracle-7
   - name: debian-9
   - name: debian-10
-  - name: oracle-7
-  - name: debian-10
-  - name: fedora-29
-  - name: opensuse-leap-42
-  - name: ubuntu-14.04
+  - name: fedora-latest
+  - name: opensuse-leap-15
   - name: ubuntu-16.04
+  - name: ubuntu-18.04
   - name: amazonlinux
     driver_config:
       box: mvbcoding/awslinux
@@ -27,7 +27,8 @@ suites:
       - recipe[test::create]
   - name: create_thin
     excludes:
-    - debian-8
+    - debian-9
+    - debian-10
     run_list:
       - recipe[test::create_thin]
   - name: resize
@@ -36,13 +37,15 @@ suites:
       - recipe[test::resize]
   - name: resize_thin
     excludes:
-    - debian-8
+    - debian-9
+    - debian-10
     run_list:
       - recipe[test::create_thin]
       - recipe[test::resize_thin]
   - name: resize_thin_pool_meta_data
     excludes:
-    - debian-8
+    - debian-9
+    - debian-10
     run_list:
       - recipe[test::create_thin]
       - recipe[test::resize_thin_pool_meta_data]

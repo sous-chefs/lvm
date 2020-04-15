@@ -2,7 +2,7 @@
 # Cookbook:: lvm
 # Attributes:: default
 #
-# Copyright:: 2009-2019, Chef Software, Inc.
+# Copyright:: Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +18,6 @@
 #
 
 default['lvm']['chef-ruby-lvm']['version'] = '0.4.0'
-default['lvm']['chef-ruby-lvm-attrib']['version'] = '0.2.8'
+default['lvm']['chef-ruby-lvm-attrib']['version'] = '0.3.1'
 default['lvm']['cleanup_old_gems'] = true
 default['lvm']['rubysource'] = 'https://rubygems.org'
