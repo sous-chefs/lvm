@@ -19,17 +19,6 @@
 
 apt_update 'update'
 
-# install the old gems to make sure the uninstall works
-chef_gem 'di-ruby-lvm' do
-  compile_time true
-  not_if '/opt/chef/embedded/bin/gem list | grep "chef-ruby-lvm ""'
-end
-
-chef_gem 'di-ruby-lvm-attrib' do
-  compile_time true
-  not_if '/opt/chef/embedded/bin/gem list | grep chef-ruby-lvm-attrib'
-end
-
 include_recipe 'lvm'
 
 # The test device to use
