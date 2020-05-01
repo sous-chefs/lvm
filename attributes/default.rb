@@ -19,5 +19,4 @@
 
 default['lvm']['chef-ruby-lvm']['version'] = '0.4.0'
 default['lvm']['chef-ruby-lvm-attrib']['version'] = '0.3.1'
-default['lvm']['cleanup_old_gems'] = true
 default['lvm']['rubysource'] = 'https://rubygems.org'

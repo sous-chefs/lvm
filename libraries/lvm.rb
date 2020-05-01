@@ -1,5 +1,5 @@
 #
-# Copyright:: 2016-2019, Chef Software, Inc.
+# Copyright:: Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,24 +18,6 @@
 module LVMCookbook
   def require_lvm_gems
     return if defined?(LVM)
-
-    Chef::Log.warn("The previous di-ruby-lvm and di-ruby-lvm-attrib gems have been replaced with chef maintained forks. You have set the legacy attributes (node['lvm']['di-ruby-lvm']/node['lvm']['di-ruby-lvm-attrib']) for pinning installed gem versions. You will need to remove these attributes and instead set the new chef varients. See the attributes file for the latest attributes.") if node['lvm']['di-ruby-lvm'] || node['lvm']['di-ruby-lvm-attrib']
-
-    if node['lvm']['cleanup_old_gems']
-      chef_gem "#{new_resource.name}_di-ruby-lvm-attrib_removal" do
-        package_name 'di-ruby-lvm-attrib'
-        action :remove
-        compile_time true
-        source node['lvm']['rubysource']
-      end
-
-      chef_gem "#{new_resource.name}_di-ruby-lvm_removal" do
-        package_name 'di-ruby-lvm'
-        action :remove
-        compile_time true
-        source node['lvm']['rubysource']
-      end
-    end
 
     # require attribute specified gems
     gem 'chef-ruby-lvm-attrib', node['lvm']['chef-ruby-lvm-attrib']['version']
