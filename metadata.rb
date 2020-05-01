@@ -3,7 +3,7 @@ maintainer 'Chef Software, Inc.'
 maintainer_email 'cookbooks@chef.io'
 license 'Apache-2.0'
 description 'Installs and manages Logical Volume Manager'
-version '4.6.1'
+version '5.0.0'
 %w(amazon centos fedora freebsd oracle redhat scientific suse ubuntu).each do |os|
   supports os
 end
