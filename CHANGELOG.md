@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 5.0.1 (2020-05-27)
+
+- Update the attributes gem version from 0.3.1 to 0.3.2
+
 ## 5.0.0 (2020-05-01)
 
 The 5.0 release of this cookbook no longer cleans up the legacy di-ruby-lvm-attrib and di-ruby-lvm gems. These gems were replaced and the cleanup was added ~3 years ago. Any upgrade to this cookbook or to the Chef Infra Client would remove the legacy gems. If you are trying to upgrade from a VERY old version of this cookbook to current you'll either need to perform that cleanup by hand in a wrapper cookbook or you'll want to use the 4.x release first to perform the cleanup.
