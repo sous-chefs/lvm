@@ -2,6 +2,21 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## Unreleased
+
+- resolved cookstyle error: libraries/provider_lvm_logical_volume.rb:21:1 refactor: `ChefModernize/IncludingMixinShelloutInResources`
+- resolved cookstyle error: libraries/provider_lvm_logical_volume.rb:32:7 refactor: `ChefModernize/IncludingMixinShelloutInResources`
+- resolved cookstyle error: libraries/provider_lvm_thin_pool_meta_data.rb:21:1 refactor: `ChefModernize/IncludingMixinShelloutInResources`
+- resolved cookstyle error: libraries/provider_lvm_thin_pool_meta_data.rb:31:7 refactor: `ChefModernize/IncludingMixinShelloutInResources`
+- resolved cookstyle error: libraries/provider_lvm_volume_group.rb:21:1 refactor: `ChefModernize/IncludingMixinShelloutInResources`
+- resolved cookstyle error: libraries/provider_lvm_volume_group.rb:31:7 refactor: `ChefModernize/IncludingMixinShelloutInResources`
+- resolved cookstyle error: libraries/resource_lvm_logical_volume.rb:28:7 warning: `ChefDeprecations/ResourceUsesOnlyResourceName`
+- resolved cookstyle error: libraries/resource_lvm_thin_pool.rb:29:7 warning: `ChefDeprecations/ResourceUsesOnlyResourceName`
+- resolved cookstyle error: libraries/resource_lvm_thin_pool_meta_data.rb:29:7 warning: `ChefDeprecations/ResourceUsesOnlyResourceName`
+- resolved cookstyle error: libraries/resource_lvm_thin_volume.rb:29:7 warning: `ChefDeprecations/ResourceUsesOnlyResourceName`
+- resolved cookstyle error: libraries/resource_lvm_volume_group.rb:29:7 warning: `ChefDeprecations/ResourceUsesOnlyResourceName`
+- resolved cookstyle error: test/fixtures/cookbooks/test/resources/loop_devices.rb:1:1 warning: `ChefDeprecations/ResourceUsesOnlyResourceName`
+
 ## 5.0.1 (2020-05-27)
 
 - Update the attributes gem version from 0.3.1 to 0.3.2
