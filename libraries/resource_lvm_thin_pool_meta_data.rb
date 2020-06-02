@@ -26,7 +26,7 @@ class Chef
     #
     # A thin pool metadata is a thin pool's metadata logical volume
     class LvmThinPoolMetaData < Chef::Resource::BaseLogicalVolume
-      resource_name :lvm_thin_pool_meta_data
+      provides :lvm_thin_pool_meta_data
 
       default_action :resize
       allowed_actions :resize

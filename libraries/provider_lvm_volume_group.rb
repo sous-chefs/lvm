@@ -18,7 +18,6 @@
 #
 
 require 'chef/provider'
-require 'chef/mixin/shell_out'
 require 'chef/dsl/recipe'
 require File.join(File.dirname(__FILE__), 'lvm')
 
@@ -28,7 +27,6 @@ class Chef
     #
     class LvmVolumeGroup < Chef::Provider
       include Chef::DSL::Recipe
-      include Chef::Mixin::ShellOut
       include LVMCookbook
 
       # Loads the current resource attributes
