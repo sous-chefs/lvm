@@ -42,7 +42,7 @@ class Chef
 
       # The create action
       #
-      def action_create
+      action :create do
         require_lvm_gems
         install_filesystem_deps
 
@@ -126,7 +126,7 @@ class Chef
       end
 
       # Action to resize LV to specified size
-      def action_resize
+      action :resize do
         require_lvm_gems
         lvm = LVM::LVM.new(lvm_options)
         name = new_resource.name
@@ -218,7 +218,7 @@ class Chef
       # must specify the volume group name - as the umount passes a full path
       # if mount_point specified, then unmount first
       # if remove_mount_point specificed, then the directory will be removed
-      def action_remove
+      action :remove do
         require_lvm_gems
         install_filesystem_deps
 

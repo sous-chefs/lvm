@@ -38,7 +38,7 @@ class Chef
         @current_resource
       end
 
-      def action_resize
+      action :resize do
         require_lvm_gems
         lvm = LVM::LVM.new
         name = new_resource.name
