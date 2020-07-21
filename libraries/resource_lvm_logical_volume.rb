@@ -64,23 +64,23 @@ class Chef
         }
 
       # property: contiguous - whether to use contiguous allocation policy
-      property :contiguous, [TrueClass, FalseClass]
+      property :contiguous, [true, false]
 
       # property: readahead - the read ahead sector count of the logical volume
       property :readahead, [Integer, String],
         equal_to: [2..120, 'auto', 'none'].flatten!
 
       # property: take_up_free_space - whether to have the LV take up the remainder of free space on the VG
-      property :take_up_free_space, [TrueClass, FalseClass]
+      property :take_up_free_space, [true, false]
 
       # property: wipe_signature -
-      property :wipe_signatures, [TrueClass, FalseClass], default: false
+      property :wipe_signatures, [true, false], default: false
 
       # property: ignore_skipped_cluster -
-      property :ignore_skipped_cluster, [TrueClass, FalseClass], default: false
+      property :ignore_skipped_cluster, [true, false], default: false
 
       # property: remove_mount_point - whether to remove the mount location/directory
-      property :remove_mount_point, [TrueClass, FalseClass]
+      property :remove_mount_point, [true, false]
     end
   end
 end

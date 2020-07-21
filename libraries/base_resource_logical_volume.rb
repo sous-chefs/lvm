@@ -24,7 +24,7 @@ class Chef
     # Base class that contains common properties for all logical volume resources
     # This class is only meant to be used as a base class for other resources.
     #
-    class BaseLogicalVolume < Chef::Resource
+    class BaseLogicalVolume < Chef::Resource # cookstyle: disable ChefDeprecations/HWRPWithoutProvides
       # property: name - name of the logical volume
       property :name, String, name_property: true, required: true,
         regex: /[\w+.-]+/,

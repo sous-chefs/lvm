@@ -43,51 +43,14 @@ class Chef
         @provider = Chef::Provider::LvmThinVolume
       end
 
-      # Attribute: size - size of the logical volume
-      #
-      # @param arg [String] the size of the logical volume
-      #
-      # @return [String] the size of the logical volume
-      #
-      def size(arg = nil)
-        set_or_return(
-          :size,
-          arg,
-          kind_of: String,
-          regex: /^(\d+[kKmMgGtT]|\d+)$/,
-          required: true
-        )
-      end
+      # property: size - size of the logical volume
+      property :size, String, regex: /^(\d+[kKmMgGtT]|\d+)$/, required: true
 
-      # Attribute: pool - The name of the thin pool logical volume in which this thin volume will be created
-      #
-      # @param arg [String] The name of the thin pool logical volume in which this thin volume will be created
-      #
-      # @return [String] The name of the thin pool logical volume in which this thin volume will be created
-      #
-      def pool(arg = nil)
-        set_or_return(
-          :pool,
-          arg,
-          kind_of: String,
-          required: true
-        )
-      end
+      # property: pool - The name of the thin pool logical volume in which this thin volume will be created
+      property :pool, String, required: true
 
-      # Attribute: ignore_skipped_cluster -
-      #
-      # @param arg [Boolean] whether to ignore skipped cluster VGs during LVM commands
-      #
-      # @return [Boolean] the ignore_skipped_cluster setting
-      #
-      def ignore_skipped_cluster(arg = nil)
-        set_or_return(
-          :ignore_skipped_cluster,
-          arg,
-          kind_of: [TrueClass, FalseClass],
-          default: false
-        )
-      end
+      # property: ignore_skipped_cluster -
+      property :ignore_skipped_cluster, [true, false], default: false
     end
   end
 end

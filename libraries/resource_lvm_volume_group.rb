@@ -47,57 +47,21 @@ class Chef
         @provider = Chef::Provider::LvmVolumeGroup
       end
 
-      # Attribute: name - name of the volume group
-      #
-      # @param arg [String] the name of the volume group
-      #
-      # @return [String] the name of the volume group
-      #
-      def name(arg = nil)
-        set_or_return(
-          :name,
-          arg,
-          kind_of: String,
-          name_attribute: true,
-          regex: /[\w+.-]+/,
-          required: true,
-          callbacks: {
-            "cannot be '.' or '..'" => proc do |value|
-              !(value == '.' || value == '..')
-            end,
-          }
-        )
-      end
+      # property: name - name of the volume group
+      property :name, String, name_property: true,
+        regex: /[\w+.-]+/,
+        required: true,
+        callbacks: {
+          "cannot be '.' or '..'" => proc do |value|
+            !(value == '.' || value == '..')
+          end,
+        }
 
-      # Attribute: physical_volumes - list of physical devices this volume group should be restricted to
-      #
-      # @param arg [Array, String] list of physical devices
-      #
-      # @return [String] list of physical devices
-      #
-      def physical_volumes(arg = nil)
-        set_or_return(
-          :physical_volumes,
-          arg,
-          kind_of: [Array, String],
-          required: true
-        )
-      end
+      # property: physical_volumes - list of physical devices this volume group should be restricted to
+      property :physical_volumes, [Array, String], required: true
 
-      # Attribute: physical_extent_size - the physical_extent_size
-      #
-      # @param arg [String] the physical extent size
-      #
-      # @return [String] the physical extent size
-      #
-      def physical_extent_size(arg = nil)
-        set_or_return(
-          :physical_extent_size,
-          arg,
-          kind_of: String,
-          regex: /\d+[bBsSkKmMgGtTpPeE]?/
-        )
-      end
+      # property: physical_extent_size - the physical_extent_size
+      property :physical_extent_size, String, regex: /\d+[bBsSkKmMgGtTpPeE]?/
 
       # A shortcut for creating a logical volume when creating the volume group
       #
@@ -114,20 +78,8 @@ class Chef
         volume
       end
 
-      # Attribute: wipe_signature -
-      #
-      # @param arg [Boolean] whether to automatically wipe any preexisting signatures
-      #
-      # @return [Boolean] the wipe_signature setting
-      #
-      def wipe_signatures(arg = nil)
-        set_or_return(
-          :wipe_signatures,
-          arg,
-          kind_of: [TrueClass, FalseClass],
-          default: false
-        )
-      end
+      # property: wipe_signature -
+      property :wipe_signatures, [true, false], default: false
 
       # A shortcut for creating a thin pool (which is just a special type of logical volume) when creating the volume group
       #
@@ -143,20 +95,8 @@ class Chef
         volume
       end
 
-      # Attribute: ignore_skipped_cluster -
-      #
-      # @param arg [Boolean] whether to ignore skipped cluster VGs during LVM commands
-      #
-      # @return [Boolean] the ignore_skipped_cluster setting
-      #
-      def ignore_skipped_cluster(arg = nil)
-        set_or_return(
-          :ignore_skipped_cluster,
-          arg,
-          kind_of: [TrueClass, FalseClass],
-          default: false
-        )
-      end
+      # property: ignore_skipped_cluster -
+      proeprty :ignore_skipped_cluster, [TrueClass, FalseClass], default: false
     end
   end
 end

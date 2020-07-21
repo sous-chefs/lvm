@@ -43,36 +43,11 @@ class Chef
         @provider = Chef::Provider::LvmThinPoolMetaData
       end
 
-      # Attribute: pool - The name of the thin pool logical volume in which this metadata volume exist
-      #
-      # @param arg [String] The name of the thin pool logical volume in which this metadata volume exist
-      #
-      # @return [String] The name of the thin pool logical volume in which this metadata volume exist
-      #
-      def pool(arg = nil)
-        set_or_return(
-          :pool,
-          arg,
-          kind_of: String,
-          required: true
-        )
-      end
+      # property: pool - The name of the thin pool logical volume in which this metadata volume exist
+      property :pool, String, required: true
 
-      # Attribute: size - the size of thin pool metadata logical volume
-      #
-      # @param arg [String] the size of thin pool metadata logical volume
-      #
-      # @return [String] the size of thin pool metadata logical volume
-      #
-      def size(arg = nil)
-        set_or_return(
-          :size,
-          arg,
-          kind_of: String,
-          regex: /^(\d+[kKmMgGtT]|\d+)$/,
-          required: true
-        )
-      end
+      # property: size - the size of thin pool metadata logical volume
+      property :size, String, regex: /^(\d+[kKmMgGtT]|\d+)$/, required: true
     end
   end
 end
