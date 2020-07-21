@@ -1,3 +1,4 @@
+resource_name :loop_devices
 provides :loop_devices
 
 property :devices, Array, name_property: true

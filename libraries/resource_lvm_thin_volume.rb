@@ -26,6 +26,7 @@ class Chef
     #
     # A thin pool is a logical volume that can contain thin volumes (which are also logical volumes but are "thin")
     class LvmThinVolume < Chef::Resource::BaseLogicalVolume
+      resource_name :lvm_thin_volume
       provides :lvm_thin_volume
 
       default_action :create

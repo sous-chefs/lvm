@@ -27,7 +27,8 @@ class Chef
     # The provider for lvm_logical_volume resource
     #
     class LvmLogicalVolume < Chef::Provider
-      include Chef::DSL::Recipe
+      provides :lvm_logical_volume
+
       include Chef::DSL::PlatformIntrospection
       include LVMCookbook
 

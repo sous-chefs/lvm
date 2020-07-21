@@ -24,8 +24,7 @@ class Chef
     # The lvm_volume_group resource
     #
     class LvmVolumeGroup < Chef::Resource
-      include Chef::DSL::Recipe
-
+      resource_name :lvm_volume_group
       provides :lvm_volume_group
 
       default_action :create
@@ -72,7 +71,7 @@ class Chef
       #
       def logical_volume(name, &block)
         Chef::Log.debug "Creating logical volume #{name}"
-        volume = lvm_logical_volume(name, &block)
+        volume = Chef::Resource::LvmLogicalVolume.new(name, &block)
         volume.action :nothing
         @logical_volumes << volume
         volume
@@ -89,7 +88,7 @@ class Chef
       # @return [Chef::Resource::LvmThinPool] the lvm_thin_pool resource
       #
       def thin_pool(name, &block)
-        volume = lvm_thin_pool(name, &block)
+        volume = Chef::Resource::LvmThinPool.new(name, &block)
         volume.action :nothing
         @logical_volumes << volume
         volume
