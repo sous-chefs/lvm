@@ -2,6 +2,17 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## Unreleased
+
+- resolved cookstyle error: libraries/provider_lvm_logical_volume.rb:45:7 refactor: `ChefModernize/ActionMethodInResource`
+- resolved cookstyle error: libraries/provider_lvm_logical_volume.rb:129:7 refactor: `ChefModernize/ActionMethodInResource`
+- resolved cookstyle error: libraries/provider_lvm_logical_volume.rb:221:7 refactor: `ChefModernize/ActionMethodInResource`
+- resolved cookstyle error: libraries/provider_lvm_thin_pool.rb:36:7 refactor: `ChefModernize/ActionMethodInResource`
+- resolved cookstyle error: libraries/provider_lvm_thin_pool.rb:41:7 refactor: `ChefModernize/ActionMethodInResource`
+- resolved cookstyle error: libraries/provider_lvm_thin_pool_meta_data.rb:41:7 refactor: `ChefModernize/ActionMethodInResource`
+- resolved cookstyle error: libraries/provider_lvm_volume_group.rb:43:7 refactor: `ChefModernize/ActionMethodInResource`
+- resolved cookstyle error: libraries/provider_lvm_volume_group.rb:66:7 refactor: `ChefModernize/ActionMethodInResource`
+
 ## 5.0.2 (2020-06-02)
 
 - Cookstyle fixes including Chef Infra Client 16 fixes - [@xorimabot](https://github.com/xorimabot)

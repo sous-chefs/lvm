@@ -33,12 +33,12 @@ class Chef
         @current_resource
       end
 
-      def action_create
+      action :create do
         super
         process_thin_volumes(:create)
       end
 
-      def action_resize
+      action :resize do
         super
         process_thin_volumes(:resize)
       end

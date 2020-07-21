@@ -40,7 +40,7 @@ class Chef
 
       # The create action
       #
-      def action_create
+      action :create do
         require_lvm_gems
         name = new_resource.name
         physical_volume_list = [new_resource.physical_volumes].flatten
@@ -63,7 +63,7 @@ class Chef
 
       # The extend action
       #
-      def action_extend
+      action :extend do
         require_lvm_gems
         name = new_resource.name
         physical_volume_list = [new_resource.physical_volumes].flatten
