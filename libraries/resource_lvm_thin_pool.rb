@@ -26,6 +26,7 @@ class Chef
     #
     # A thin pool is a logical volume that can contain thin volumes (which are also logical volumes but are "thin")
     class LvmThinPool < Chef::Resource::LvmLogicalVolume
+      resource_name :lvm_thin_pool
       provides :lvm_thin_pool
 
       # Thin Logical volumes to be created in the thin pool
@@ -45,7 +46,7 @@ class Chef
       # @return [Chef::Resource::LvmThinVolume] the lvm_thin_volume resource
       #
       def thin_volume(name, &block)
-        volume = lvm_thin_volume(name, &block)
+        volume = Chef::Resource::LvmThinVolume.new(name, &block)
         volume.action :nothing
         @thin_volumes << volume
         volume
