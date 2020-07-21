@@ -96,7 +96,7 @@ class Chef
       end
 
       # property: ignore_skipped_cluster -
-      proeprty :ignore_skipped_cluster, [TrueClass, FalseClass], default: false
+      property :ignore_skipped_cluster, [TrueClass, FalseClass], default: false
     end
   end
 end
