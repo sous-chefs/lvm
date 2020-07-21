@@ -42,157 +42,45 @@ class Chef
         @provider = Chef::Provider::LvmLogicalVolume
       end
 
-      # Attribute: physical_volumes - list of physical volumes to be used for creation
-      #
-      # @param arg [String, Array] - list of physical devices
-      #
-      # @return [String, Array] - list of physical devices
-      #
-      def physical_volumes(arg = nil)
-        set_or_return(
-          :physical_volumes,
-          arg,
-          kind_of: [String, Array]
-        )
-      end
+      # property: physical_volumes - list of physical volumes to be used for creation
+      property :physical_volumes, [String, Array]
 
-      # Attribute: stripes - number of stripes for the volume
-      #
-      # @param arg [String] number of stripes
-      #
-      # @return [String] number of stripes
-      #
-      def stripes(arg = nil)
-        set_or_return(
-          :stripes,
-          arg,
-          kind_of: Integer,
-          callbacks: {
-            'must be greater than 0' => proc { |value| value > 0 },
-          }
-        )
-      end
+      # property: stripes - number of stripes for the volume
+      property :stripes, Integer,
+        callbacks: {
+          'must be greater than 0' => proc { |value| value > 0 },
+        }
 
-      # Attribute: stripe_size - the stripe size
-      #
-      # @param arg [String] the stripe size
-      #
-      # @return [String] the stripe size
-      #
-      def stripe_size(arg = nil)
-        set_or_return(
-          :stripe_size,
-          arg,
-          kind_of: Integer,
-          callbacks: {
-            'must be a power of 2' => proc { |value| (Math.log2(value) % 1) == 0 },
-          }
-        )
-      end
+      # property: stripe_size - the stripe size
+      property :stripe_size, Integer,
+        callbacks: {
+          'must be a power of 2' => proc { |value| (Math.log2(value) % 1) == 0 },
+        }
 
-      # Attribute: mirrors - number of mirrors for the volume
-      #
-      # @param arg [Integer] number of mirrors
-      #
-      # @return [Integer] number of mirrors
-      #
-      def mirrors(arg = nil)
-        set_or_return(
-          :mirrors,
-          arg,
-          kind_of: Integer,
-          callbacks: {
-            'must be greater than 0' => proc { |value| value > 0 },
-          }
-        )
-      end
+      # property: mirrors - number of mirrors for the volume
+      property :mirrors, Integer,
+        callbacks: {
+          'must be greater than 0' => proc { |value| value > 0 },
+        }
 
-      # Attribute: contiguous - whether to use contiguous allocation policy
-      #
-      # @param arg [Boolean] whether to use contiguous allocation policy
-      #
-      # @return [Boolean] the contiguous allocation policy setting
-      #
-      def contiguous(arg = nil)
-        set_or_return(
-          :contiguous,
-          arg,
-          kind_of: [TrueClass, FalseClass]
-        )
-      end
+      # property: contiguous - whether to use contiguous allocation policy
+      property :contiguous, [TrueClass, FalseClass]
 
-      # Attribute: readahead - the read ahead sector count of the logical volume
-      #
-      # @param arg [Integer, String] the read ahead sector count
-      #
-      # @return [Integer, String] the read ahead sector count
-      #
-      def readahead(arg = nil)
-        set_or_return(
-          :readahead,
-          arg,
-          kind_of: [Integer, String],
-          equal_to: [2..120, 'auto', 'none'].flatten!
-        )
-      end
+      # property: readahead - the read ahead sector count of the logical volume
+      property :readahead, [Integer, String],
+        equal_to: [2..120, 'auto', 'none'].flatten!
 
-      # Attribute: take_up_free_space - whether to have the LV take up the remainder of free space on the VG
-      #
-      # @param arg [Boolean] whether to have the LV take up the remainder of free space
-      #
-      # @return [Boolean] if the LV should take the remainder of free space
-      #
-      def take_up_free_space(arg = nil)
-        set_or_return(
-          :take_up_free_space,
-          arg,
-          kind_of: [TrueClass, FalseClass]
-        )
-      end
+      # property: take_up_free_space - whether to have the LV take up the remainder of free space on the VG
+      property :take_up_free_space, [TrueClass, FalseClass]
 
-      # Attribute: wipe_signature -
-      #
-      # @param arg [Boolean] whether to automatically wipe any preexisting signatures
-      #
-      # @return [Boolean] the wipe_signature setting
-      #
-      def wipe_signatures(arg = nil)
-        set_or_return(
-          :wipe_signatures,
-          arg,
-          kind_of: [TrueClass, FalseClass],
-          default: false
-        )
-      end
+      # property: wipe_signature -
+      property :wipe_signatures, [TrueClass, FalseClass], default: false
 
-      # Attribute: ignore_skipped_cluster -
-      #
-      # @param arg [Boolean] whether to ignore skipped cluster VGs during LVM commands
-      #
-      # @return [Boolean] the ignore_skipped_cluster setting
-      #
-      def ignore_skipped_cluster(arg = nil)
-        set_or_return(
-          :ignore_skipped_cluster,
-          arg,
-          kind_of: [TrueClass, FalseClass],
-          default: false
-        )
-      end
+      # property: ignore_skipped_cluster -
+      property :ignore_skipped_cluster, [TrueClass, FalseClass], default: false
 
-      # Attribute: remove_mount_point - whether to remove the mount location/directory
-      #
-      # @param arg [Boolean] whether to have the resource clean up/delete the mount location/directory
-      #
-      # @return [Boolean] if the mount location should be cleaned up/deleted
-      #
-      def remove_mount_point(arg = nil)
-        set_or_return(
-          :remove_mount_point,
-          arg,
-          kind_of: [TrueClass, FalseClass]
-        )
-      end
+      # property: remove_mount_point - whether to remove the mount location/directory
+      property :remove_mount_point, [TrueClass, FalseClass]
     end
   end
 end
