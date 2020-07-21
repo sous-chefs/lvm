@@ -2,7 +2,7 @@
 # Cookbook:: lvm
 # Library:: base_resource_logical_volume
 #
-# Copyright:: 2009-2019, Chef Software, Inc.
+# Copyright:: 2009-2020, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,23 +21,10 @@ require 'chef/resource'
 
 class Chef
   class Resource
-    # Base class that contains common attributes for all logical volume resources
+    # Base class that contains common properties for all logical volume resources
+    # This class is only meant to be used as a base class for other resources.
     #
     class BaseLogicalVolume < Chef::Resource
-      include Chef::DSL::Recipe
-
-      # Initializes a BaseLogicalVolume object. This class is only meant to
-      # be used as a base class for other resources.
-      #
-      # @param name [String] name of the resource
-      # @param run_context [Chef::RunContext] the run context of chef run
-      #
-      # @return [Chef::Resource::LvmLogicalVolume] the lvm_logical_volume resource
-      #
-      def initialize(name, run_context = nil)
-        super
-      end
-
       # property: name - name of the logical volume
       property :name, String, name_property: true, required: true,
         regex: /[\w+.-]+/,
