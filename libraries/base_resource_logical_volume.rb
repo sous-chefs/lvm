@@ -38,132 +38,53 @@ class Chef
         super
       end
 
-      # Attribute: name - name of the logical volume
-      #
-      # @param arg [String] the name of the logical volume
-      #
-      # @return [String] the name of the logical volume
-      #
-      def name(arg = nil)
-        set_or_return(
-          :name,
-          arg,
-          kind_of: String,
-          regex: /[\w+.-]+/,
-          name_attribute: true,
-          required: true,
-          callbacks: {
-            "cannot be '.', '..', 'snapshot', or 'pvmove'" => proc do |value|
-              !(value == '.' || value == '..' || value == 'snapshot' || value == 'pvmove')
-            end,
-            "cannot contain the strings '_mlog' or '_mimage'" => proc do |value|
-              !value.match(/.*(_mlog|_mimage).*/)
-            end,
-          }
-        )
-      end
+      # property: name - name of the logical volume
+      property :name, String, name_property: true, required: true,
+        regex: /[\w+.-]+/,
+        callbacks: {
+          "cannot be '.', '..', 'snapshot', or 'pvmove'" => proc do |value|
+            !(value == '.' || value == '..' || value == 'snapshot' || value == 'pvmove')
+          end,
+          "cannot contain the strings '_mlog' or '_mimage'" => proc do |value|
+            !value.match(/.*(_mlog|_mimage).*/)
+          end,
+        }
 
-      # Attribute: group - the volume group the logical volume belongs to
-      #
-      # @param arg [String] the volume group name
-      #
-      # @return [String] the volume group name
-      #
-      def group(arg = nil)
-        set_or_return(
-          :group,
-          arg,
-          kind_of: String
-        )
-      end
+      # property: group - the volume group the logical volume belongs to
+      property :group, String
 
-      # Attribute: lv_params - additional parameters for lvcreate
-      #
-      # @param arg [String] the parameters
-      #
-      # @return [String] the parameters
-      #
-      def lv_params(arg = nil)
-        set_or_return(
-          :lv_params,
-          arg,
-          kind_of: String
-        )
-      end
+      # property: lv_params - additional parameters for lvcreate
+      property :lv_params, String
 
-      # Attribute: size - size of the logical volume
-      #
-      # @param arg [String] the size of the logical volume
-      #
-      # @return [String] the size of the logical volume
-      #
-      def size(arg = nil)
-        set_or_return(
-          :size,
-          arg,
-          kind_of: String,
-          regex: /^(\d+[kKmMgGtTpPeE]|(\d{1,2}|100)%(FREE|VG|PVS)|\d+)$/,
-          required: true
-        )
-      end
+      # property: size - size of the logical volume
+      property :size, String,
+        regex: /^(\d+[kKmMgGtTpPeE]|(\d{1,2}|100)%(FREE|VG|PVS)|\d+)$/,
+        required: true
 
-      # Attribute: filesystem - the file system type
-      #
-      # @param arg [String] the file system type
-      #
-      # @return [String] the file system type
-      #
-      def filesystem(arg = nil)
-        set_or_return(
-          :filesystem,
-          arg,
-          kind_of: String
-        )
-      end
+      # property: filesystem - the file system type
+      property :filesystem, String
 
-      # Attribute: filesystem_params - the file system parameters
-      #
-      # @param arg [String] the file system parameters
-      #
-      # @return [String] the file system parameters
-      #
-      def filesystem_params(arg = nil)
-        set_or_return(
-          :filesystem_params,
-          arg,
-          kind_of: String
-        )
-      end
+      # property: filesystem_params - the file system parameters
+      property :filesystem_params, String
 
-      # Attribute: mount_point - mount point for the logical volume
-      #
-      # @param arg [String] the mount point
-      #
-      # @return [String] the mount point
-      #
-      def mount_point(arg = nil)
-        set_or_return(
-          :mount_point,
-          arg,
-          kind_of: [String, Hash],
-          callbacks: {
-            ': location is required!' => proc do |value|
-              value.class == String || (value[:location] && !value[:location].empty?)
-            end,
-            ': location must be an absolute path!' => proc do |value|
-              # this can be a string or a hash, so attempt to match either for
-              # the regex
-              matches = case value
-                        when String
-                          value =~ %r{^/[^\0]*}
-                        when Hash
-                          value[:location] =~ %r{^/[^\0]*}
-                        end
-              !matches.nil?
-            end,
-          }
-        )
-      end
+      # property: mount_point - mount point for the logical volume
+      property :mount_point, [String, Hash],
+        callbacks: {
+          ': location is required!' => proc do |value|
+            value.class == String || (value[:location] && !value[:location].empty?)
+          end,
+          ': location must be an absolute path!' => proc do |value|
+            # this can be a string or a hash, so attempt to match either for
+            # the regex
+            matches = case value
+                      when String
+                        value =~ %r{^/[^\0]*}
+                      when Hash
+                        value[:location] =~ %r{^/[^\0]*}
+                      end
+            !matches.nil?
+          end,
+        }
     end
   end
 end
