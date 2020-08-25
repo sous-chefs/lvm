@@ -2,8 +2,9 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
-## Unreleased
+## 5.0.3 (2020-08-25)
 
+- Support Chef Infra Client 16 and ubuntu 20.04 - [@duncaan](https://github.com/duncaan)
 - resolved cookstyle error: libraries/provider_lvm_logical_volume.rb:45:7 refactor: `ChefModernize/ActionMethodInResource`
 - resolved cookstyle error: libraries/provider_lvm_logical_volume.rb:129:7 refactor: `ChefModernize/ActionMethodInResource`
 - resolved cookstyle error: libraries/provider_lvm_logical_volume.rb:221:7 refactor: `ChefModernize/ActionMethodInResource`
