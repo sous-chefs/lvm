@@ -26,6 +26,9 @@ class Chef
     class BaseLogicalVolume < Chef::Resource
       include Chef::DSL::Recipe
 
+      resource_name :lvm_volume_group
+      provides :lvm_volume_group
+
       # Initializes a BaseLogicalVolume object. This class is only meant to
       # be used as a base class for other resources.
       #

@@ -5,9 +5,9 @@ describe 'test::resize_thin' do
     ChefSpec::SoloRunner.new(platform: platform, version: version).converge('test::resize_thin_pool_meta_data')
   end
 
-  describe 'on Ubuntu 16.04' do
+  describe 'on Ubuntu 20.04' do
     let(:platform) { 'ubuntu' }
-    let(:version) { '16.04' }
+    let(:version) { '20.04' }
 
     it 'resizes logical volume' do
       expect(chef_run).to resize_lvm_thin_pool_meta_data('lv-thin_tmeta')
