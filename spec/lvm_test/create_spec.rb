@@ -13,9 +13,9 @@ describe 'test::create' do
     allow(File).to receive(:stat).with('/mnt/small').and_return(0100555)
   end
 
-  context 'on Ubuntu 16.04' do
+  context 'on Ubuntu 20.04' do
     let(:platform) { 'ubuntu' }
-    let(:version) { '16.04' }
+    let(:version) { '20.04' }
 
     it 'Create volume group' do
       expect(chef_run).to create_lvm_volume_group('vg-test')

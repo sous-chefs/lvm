@@ -15,9 +15,9 @@ describe 'test::remove' do
     allow(File).to receive(:stat).with('/mnt/small').and_return(0100555)
   end
 
-  context 'on Ubuntu 16.04' do
+  context 'on Ubuntu 20.04' do
     let(:platform) { 'ubuntu' }
-    let(:version) { '16.04' }
+    let(:version) { '20.04' }
 
     %w(loop10 loop11 loop12 loop13).each do |device|
       it "Create physical volume: #{device}" do

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe 'lvm::default on Ubuntu 16.04' do
+describe 'lvm::default on Ubuntu 20.04' do
   cached(:chef_run_ubuntu) do
-    ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '16.04').converge('lvm::default')
+    ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '20.04').converge('lvm::default')
   end
 
   it 'installs lvm2' do
