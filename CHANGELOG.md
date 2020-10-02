@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 5.0.4 (2020-10-02)
+
+- Standardise files with files in chef-cookbooks/repo-management - [@xorimabot](https://github.com/xorimabot)
+- Chase upstream chef-ruby-lvm-attrib version - [@jflemer-ndp](https://github.com/jflemer-ndp)
+
 ## 5.0.3 (2020-08-25)
 
 - Support Chef Infra Client 16 and ubuntu 20.04 - [@duncaan](https://github.com/duncaan)
