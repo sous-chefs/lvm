@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 5.0.5 (2020-11-13)
+
+- Update the attributes gem version from 0.3.5 to 0.3.6 [@gaelik](https://github.com/gaelik)
+
 ## 5.0.4 (2020-10-02)
 
 - Standardise files with files in chef-cookbooks/repo-management - [@xorimabot](https://github.com/xorimabot)
