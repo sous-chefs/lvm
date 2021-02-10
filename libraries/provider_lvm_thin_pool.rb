@@ -34,12 +34,12 @@ class Chef
       end
 
       action :create do
-        super
+        super()
         process_thin_volumes(:create)
       end
 
       action :resize do
-        super
+        super()
         process_thin_volumes(:resize)
       end
 
