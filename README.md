@@ -1,6 +1,7 @@
 # lvm Cookbook
 
-[![Build Status](https://travis-ci.org/chef-cookbooks/lvm.svg?branch=master)](https://travis-ci.org/chef-cookbooks/lvm) [![Cookbook Version](https://img.shields.io/cookbook/v/lvm.svg)](https://supermarket.chef.io/cookbooks/lvm)
+![delivery](https://github.com/chef-cookbooks/lvm/workflows/delivery/badge.svg)
+[![Cookbook Version](https://img.shields.io/cookbook/v/lvm.svg)](https://supermarket.chef.io/cookbooks/lvm)
 
 Installs lvm2 package and includes resources for managing LVM.
 
