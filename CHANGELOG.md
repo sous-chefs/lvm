@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## Unreleased
+
+- resolved cookstyle error: test/fixtures/cookbooks/test/resources/loop_devices.rb:1:1 refactor: `Chef/Deprecations/ResourceWithoutUnifiedTrue`
+
 ## 5.0.6 (2021-02-09)
 
 - Need to add explicit parameters for super called from action methods - [@b-dean](https://github.com/b-dean)
