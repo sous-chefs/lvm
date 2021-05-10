@@ -1,4 +1,5 @@
 provides :loop_devices
+unified_mode true
 
 property :devices, Array, name_property: true
 
