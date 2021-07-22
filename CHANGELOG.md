@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## 5.0.7 (2021-07-22)
+
+- Update the attributes gem version from 0.3.6 to 0.3.7 [@wheatevo](https://github.com/wheatevo)
+
 ## 5.0.6 (2021-02-09)
 
 - Need to add explicit parameters for super called from action methods - [@b-dean](https://github.com/b-dean)
