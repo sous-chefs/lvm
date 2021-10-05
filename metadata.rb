@@ -10,4 +10,4 @@ end
 
 source_url 'https://github.com/chef-cookbooks/lvm'
 issues_url 'https://github.com/chef-cookbooks/lvm/issues'
-chef_version '>= 12.15'
+chef_version '>= 15.3'
