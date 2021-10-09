@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## Unreleased
+
+Standardise files with files in sous-chefs/repo-management
+
+
 ## 5.0.7 (2021-07-22)
 
 - Update the attributes gem version from 0.3.6 to 0.3.7 [@wheatevo](https://github.com/wheatevo)
