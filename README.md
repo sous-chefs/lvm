@@ -1,13 +1,20 @@
 # lvm Cookbook
 
-![delivery](https://github.com/chef-cookbooks/lvm/workflows/delivery/badge.svg)
 [![Cookbook Version](https://img.shields.io/cookbook/v/lvm.svg)](https://supermarket.chef.io/cookbooks/lvm)
+[![CI State](https://github.com/sous-chefs/lvm/workflows/ci/badge.svg)](https://github.com/sous-chefs/lvm/actions?query=workflow%3Aci)
+[![OpenCollective](https://opencollective.com/sous-chefs/backers/badge.svg)](#backers)
+[![OpenCollective](https://opencollective.com/sous-chefs/sponsors/badge.svg)](#sponsors)
+[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
 Installs lvm2 package and includes resources for managing LVM.
 
 ## Note on LVM gems
 
 This cookbook has used multiple variants of the ruby-lvm and ruby-lvm-attrib gems for interacting with LVM. Most recently we used di-ruby-lvm and di-ruby-lvm-attrib gems, which are no longer being maintained. As of the 4.0 release this cookbook uses new Chef maintained gems: chef-ruby-lvm and chef-ruby-lvm-attrib. Previous versions of this cookbook supported cleaning those gems up for approximetly 3 years. At this point you'll need to remove those gems yourself if they're still present as the namespaces will conflict. If you previously used attributes to control the version of the gems to install, you will need to update to the latest attribute names to maintain that functionality.
+
+## Maintainers
+
+This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of Chef cookbook maintainers working together to maintain important cookbooks. If you’d like to know more please visit [sous-chefs.org](https://sous-chefs.org/) or come chat with us on the Chef Community Slack in [#sous-chefs](https://chefcommunity.slack.com/messages/C2V7B88SF).
 
 ## Requirements
 
@@ -588,23 +595,27 @@ No such file or directory - /opt/chef/.../chef-ruby-lvm-attrib-0.0.3/lib/lvm/att
 
 then you are running a version of lvm that the gems do not support. However, getting support added is usually pretty easy. Just follow the instructions on "Adding Attributes" in the [chef-ruby-lvm-attrib README](https://github.com/chef/chef-ruby-lvm-attrib).
 
-## License and Authors
+## Contributors
 
-- Author:: Joshua Timberman [joshua@chef.io](mailto:joshua@chef.io)
-- Author:: Greg Symons [gsymons@drillinginfo.com](mailto:gsymons@drillinginfo.com)
+This project exists thanks to all the people who [contribute.](https://opencollective.com/sous-chefs/contributors.svg?width=890&button=false)
 
-```text
-Copyright:: 2011-2016, Chef Software, Inc
+### Backers
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+Thank you to all our backers!
 
-    http://www.apache.org/licenses/LICENSE-2.0
+![https://opencollective.com/sous-chefs#backers](https://opencollective.com/sous-chefs/backers.svg?width=600&avatarHeight=40)
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-```
+### Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website.
+
+![https://opencollective.com/sous-chefs/sponsor/0/website](https://opencollective.com/sous-chefs/sponsor/0/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/1/website](https://opencollective.com/sous-chefs/sponsor/1/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/2/website](https://opencollective.com/sous-chefs/sponsor/2/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/3/website](https://opencollective.com/sous-chefs/sponsor/3/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/4/website](https://opencollective.com/sous-chefs/sponsor/4/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/5/website](https://opencollective.com/sous-chefs/sponsor/5/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/6/website](https://opencollective.com/sous-chefs/sponsor/6/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/7/website](https://opencollective.com/sous-chefs/sponsor/7/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/8/website](https://opencollective.com/sous-chefs/sponsor/8/avatar.svg?avatarHeight=100)
+![https://opencollective.com/sous-chefs/sponsor/9/website](https://opencollective.com/sous-chefs/sponsor/9/avatar.svg?avatarHeight=100)
