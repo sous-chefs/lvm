@@ -25,6 +25,8 @@ property :wipe_signatures, [true, false], default: false
 # whether to ignore skipped cluster VGs during LVM commands
 property :ignore_skipped_cluster, [true, false], default: false
 
+unified_mode true if respond_to?(:unified_mode)
+
 # The create action
 #
 action :create do

@@ -26,6 +26,8 @@ class Chef
     class BaseLogicalVolume < Chef::Resource
       include Chef::DSL::Recipe
 
+      unified_mode true if respond_to?(:unified_mode)
+
       resource_name :lvm_volume_group
       provides :lvm_volume_group
 
