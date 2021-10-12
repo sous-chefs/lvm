@@ -8,6 +8,7 @@ This file is used to list changes made in each version of the lvm cookbook.
 - Standardise files with files in sous-chefs/repo-management
 - Enable `unified_mode` if supported
 - resolved cookstyle error: test/fixtures/cookbooks/test/resources/loop_devices.rb:1:1 refactor: `Chef/Deprecations/ResourceWithoutUnifiedTrue`
+- Move resource documentation into individual files out of README
 
 ## 5.0.7 (2021-07-22)
 
