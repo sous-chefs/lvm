@@ -9,6 +9,9 @@ provisioner:
   product_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
   log_level: <%= ENV['CHEF_LOG_LEVEL'] || 'auto' %>
 
+verifier:
+  name: inspec
+
 platforms:
   - name: centos-7
   - name: centos-8
@@ -26,10 +29,10 @@ suites:
   - name: create
     run_list:
       - recipe[test::create]
+  - name: remove
+    run_list:
+      - recipe[test::remove]
   - name: create_thin
-    excludes:
-    - debian-9
-    - debian-10
     run_list:
       - recipe[test::create_thin]
   - name: resize
@@ -37,16 +40,12 @@ suites:
       - recipe[test::create]
       - recipe[test::resize]
   - name: resize_thin
-    excludes:
-    - debian-9
-    - debian-10
     run_list:
       - recipe[test::create_thin]
       - recipe[test::resize_thin]
   - name: resize_thin_pool_meta_data
-    excludes:
-    - debian-9
-    - debian-10
     run_list:
       - recipe[test::create_thin]
       - recipe[test::resize_thin_pool_meta_data]
+    excludes:
+      - debian-9
