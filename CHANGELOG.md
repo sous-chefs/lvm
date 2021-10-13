@@ -10,6 +10,7 @@ This file is used to list changes made in each version of the lvm cookbook.
 - resolved cookstyle error: test/fixtures/cookbooks/test/resources/loop_devices.rb:1:1 refactor: `Chef/Deprecations/ResourceWithoutUnifiedTrue`
 - Move resource documentation into individual files out of README
 - Migrate to InSpec tests
+- Install thin-provisioning-tools on Debian-based systems
 
 ## 5.0.7 (2021-07-22)
 
