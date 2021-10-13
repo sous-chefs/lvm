@@ -11,6 +11,7 @@ This file is used to list changes made in each version of the lvm cookbook.
 - Move resource documentation into individual files out of README
 - Migrate to InSpec tests
 - Install thin-provisioning-tools on Debian-based systems
+- Add GitHub CI
 
 ## 5.0.7 (2021-07-22)
 
