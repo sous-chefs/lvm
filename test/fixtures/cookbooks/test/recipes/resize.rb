@@ -149,7 +149,7 @@ lvm_logical_volume 'remainder_resize' do
   action [:create, :resize]
   name 'remainder_resize'
   group 'vg-test'
-  size '1'
+  size '2'
   filesystem 'ext3'
   take_up_free_space true
   mount_point '/mnt/remainder_resize'
