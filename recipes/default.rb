@@ -19,6 +19,8 @@
 
 package 'lvm2'
 
+package 'thin-provisioning-tools' if platform_family?('debian')
+
 # Start+Enable the lvmetad service on RHEL7, it is required by default
 # but not automatically started
 if platform_family?('rhel') && node['platform_version'].to_i >= 7 && !platform?('amazon')

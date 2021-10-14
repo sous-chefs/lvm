@@ -1,0 +1,24 @@
+# TODO: These need to be addressed when we convert these to using custom
+# resources
+
+# Offense count: 10
+Chef/Correctness/ResourceSetsNameProperty:
+  Exclude:
+    - '**/attributes/*.rb'
+    - '**/metadata.rb'
+    - '**/Berksfile'
+    - 'test/fixtures/cookbooks/test/recipes/create.rb'
+    - 'test/fixtures/cookbooks/test/recipes/resize.rb'
+    - 'test/fixtures/cookbooks/test/recipes/resize_thin.rb'
+    - 'test/fixtures/cookbooks/test/recipes/resize_thin_pool_meta_data.rb'
+
+# Offense count: 27
+# Configuration parameters: Include.
+# Include: **/resources/*.rb, **/libraries/*.rb
+Chef/Modernize/SetOrReturnInResources:
+  Exclude:
+    - 'libraries/base_resource_logical_volume.rb'
+    - 'libraries/resource_lvm_logical_volume.rb'
+    - 'libraries/resource_lvm_thin_pool_meta_data.rb'
+    - 'libraries/resource_lvm_thin_volume.rb'
+    - 'libraries/resource_lvm_volume_group.rb'

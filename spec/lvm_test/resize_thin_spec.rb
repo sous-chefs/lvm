@@ -25,7 +25,7 @@ describe 'test::resize_thin' do
 
   describe 'on Amazon Linux' do
     let(:platform) { 'amazon' }
-    let(:version) { '2016.03' }
+    let(:version) { '2' }
 
     it 'resizes logical volume' do
       expect(chef_run).to resize_lvm_thin_volume('thin_vol_1')

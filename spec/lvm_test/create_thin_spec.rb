@@ -52,7 +52,7 @@ describe 'test::create_thin' do
 
   context 'on Amazon Linux' do
     let(:platform) { 'amazon' }
-    let(:version) { '2016.03' }
+    let(:version) { '2' }
 
     before(:each) do
       stub_command('/sbin/lvm dumpconfig global/use_lvmetad | grep use_lvmetad=1').and_return(true)

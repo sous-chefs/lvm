@@ -28,6 +28,8 @@ class Chef
 
       provides :lvm_volume_group
 
+      unified_mode true if respond_to?(:unified_mode)
+
       default_action :create
       allowed_actions :create, :extend
 
