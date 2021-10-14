@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## Unreleased
+
 ## 5.1.0 - *2021-10-14*
 
 - Sous Chefs adoption
