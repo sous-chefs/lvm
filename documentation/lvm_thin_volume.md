@@ -18,14 +18,10 @@ Manages LVM thin volumes (which are simply logical volumes created with the `--t
 | `name`              | String        | name property | Name of the logical volume                                                                                                                |
 | `group`             | String        |               | (required) Volume group in which to create the new volume (not required if the volume is declared inside of an `lvm_volume_group` block)  |
 | `pool`              | String        |               | (required) Thin pool volume in which to create the new volume (not required if the volume is declared inside of an `lvm_thin_pool` block) |
-| `size`              | String        |               | (required) Size of the volume                                                                                                             |
+| `size`              | String        |               | (required) Size of the thin volume, including units (k, K, m, M, g, G, t, T)                                                              |
 | `filesystem`        | String        | `nil`         | The format for the file system                                                                                                            |
 | `filesystem_params` | String        | `nil`         | Optional parameters to use when formatting the file system                                                                                |
 | `mount_point`       | String, Hash  | `nil`         | Either a String containing the path to the mount point, or a Hash                                                                         |
-
-### size
-
-- It can be the size of the volume with units (k, K, m, M, g, G, t, T)
 
 ### mount_point
 

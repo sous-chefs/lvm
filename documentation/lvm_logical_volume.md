@@ -18,7 +18,7 @@ Manages LVM logical volumes.
 | ------------------------ | --------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `name`                   | String          | name property | Name of the logical volume                                                                                                               |
 | `group`                  | String          |               | (required) Volume group in which to create the new volume (not required if the volume is declared inside of an `lvm_volume_group` block) |
-| `size`                   | String          |               | (required) Size of the volume                                                                                                            |
+| `size`                   | String          |               | (required) Size of the volume, including units (k, K, m, M, g, G, t, T) or as the percentage of the size of the volume group             |
 | `filesystem`             | String          | `nil`         | The format for the file system                                                                                                           |
 | `filesystem_params`      | String          | `nil`         | Optional parameters to use when formatting the file system                                                                               |
 | `mount_point`            | String, Hash    | `nil`         | Either a String containing the path to the mount point, or a Hash                                                                        |
@@ -33,11 +33,6 @@ Manages LVM logical volumes.
 | `ignore_skipped_cluster` | `true`, `false` | `false`       | Continue execution even if `lvm` detects skipped clustered volume groups                                                                 |
 | `lv_params`              | String          | `nil`         | Optional parameters to be passed to LVM                                                                                                  |
 | `remove_mount_point`     | `true`, `false` | `false`       | Optional parameter to be passed to LVM during a :remove event to clean up the directory                                                  |
-
-### size
-
-- It can be the size of the volume with units (k, K, m, M, g, G, t, T)
-- It can be specified as the percentage of the size of the volume group
 
 ### mount_point
 
