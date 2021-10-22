@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## Unreleased
+
 ## 5.2.0 - *2021-10-22*
 
 - Use default Chef source for gems
