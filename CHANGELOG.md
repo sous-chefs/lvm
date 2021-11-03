@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the lvm cookbook.
 
 ## Unreleased
 
+- Add CentOS Stream 8 to CI pipeline
+
 ## 5.2.0 - *2021-10-22*
 
 - Use default Chef source for gems
