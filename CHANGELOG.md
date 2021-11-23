@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## Unreleased
+
 ## 5.2.1 - *2021-11-23*
 
 - Add CentOS Stream 8 to CI pipeline
