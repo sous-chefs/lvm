@@ -6,6 +6,9 @@ platforms:
   - name: centos-8
     driver:
       box_url: https://ftp.osuosl.org/pub/sous-chefs/bento/centos-8.box
+  - name: centos-stream-8
+    driver:
+      box_url: https://ftp.osuosl.org/pub/sous-chefs/bento/centos-stream-8.box
   - name: debian-10
     driver:
       box_url: https://ftp.osuosl.org/pub/sous-chefs/bento/debian-10.box
