@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
-## Unreleased
+## 5.2.2 - *2022-02-08*
 
 - Remove delivery folder
 
