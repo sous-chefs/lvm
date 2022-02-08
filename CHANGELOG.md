@@ -7,6 +7,8 @@ This file is used to list changes made in each version of the lvm cookbook.
 - Standardise files with files in sous-chefs/repo-management
 - Remove Gemfile and the community cookbook releaser
 - Always turn on unfied_mode so we get consistent behaviour
+- Require Chef 15.3 for unified_mode
+- Turn on unified_mode
 
 ## 5.2.2 - *2022-02-08*
 
