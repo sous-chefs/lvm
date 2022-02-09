@@ -27,3 +27,5 @@ platforms:
   - name: amazonlinux-2
     driver:
       box_url: https://ftp.osuosl.org/pub/sous-chefs/bento/amazonlinux-2.box
+  # - name: rockylinux-8
+  # - name: almalinux-8
