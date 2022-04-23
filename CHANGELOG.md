@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the lvm cookbook.
 
 ## Unreleased
 
+Standardise files with files in sous-chefs/repo-management
+
 - Standardise files with files in sous-chefs/repo-management
 - Remove Gemfile and the community cookbook releaser
 - Always turn on unfied_mode so we get consistent behaviour
