@@ -18,7 +18,7 @@ action :create do
   require_lvm_gems
   lvm = LVM::LVM.new(lvm_options)
   if lvm.physical_volumes[new_resource.name].nil?
-    yes_flag = new_resource.wipe_signatures == true ? '--yes' : ''
+    yes_flag = new_resource.wipe_signatures == true ? '--yes' : '-qq'
 
     converge_by("creating physical volume '#{new_resource.name}'") do
       lvm.raw "pvcreate #{new_resource.name} #{yes_flag}"

@@ -129,7 +129,7 @@ class Chef
         else
           physical_volumes = physical_volume_list.join(' ')
           physical_extent_size = new_resource.physical_extent_size ? "-s #{new_resource.physical_extent_size}" : ''
-          yes_flag = new_resource.wipe_signatures == true ? '--yes' : ''
+          yes_flag = new_resource.wipe_signatures == true ? '--yes' : '-qq'
           command = "vgcreate #{name} #{physical_extent_size} #{physical_volumes} #{yes_flag}"
           Chef::Log.debug "Executing lvm command: '#{command}'"
           output = lvm.raw command
