@@ -6,7 +6,7 @@ description       'Installs and manages Logical Volume Manager'
 version           '5.2.2'
 source_url        'https://github.com/sous-chefs/lvm'
 issues_url        'https://github.com/sous-chefs/lvm/issues'
-chef_version      '>= 12.15'
+chef_version      '>= 15.3'
 
 supports 'amazon'
 supports 'centos'
