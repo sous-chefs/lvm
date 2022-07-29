@@ -4,8 +4,6 @@ This file is used to list changes made in each version of the lvm cookbook.
 
 ## Unreleased
 
-## 6.0.1 - *2022-07-29*
-
 - Update chef-ruby-lvm-attrib gem to 0.3.10
 
 ## 6.0.0 - *2022-04-25*
