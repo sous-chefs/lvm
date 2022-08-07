@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the lvm cookbook.
 
 ## Unreleased
 
+- CI: Remove use of Vagrant boxes from OSUOSL
+
 ## 6.0.1 - *2022-07-29*
 
 - Update chef-ruby-lvm-attrib gem to 0.3.10
