@@ -11,5 +11,5 @@ describe command 'vgs' do
 end
 
 describe command 'pvs' do
-  its('stdout') { should match %r{dev/loop0\s+vg-data\s+lvm2\s+a--\s+156.00m\s+136.00m} }
+  its('stdout') { should match %r{dev/loop10\s+vg-data\s+lvm2\s+a--\s+124.00m\s+104.00m} }
 end

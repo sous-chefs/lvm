@@ -22,10 +22,10 @@ apt_update 'update'
 include_recipe 'lvm'
 
 devices = [
-  '/dev/loop0',
-  '/dev/loop1',
-  '/dev/loop2',
-  '/dev/loop3',
+  '/dev/loop10',
+  '/dev/loop11',
+  '/dev/loop12',
+  '/dev/loop13',
 ]
 
 loop_devices 'loop_devices' do
@@ -40,7 +40,7 @@ end
 
 # create a volume group and use the shortcut methods for creating a thin pool and thin volumes to test that they work
 lvm_volume_group 'vg-data' do
-  physical_volumes ['/dev/loop0', '/dev/loop1']
+  physical_volumes ['/dev/loop10', '/dev/loop11']
 
   thin_pool 'tpool' do
     size '24M'
@@ -61,7 +61,7 @@ lvm_volume_group 'vg-data' do
 end
 
 lvm_volume_group 'vg-test' do
-  physical_volumes ['/dev/loop2', '/dev/loop3']
+  physical_volumes ['/dev/loop12', '/dev/loop13']
 end
 
 lvm_thin_pool 'lv-thin' do

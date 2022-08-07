@@ -8,7 +8,7 @@ describe 'test::create' do
   before do
     allow_any_instance_of(Chef::Recipe).to receive(:shell_out).and_call_original
     pvs = double('pvs', stdout: '1')
-    allow_any_instance_of(Chef::Recipe).to receive(:shell_out).with('pvs | grep -c /dev/loop1').and_return(pvs)
+    allow_any_instance_of(Chef::Recipe).to receive(:shell_out).with('pvs | grep -c /dev/loop11').and_return(pvs)
     allow(File).to receive(:stat).and_call_original
     allow(File).to receive(:stat).with('/mnt/small').and_return(0100555)
   end
@@ -26,7 +26,7 @@ describe 'test::create' do
     end
 
     it 'Create physical volume' do
-      expect(chef_run).to create_lvm_physical_volume('/dev/loop0')
+      expect(chef_run).to create_lvm_physical_volume('/dev/loop10')
     end
   end
 
@@ -47,7 +47,7 @@ describe 'test::create' do
     end
 
     it 'Create physical volume' do
-      expect(chef_run).to create_lvm_physical_volume('/dev/loop0')
+      expect(chef_run).to create_lvm_physical_volume('/dev/loop10')
     end
   end
 
@@ -68,7 +68,7 @@ describe 'test::create' do
     end
 
     it 'Create physical volume' do
-      expect(chef_run).to create_lvm_physical_volume('/dev/loop0')
+      expect(chef_run).to create_lvm_physical_volume('/dev/loop10')
     end
   end
 end
