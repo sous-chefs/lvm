@@ -317,7 +317,7 @@ class Chef
         mirrors = new_resource.mirrors ? "--mirrors #{new_resource.mirrors}" : ''
         contiguous = new_resource.contiguous ? '--contiguous y' : ''
         readahead = new_resource.readahead ? "--readahead #{new_resource.readahead}" : ''
-        yes_flag = new_resource.wipe_signatures == true ? '--yes' : ''
+        yes_flag = new_resource.wipe_signatures == true ? '--yes' : '-qq'
         lv_params = new_resource.lv_params
         name = new_resource.name
         group = new_resource.group

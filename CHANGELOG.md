@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the lvm cookbook.
 
 ## Unreleased
 
+- Fix `pvcreate` and `lvcreate` to return an error if a valid signature was found on the device instead of waiting interactivly for confirmation.
+
 ## 6.0.2 - *2022-08-07*
 
 - CI: Remove use of Vagrant boxes from OSUOSL
