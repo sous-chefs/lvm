@@ -23,14 +23,14 @@ include_recipe 'lvm'
 
 # The test device to use
 devices = [
-  '/dev/loop0',
-  '/dev/loop1',
-  '/dev/loop2',
-  '/dev/loop3',
-  '/dev/loop4',
-  '/dev/loop5',
-  '/dev/loop6',
-  '/dev/loop7',
+  '/dev/loop10',
+  '/dev/loop11',
+  '/dev/loop12',
+  '/dev/loop13',
+  '/dev/loop14',
+  '/dev/loop15',
+  '/dev/loop16',
+  '/dev/loop17',
 ]
 
 loop_devices 'loop_devices' do
@@ -51,7 +51,7 @@ lvm_physical_volume devices.first
 # Creates the volume group
 #
 lvm_volume_group 'vg-data' do
-  physical_volumes ['/dev/loop0', '/dev/loop1', '/dev/loop2', '/dev/loop3']
+  physical_volumes ['/dev/loop10', '/dev/loop11', '/dev/loop12', '/dev/loop13']
 
   logical_volume 'logs' do
     size '10M'
@@ -70,13 +70,13 @@ lvm_volume_group 'vg-data' do
 end
 
 lvm_volume_group 'vg-test' do
-  physical_volumes ['/dev/loop4', '/dev/loop5', '/dev/loop6']
+  physical_volumes ['/dev/loop14', '/dev/loop15', '/dev/loop16']
 end
 
 lvm_volume_group 'vg-test-extend' do
   action :extend
   name 'vg-test'
-  physical_volumes ['/dev/loop4', '/dev/loop5', '/dev/loop6', '/dev/loop7']
+  physical_volumes ['/dev/loop14', '/dev/loop15', '/dev/loop16', '/dev/loop17']
 end
 # Creates the logical volume
 #

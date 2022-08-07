@@ -21,17 +21,17 @@ apt_update 'update'
 
 include_recipe 'lvm'
 
-execute 'extend loop0 device' do
+execute 'extend loop10 device' do
   command <<-EOF
 dd if=/dev/zero bs=512 count=65536 >> /vfile0
-losetup -c /dev/loop0
+losetup -c /dev/loop10
 touch /vfile0.extended
   EOF
   not_if { ::File.exist?('/vfile0.extended') }
 end
 
-lvm_physical_volume 'loop0_resize' do
-  name '/dev/loop0'
+lvm_physical_volume 'loop10_resize' do
+  name '/dev/loop10'
   action :resize
 end
 

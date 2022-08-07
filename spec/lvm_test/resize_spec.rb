@@ -10,7 +10,7 @@ describe 'test::resize' do
     let(:version) { '20.04' }
 
     it 'Resize physical volume' do
-      expect(chef_run).to resize_lvm_physical_volume('/dev/loop0')
+      expect(chef_run).to resize_lvm_physical_volume('/dev/loop10')
     end
 
     it 'Create logical volume' do
@@ -39,7 +39,7 @@ describe 'test::resize' do
     end
 
     it 'Resize physical volume' do
-      expect(chef_run).to resize_lvm_physical_volume('/dev/loop0')
+      expect(chef_run).to resize_lvm_physical_volume('/dev/loop10')
     end
 
     it 'Create small logical volume' do
@@ -68,7 +68,7 @@ describe 'test::resize' do
     end
 
     it 'Resize physical volume' do
-      expect(chef_run).to resize_lvm_physical_volume('/dev/loop0')
+      expect(chef_run).to resize_lvm_physical_volume('/dev/loop10')
     end
 
     it 'Create small logical volume' do

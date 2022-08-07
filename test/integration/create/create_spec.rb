@@ -1,12 +1,12 @@
 describe command 'pvs' do
-  its('stdout') { should match '/dev/loop0 vg-data' }
-  its('stdout') { should match '/dev/loop1 vg-data' }
-  its('stdout') { should match '/dev/loop2 vg-data' }
-  its('stdout') { should match '/dev/loop3 vg-data' }
-  its('stdout') { should match '/dev/loop4 vg-test' }
-  its('stdout') { should match '/dev/loop5 vg-test' }
-  its('stdout') { should match '/dev/loop6 vg-test' }
-  its('stdout') { should match '/dev/loop7 vg-test' }
+  its('stdout') { should match '/dev/loop10 vg-data' }
+  its('stdout') { should match '/dev/loop11 vg-data' }
+  its('stdout') { should match '/dev/loop12 vg-data' }
+  its('stdout') { should match '/dev/loop13 vg-data' }
+  its('stdout') { should match '/dev/loop14 vg-test' }
+  its('stdout') { should match '/dev/loop15 vg-test' }
+  its('stdout') { should match '/dev/loop16 vg-test' }
+  its('stdout') { should match '/dev/loop17 vg-test' }
 end
 
 describe command 'vgs' do
