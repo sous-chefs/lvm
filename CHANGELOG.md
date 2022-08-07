@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
-## Unreleased
+## 6.1.0 - *2022-08-07*
 
 - Fix `pvcreate` and `lvcreate` to return an error if a valid signature was found on the device instead of waiting interactivly for confirmation.
 
