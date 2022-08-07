@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
-## Unreleased
+## 6.0.2 - *2022-08-07*
 
 - CI: Remove use of Vagrant boxes from OSUOSL
 - CI: Fix loop file creation on Ubuntu 20.04
