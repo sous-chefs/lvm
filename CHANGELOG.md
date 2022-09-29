@@ -4,6 +4,8 @@ This file is used to list changes made in each version of the lvm cookbook.
 
 ## Unreleased
 
+- Fix parsing of output from `blkid` in `libraries/provider_lvm_logical_volume.rb` due to different behavior under busybox (e.g., running in hab effortless)
+
 ## 6.1.0 - *2022-08-07*
 
 - Fix `pvcreate` and `lvcreate` to return an error if a valid signature was found on the device instead of waiting interactivly for confirmation.
