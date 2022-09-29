@@ -385,8 +385,8 @@ class Chef
         Chef::Log.debug "Checking to see if #{device_name} is formatted..."
         # Do not raise when there is an error in running the blkid command. If the exitstatus is not 0,
         # the device is perhaps not formatted.
-        blkid = shell_out("blkid -o value -s TYPE #{device_name}")
-        blkid.exitstatus == 0 && blkid.stdout.strip == fs_type.strip
+        blkid = shell_out("blkid #{device_name}")
+        blkid.exitstatus == 0 && blkid.stdout.strip.include?(fs_type.strip)
       end
     end
   end
