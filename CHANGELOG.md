@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
-## Unreleased
+## 6.1.1 - *2022-09-29*
 
 - Fix parsing of output from `blkid` in `libraries/provider_lvm_logical_volume.rb` due to different behavior under busybox (e.g., running in hab effortless)
 
