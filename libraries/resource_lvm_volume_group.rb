@@ -27,6 +27,7 @@ class Chef
       include Chef::DSL::Recipe
 
       resource_name :lvm_volume_group
+      provides :lvm_volume_group
 
       default_action :create
       allowed_actions :create, :extend

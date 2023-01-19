@@ -26,6 +26,7 @@ class Chef
     #
     class LvmLogicalVolume < Chef::Resource::BaseLogicalVolume
       resource_name :lvm_logical_volume
+      provides :lvm_logical_volume
 
       default_action :create
       allowed_actions :create, :resize, :remove
