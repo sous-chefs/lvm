@@ -1,6 +1,7 @@
-[Back to resource list](../README.md#resources)
 
 # lvm_thin_volume
+
+[Back to resource list](../README.md#resources)
 
 Manages LVM thin volumes (which are simply logical volumes created with the `--thin` argument to `lvcreate` and are contained inside of other logical volumes that were created with the `--thinpool` option to `lvcreate`).
 

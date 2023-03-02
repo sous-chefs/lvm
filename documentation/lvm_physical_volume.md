@@ -1,6 +1,7 @@
-[Back to resource list](../README.md#resources)
 
 # lvm_physical_volume
+
+[Back to resource list](../README.md#resources)
 
 Manages LVM physical volumes.
 

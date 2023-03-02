@@ -1,6 +1,7 @@
-[Back to resource list](../README.md#resources)
 
 # lvm_thin_pool_meta_data
+
+[Back to resource list](../README.md#resources)
 
 Manages LVM thin pool metadata size.
 
