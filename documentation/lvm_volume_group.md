@@ -1,6 +1,7 @@
-[Back to resource list](../README.md#resources)
 
 # lvm_volume_group
+
+[Back to resource list](../README.md#resources)
 
 Manages LVM volume groups.
 
