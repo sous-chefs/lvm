@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
-## Unreleased
+## 6.1.10 - *2023-04-01*
 
 Standardise files with files in sous-chefs/repo-management
 
