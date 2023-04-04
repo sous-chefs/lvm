@@ -24,7 +24,6 @@ platforms:
   - name: ubuntu-20.04
   # - name: ubuntu-22.04
   - name: almalinux-8
-  - name: amazonlinux-2
   - name: rockylinux-8
 
 suites:
