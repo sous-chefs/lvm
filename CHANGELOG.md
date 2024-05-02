@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
-## Unreleased
+## 6.1.21 - *2024-05-02*
 
 ## 6.1.20 - *2024-04-30*
 
