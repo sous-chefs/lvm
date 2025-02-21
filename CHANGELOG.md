@@ -4,6 +4,7 @@ This file is used to list changes made in each version of the lvm cookbook.
 
 ## Unreleased
 
+- Bump gem to 0.4.2
 - CI: Update tested platforms
 - CI: Switch to using ubuntu-latest and manually install VirtualBox
 
