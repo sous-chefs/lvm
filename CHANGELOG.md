@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the lvm cookbook.
 
+## Unreleased
+
 ## 6.2.2 - *2025-02-21*
 
 - Bump gem to 0.4.2
