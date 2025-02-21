@@ -5,13 +5,10 @@ This file is used to list changes made in each version of the lvm cookbook.
 ## Unreleased
 
 - Update chef-ruby-lvm-attrib gem to 0.4.2
-- Update chef-ruby-lvm-attrib gem to 0.4.1
 
 ## 6.2.1 - *2024-11-18*
 
-Standardise files with files in sous-chefs/repo-management
-
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 6.2.0 - *2024-09-05*
 
@@ -19,11 +16,7 @@ Standardise files with files in sous-chefs/repo-management
 
 ## 6.1.23 - *2024-07-15*
 
-Standardise files with files in sous-chefs/repo-management
-
-Standardise files with files in sous-chefs/repo-management
-
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 6.1.22 - *2024-05-03*
 
@@ -49,27 +42,27 @@ Standardise files with files in sous-chefs/repo-management
 
 ## 6.1.13 - *2023-04-04*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 6.1.12 - *2023-04-01*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 6.1.11 - *2023-04-01*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 6.1.10 - *2023-04-01*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 6.1.9 - *2023-03-20*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 6.1.8 - *2023-03-15*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 6.1.7 - *2023-03-02*
 
@@ -77,15 +70,15 @@ Standardise files with files in sous-chefs/repo-management
 
 ## 6.1.5 - *2023-02-27*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 6.1.4 - *2023-02-15*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 6.1.3 - *2022-12-13*
 
-Standardise files with files in sous-chefs/repo-management
+- Standardise files with files in sous-chefs/repo-management
 
 ## 6.1.2 - *2022-09-30*
 
@@ -488,22 +481,22 @@ No change. Bumping version for toolchain
 
 ## v1.0.4 (2013-12-28)
 
-- **[COOK-3987](https://tickets.chef.io/browse/COOK-3987)** - Volumes are created with the wrong # of extents. Size = '2%VG' is treated as a size of 2 extents.
+- **COOK-3987** - Volumes are created with the wrong # of extents. Size = '2%VG' is treated as a size of 2 extents.
 
 ## v1.0.2
 
-- **[COOK-3935](https://tickets.chef.io/browse/COOK-3935)** - fix minor typo
+- **COOK-3935** - fix minor typo
 - Fixing up style
 - Updating test harness
 
 ## v1.0.0
 
-- **[COOK-3357](https://tickets.chef.io/browse/COOK-3357)** - Complete refactor into a heavy-weight provider with tests
+- **COOK-3357** - Complete refactor into a heavy-weight provider with tests
 
 ## v0.8.12
 
-- **[COOK-2991](https://tickets.chef.io/browse/COOK-2991)** - Add SLES support
-- **[COOK-2348](https://tickets.chef.io/browse/COOK-2348)** - Fix `lvm_logical_volume` when `mount_point` parameter is a String
+- **COOK-2991** - Add SLES support
+- **COOK-2348** - Fix `lvm_logical_volume` when `mount_point` parameter is a String
 
 ## v0.8.10
 
