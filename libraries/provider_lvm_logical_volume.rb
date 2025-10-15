@@ -56,7 +56,7 @@ class Chef
 
         vg = lvm.volume_groups[group]
         # Create the logical volume
-        if vg.nil? || vg.logical_volumes.select { |lv| lv.name == name }.empty?
+        if vg.nil? || vg.logical_volumes.none? { |lv| lv.name == name }
           command = create_command
           Chef::Log.debug "Executing lvm command: '#{command}'"
           output = lvm.raw(command)
@@ -370,7 +370,7 @@ class Chef
       # @return [String] the mapped dm name
       #
       def to_dm_name(name)
-        name.gsub(/-/, '--')
+        name.gsub('-', '--')
       end
 
       # Checks if the device is formatted with the given file system type

@@ -34,10 +34,10 @@ action :resize do
   end
   if !pv.empty?
     # get the size the OS says the block device is
-    block_device_raw_size = pv[0].dev_size.to_i
+    block_device_raw_size = pv.first.dev_size.to_i
     # get the size LVM thinks the PV is
-    pv_size = pv[0].size.to_i
-    pe_size = pv_size / pv[0].pe_count
+    pv_size = pv.first.size.to_i
+    pe_size = pv_size / pv.first.pe_count
 
     # get the amount of space that cannot be allocated
     non_allocatable_space = block_device_raw_size % pe_size
