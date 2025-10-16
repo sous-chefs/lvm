@@ -5,6 +5,11 @@ This file is used to list changes made in each version of the lvm cookbook.
 Standardise files with files in sous-chefs/repo-management
 Standardise files with files in sous-chefs/repo-management
 
+## Unreleased
+
+Standardise files with files in sous-chefs/repo-management
+
+
 ## [6.2.4](https://github.com/sous-chefs/lvm/compare/6.2.3...v6.2.4) (2025-10-15)
 
 
