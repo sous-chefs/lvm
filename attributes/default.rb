@@ -18,5 +18,5 @@
 #
 
 default['lvm']['chef-ruby-lvm']['version'] = '0.4.0'
-default['lvm']['chef-ruby-lvm-attrib']['version'] = '0.4.2'
+default['lvm']['chef-ruby-lvm-attrib']['version'] = '0.4.5'
 default['lvm']['rubysource'] = Chef::Config['rubygems_url']
