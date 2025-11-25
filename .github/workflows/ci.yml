@@ -8,7 +8,7 @@ name: "Lint & Unit Test"
 
 jobs:
   lint-unit:
-    uses: sous-chefs/.github/.github/workflows/lint-unit.yml@5.0.7
+    uses: sous-chefs/.github/.github/workflows/lint-unit.yml@5.0.8
     permissions:
       actions: write
       checks: write
