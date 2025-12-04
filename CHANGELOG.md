@@ -9,6 +9,13 @@ Standardise files with files in sous-chefs/repo-management
 
 * Update chef-ruby-lvm-attrib gem to 0.5.0
 
+## [6.2.5](https://github.com/sous-chefs/lvm/compare/v6.2.4...v6.2.5) (2025-12-04)
+
+
+### Bug Fixes
+
+* **ci:** Update workflows to use release pipeline ([#274](https://github.com/sous-chefs/lvm/issues/274)) ([1dc629e](https://github.com/sous-chefs/lvm/commit/1dc629ed4f97b784d73d6c6a4d63836e28bb36bc))
+
 ## [6.2.4](https://github.com/sous-chefs/lvm/compare/6.2.3...v6.2.4) (2025-10-15)
 
 
