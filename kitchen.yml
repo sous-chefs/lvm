@@ -17,7 +17,6 @@ platforms:
   - name: almalinux-9
   - name: amazonlinux-2023
   - name: centos-stream-9
-  - name: debian-11
   - name: debian-12
   - name: fedora-latest
   - name: opensuse-leap-15
@@ -49,5 +48,4 @@ suites:
     run_list:
       - recipe[test::create_thin]
       - recipe[test::resize_thin_pool_meta_data]
-    excludes:
-      - debian-9
+    excludes: []
