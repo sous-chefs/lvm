@@ -1,3 +1,5 @@
+apt_update
+
 # frozen_string_literal: true
 
 #
