@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe command 'pvs' do
   its('stdout') { should match '/dev/loop10 vg-data' }
   its('stdout') { should match '/dev/loop11 vg-data' }

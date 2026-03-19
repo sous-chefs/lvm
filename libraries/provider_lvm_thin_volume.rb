@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Cookbook:: lvm
 # Library:: provider_lvm_thin_volume

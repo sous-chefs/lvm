@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Cookbook:: lvm
 # Library:: base_resource_logical_volume

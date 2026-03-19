@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe command 'lvs' do
   its('stdout') { should match /percent_resize\s+vg-test\s+-wi-ao----\s+48.00m/ }
   its('stdout') { should match /percent_noresize\s+vg-test\s+-wi-ao----\s+24.00m/ }

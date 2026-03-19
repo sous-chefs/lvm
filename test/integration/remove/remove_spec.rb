@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe command 'pvs' do
   its('stdout') { should match %r{/dev/loop10\s+vg-rmdata\s+lvm2\s+a--\s+124.00m\s+124.00m} }
   its('stdout') { should match %r{/dev/loop11\s+vg-rmdata\s+lvm2\s+a--\s+124.00m\s+124.00m} }
