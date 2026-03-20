@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe 'test::test_notify' do
   let(:chef_run) do
-    ChefSpec::ServerRunner.new(platform: 'centos', version: '7').converge(described_recipe)
+    ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '24.04').converge(described_recipe)
   end
 
   it 'should allow resource notifications in chefspec' do

@@ -18,29 +18,33 @@
 #
 
 module LVMCookbook
+  LVM_GEM_VERSION = '0.4.0'
+  LVM_ATTRIB_GEM_VERSION = '0.5.0'
+
   def require_lvm_gems
     return if defined?(LVM)
 
-    # require attribute specified gems
-    gem 'chef-ruby-lvm-attrib', node['lvm']['chef-ruby-lvm-attrib']['version']
-    gem 'chef-ruby-lvm', node['lvm']['chef-ruby-lvm']['version']
+    gem 'chef-ruby-lvm-attrib', LVM_ATTRIB_GEM_VERSION
+    gem 'chef-ruby-lvm', LVM_GEM_VERSION
     require 'lvm'
-    Chef::Log.debug("Node had chef-ruby-lvm-attrib #{node['lvm']['chef-ruby-lvm-attrib']['version']} and chef-ruby-lvm #{node['lvm']['chef-ruby-lvm']['version']} installed. No need to install gems.")
+    Chef::Log.debug("Node had chef-ruby-lvm-attrib #{LVM_ATTRIB_GEM_VERSION} and chef-ruby-lvm #{LVM_GEM_VERSION} installed. No need to install gems.")
   rescue LoadError
     Chef::Log.debug('Did not find lvm gems of the specified versions installed. Installing now')
 
+    rubygems_url = Chef::Config['rubygems_url']
+
     chef_gem 'chef-ruby-lvm-attrib' do
       action :install
-      version node['lvm']['chef-ruby-lvm-attrib']['version']
-      source node['lvm']['rubysource']
+      version LVM_ATTRIB_GEM_VERSION
+      source rubygems_url
       clear_sources true
       compile_time true
     end
 
     chef_gem 'chef-ruby-lvm' do
       action :install
-      version node['lvm']['chef-ruby-lvm']['version']
-      source node['lvm']['rubysource']
+      version LVM_GEM_VERSION
+      source rubygems_url
       clear_sources true
       compile_time true
     end

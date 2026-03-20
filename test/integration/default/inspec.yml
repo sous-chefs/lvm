@@ -1,0 +1,11 @@
+---
+name: default
+title: Default LVM suite
+maintainer: Sous Chefs
+copyright: Sous Chefs
+copyright_email: help@sous-chefs.org
+license: Apache-2.0
+summary: Verifies basic LVM physical volume, volume group, and logical volume creation
+version: 0.1.0
+supports:
+  - platform: linux
