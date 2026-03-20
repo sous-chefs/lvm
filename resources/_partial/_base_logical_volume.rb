@@ -5,6 +5,11 @@
 # thin_volume, thin_pool_meta_data).
 #
 
+property :lv_name,
+          String,
+          name_property: true,
+          description: 'Name of the logical volume'
+
 property :group,
           String,
           description: 'Volume group name the logical volume belongs to'

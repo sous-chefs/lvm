@@ -5,6 +5,11 @@ unified_mode true
 
 default_action :resize
 
+property :lv_name,
+          String,
+          name_property: true,
+          description: 'Name of the thin pool metadata logical volume'
+
 property :group,
           String,
           description: 'Volume group name the logical volume belongs to'
@@ -44,7 +49,7 @@ property :ignore_skipped_cluster,
 action :resize do
   require_lvm_gems
   lvm = LVM::LVM.new
-  name = new_resource.name
+  name = new_resource.lv_name
   group = new_resource.group
   pool = new_resource.pool
   vg = lvm.volume_groups[group]

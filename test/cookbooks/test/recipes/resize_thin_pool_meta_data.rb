@@ -24,7 +24,7 @@
 #
 lvm_thin_pool_meta_data 'lv-thin_tmeta_data_resize' do
   action [:resize]
-  name 'lv-thin_tmeta'
+  lv_name 'lv-thin_tmeta'
   group 'vg-test'
   pool 'lv-thin'
   size '128M'

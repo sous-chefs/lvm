@@ -37,7 +37,7 @@ touch /vfile0.extended
 end
 
 lvm_physical_volume 'loop10_resize' do
-  name '/dev/loop10'
+  volume_name '/dev/loop10'
   action :resize
 end
 
@@ -55,7 +55,7 @@ end
 #
 lvm_logical_volume 'small_resize_test' do
   action :resize
-  name 'small_resize'
+  lv_name 'small_resize'
   group 'vg-test'
   size '16M'
   filesystem 'ext3'
@@ -76,7 +76,7 @@ end
 #
 lvm_logical_volume 'percent_resize_test' do
   action :resize
-  name 'percent_resize'
+  lv_name 'percent_resize'
   group 'vg-test'
   size '10%VG'
   filesystem 'ext3'
@@ -98,7 +98,7 @@ end
 #
 lvm_logical_volume 'small_noresize_test' do
   action :resize
-  name 'small_noresize'
+  lv_name 'small_noresize'
   group 'vg-test'
   size '8M'
   filesystem 'ext3'
@@ -120,7 +120,7 @@ end
 #
 lvm_logical_volume 'percent_noresize_test' do
   action :resize
-  name 'percent_noresize'
+  lv_name 'percent_noresize'
   group 'vg-test'
   size '5%VG'
   filesystem 'ext3'
@@ -141,7 +141,7 @@ end
 #
 lvm_logical_volume 'small_resize_raw_test' do
   action :resize
-  name 'small_resize_raw'
+  lv_name 'small_resize_raw'
   group 'vg-test'
   size '16M'
   filesystem 'RAW'
@@ -153,7 +153,6 @@ end
 #
 lvm_logical_volume 'remainder_resize' do
   action [:create, :resize]
-  name 'remainder_resize'
   group 'vg-test'
   size '2'
   filesystem 'ext3'

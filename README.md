@@ -14,7 +14,7 @@ This cookbook uses [chef-ruby-lvm](https://github.com/chef/chef-ruby-lvm) and [c
 
 ### Overriding gem versions
 
-The default gem versions are `chef-ruby-lvm` **0.4.0** and `chef-ruby-lvm-attrib` **0.5.0**. To override these, set node attributes in a wrapper cookbook or role:
+The default gem versions are `chef-ruby-lvm` **0.4.3** and `chef-ruby-lvm-attrib` **0.6.0**. To override these, set node attributes in a wrapper cookbook or role:
 
 ```ruby
 # wrapper_cookbook/attributes/default.rb
@@ -37,8 +37,8 @@ Or in a role/environment JSON:
 
 | Attribute                                     | Default   | Description                               |
 |-----------------------------------------------|-----------|-------------------------------------------|
-| `node['lvm']['chef-ruby-lvm-version']`        | `'0.4.0'` | Version of the `chef-ruby-lvm` gem        |
-| `node['lvm']['chef-ruby-lvm-attrib-version']` | `'0.5.0'` | Version of the `chef-ruby-lvm-attrib` gem |
+| `node['lvm']['chef-ruby-lvm-version']`        | `'0.4.3'` | Version of the `chef-ruby-lvm` gem        |
+| `node['lvm']['chef-ruby-lvm-attrib-version']` | `'0.6.0'` | Version of the `chef-ruby-lvm-attrib` gem |
 
 ## Maintainers
 

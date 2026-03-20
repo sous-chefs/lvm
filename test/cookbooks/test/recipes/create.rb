@@ -81,7 +81,7 @@ end
 
 lvm_volume_group 'vg-test-extend' do
   action :extend
-  name 'vg-test'
+  vg_name 'vg-test'
   physical_volumes ['/dev/loop14', '/dev/loop15', '/dev/loop16', '/dev/loop17']
 end
 # Creates the logical volume

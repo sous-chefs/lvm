@@ -24,7 +24,7 @@
 #
 lvm_thin_volume 'thin_vol_1_resize' do
   action [:resize]
-  name 'thin_vol_1'
+  lv_name 'thin_vol_1'
   group 'vg-test'
   pool 'lv-thin'
   size '32M'

@@ -72,7 +72,7 @@ action :create do
   install_filesystem_deps
 
   lvm = LVM::LVM.new(lvm_options)
-  name = new_resource.name
+  name = new_resource.lv_name
   group = new_resource.group
   fs_type = new_resource.filesystem
   fs_params = new_resource.filesystem_params
@@ -151,7 +151,7 @@ end
 action :resize do
   require_lvm_gems
   lvm = LVM::LVM.new(lvm_options)
-  name = new_resource.name
+  name = new_resource.lv_name
   group = new_resource.group
 
   vg = lvm.volume_groups[group]
@@ -240,7 +240,7 @@ action_class do
   def install_filesystem_deps
     if platform_family?('suse') && /^ext/.match(new_resource.filesystem)
       Chef::Log.debug('Installing e2fsprogs to create the filesystem')
-      package "e2fsprogs package for #{new_resource.name}" do
+      package "e2fsprogs package for #{new_resource.lv_name}" do
         package_name 'e2fsprogs'
       end
     else
@@ -266,7 +266,7 @@ action_class do
     readahead = new_resource.readahead ? "--readahead #{new_resource.readahead}" : ''
     yes_flag = new_resource.wipe_signatures == true ? '--yes' : '-qq'
     lv_params = new_resource.lv_params
-    name = new_resource.name
+    name = new_resource.lv_name
     group = new_resource.group
     physical_volumes = [new_resource.physical_volumes].flatten.join ' ' if new_resource.physical_volumes
 
@@ -275,7 +275,7 @@ action_class do
   end
 
   def resize_command(lv_size_req)
-    name = new_resource.name
+    name = new_resource.lv_name
     group = new_resource.group
     device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
     resize_fs =
@@ -307,7 +307,7 @@ action_class do
     updates = []
     new_resource.thin_volumes&.each do |tv|
       tv.group new_resource.group
-      tv.pool new_resource.name
+      tv.pool new_resource.lv_name
       tv.run_action action
       updates << tv.updated?
     end
