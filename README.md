@@ -10,7 +10,35 @@ Installs lvm2 package and includes resources for managing LVM.
 
 ## Note on LVM gems
 
-This cookbook has used multiple variants of the ruby-lvm and ruby-lvm-attrib gems for interacting with LVM. Most recently we used di-ruby-lvm and di-ruby-lvm-attrib gems, which are no longer being maintained. As of the 4.0 release this cookbook uses new Chef maintained gems: chef-ruby-lvm and chef-ruby-lvm-attrib. Previous versions of this cookbook supported cleaning those gems up for approximetly 3 years. At this point you'll need to remove those gems yourself if they're still present as the namespaces will conflict. If you previously used attributes to control the version of the gems to install, you will need to update to the latest attribute names to maintain that functionality.
+This cookbook uses [chef-ruby-lvm](https://github.com/chef/chef-ruby-lvm) and [chef-ruby-lvm-attrib](https://github.com/chef/chef-ruby-lvm-attrib) gems for interacting with LVM.
+
+### Overriding gem versions
+
+The default gem versions are `chef-ruby-lvm` **0.4.0** and `chef-ruby-lvm-attrib` **0.5.0**. To override these, set node attributes in a wrapper cookbook or role:
+
+```ruby
+# wrapper_cookbook/attributes/default.rb
+default['lvm']['chef-ruby-lvm-version'] = '0.5.0'
+default['lvm']['chef-ruby-lvm-attrib-version'] = '0.6.0'
+```
+
+Or in a role/environment JSON:
+
+```json
+{
+  "default_attributes": {
+    "lvm": {
+      "chef-ruby-lvm-version": "0.5.0",
+      "chef-ruby-lvm-attrib-version": "0.6.0"
+    }
+  }
+}
+```
+
+| Attribute                                     | Default   | Description                               |
+|-----------------------------------------------|-----------|-------------------------------------------|
+| `node['lvm']['chef-ruby-lvm-version']`        | `'0.4.0'` | Version of the `chef-ruby-lvm` gem        |
+| `node['lvm']['chef-ruby-lvm-attrib-version']` | `'0.5.0'` | Version of the `chef-ruby-lvm-attrib` gem |
 
 ## Maintainers
 

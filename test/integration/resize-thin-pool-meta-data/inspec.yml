@@ -6,6 +6,4 @@ license: Apache-2.0
 summary: Tests for LVM thin pool metadata resizing
 version: 1.0.0
 supports:
-  - platform-family: debian
-  - platform-family: rhel
-  - platform-family: fedora
+  - platform: linux

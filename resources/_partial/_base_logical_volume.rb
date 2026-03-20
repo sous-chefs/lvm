@@ -15,7 +15,6 @@ property :lv_params,
 
 property :size,
           String,
-          required: true,
           regex: /^(\d+[kKmMgGtTpPeE]|(\d{1,2}|100)%(FREE|VG|PVS)|\d+)$/,
           description: 'Size of the logical volume'
 
