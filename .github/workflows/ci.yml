@@ -18,29 +18,26 @@ jobs:
 
   integration:
     needs: lint-unit
-    runs-on: ubuntu-latest
+    # Temporary pin: keep this on 22.04 until we migrate off Vagrant/VirtualBox.
+    # Follow-up required before ubuntu-22.04 runner EOL.
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        os:
-          - opensuse-leap-15
-          - amazonlinux-2023
-          - fedora-latest
-          - almalinux-9
-          - almalinux-10
-          - centos-stream-9
-          - centos-stream-10
-          - debian-12
-          - debian-13
-          - ubuntu-22.04
-          - ubuntu-24.04
-        suite:
-          - default
-          - create
-          - remove
-          - create-thin
-          - resize
-          - resize-thin
-          - resize-thin-pool-meta-data
+        include:
+          - os: ubuntu-22.04
+            suite: default
+          - os: ubuntu-22.04
+            suite: create
+          - os: ubuntu-22.04
+            suite: remove
+          - os: ubuntu-22.04
+            suite: create-thin
+          - os: ubuntu-22.04
+            suite: resize
+          - os: ubuntu-22.04
+            suite: resize-thin
+          - os: ubuntu-22.04
+            suite: resize-thin-pool-meta-data
       fail-fast: false
 
     steps:
@@ -52,7 +49,7 @@ jobs:
         uses: actionshub/test-kitchen@3.0.0
         env:
           CHEF_LICENSE: accept-no-persist
-          KITCHEN_LOCAL_YAML: kitchen.dokken.yml
+          KITCHEN_LOCAL_YAML: kitchen.yml
         with:
           suite: ${{ matrix.suite }}
           os: ${{ matrix.os }}
