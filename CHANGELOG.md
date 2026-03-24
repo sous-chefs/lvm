@@ -8,6 +8,8 @@ Standardise files with files in sous-chefs/repo-management
 ## Unreleased
 
 * Update chef-ruby-lvm-attrib gem to 0.5.0
+* CI: Temporarily pin integration to Vagrant on ubuntu-22.04 for reliable LVM test execution
+* CI: Track migration to a non-Vagrant approach before ubuntu-22.04 EOL
 
 ## [6.2.5](https://github.com/sous-chefs/lvm/compare/v6.2.4...v6.2.5) (2025-12-04)
 

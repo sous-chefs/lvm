@@ -1,0 +1,9 @@
+---
+name: create_thin
+title: LVM Thin Provisioning Create Tests
+maintainer: Sous Chefs
+license: Apache-2.0
+summary: Tests for LVM thin pool and thin volume creation
+version: 1.0.0
+supports:
+  - platform: linux

@@ -1,0 +1,9 @@
+---
+name: resize_thin_pool_meta_data
+title: LVM Thin Pool Metadata Resize Tests
+maintainer: Sous Chefs
+license: Apache-2.0
+summary: Tests for LVM thin pool metadata resizing
+version: 1.0.0
+supports:
+  - platform: linux

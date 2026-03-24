@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 #
 # Copyright:: Chef Software, Inc.
 # License:: Apache License, Version 2.0
@@ -16,33 +18,70 @@
 #
 
 module LVMCookbook
+  LVM_GEM_VERSION = '0.4.3'
+  LVM_ATTRIB_GEM_VERSION = '0.6.0'
+
+  def lvm_gem_version
+    node.dig('lvm', 'chef-ruby-lvm-version') || LVM_GEM_VERSION
+  end
+
+  def lvm_attrib_gem_version
+    node.dig('lvm', 'chef-ruby-lvm-attrib-version') || LVM_ATTRIB_GEM_VERSION
+  end
+
   def require_lvm_gems
     return if defined?(LVM)
 
-    # require attribute specified gems
-    gem 'chef-ruby-lvm-attrib', node['lvm']['chef-ruby-lvm-attrib']['version']
-    gem 'chef-ruby-lvm', node['lvm']['chef-ruby-lvm']['version']
+    gem 'chef-ruby-lvm-attrib', lvm_attrib_gem_version
+    gem 'chef-ruby-lvm', lvm_gem_version
     require 'lvm'
-    Chef::Log.debug("Node had chef-ruby-lvm-attrib #{node['lvm']['chef-ruby-lvm-attrib']['version']} and chef-ruby-lvm #{node['lvm']['chef-ruby-lvm']['version']} installed. No need to install gems.")
+    patch_lvm_version_parsing
+    Chef::Log.debug("Node had chef-ruby-lvm-attrib #{lvm_attrib_gem_version} and chef-ruby-lvm #{lvm_gem_version} installed. No need to install gems.")
   rescue LoadError
     Chef::Log.debug('Did not find lvm gems of the specified versions installed. Installing now')
 
+    rubygems_url = Chef::Config['rubygems_url']
+
     chef_gem 'chef-ruby-lvm-attrib' do
       action :install
-      version node['lvm']['chef-ruby-lvm-attrib']['version']
-      source node['lvm']['rubysource']
+      version lvm_attrib_gem_version
+      source rubygems_url
       clear_sources true
       compile_time true
     end
 
     chef_gem 'chef-ruby-lvm' do
       action :install
-      version node['lvm']['chef-ruby-lvm']['version']
-      source node['lvm']['rubysource']
+      version lvm_gem_version
+      source rubygems_url
       clear_sources true
       compile_time true
     end
 
     require 'lvm'
+    patch_lvm_version_parsing
+  end
+
+  # Workaround for chef-ruby-lvm version parsing bug. On RHEL-based distros the
+  # LVM version string includes a distro suffix inside the parentheses, e.g.
+  # "2.03.32(2-RHEL10)". The upstream regex ^(.*?)(-| ) captures "2.03.32(2"
+  # (stopping at the first hyphen), which doesn't match any attributes directory.
+  # This patch extracts the base version with numeric paren suffix, e.g.
+  # "2.03.32(2-RHEL10)" becomes "2.03.32(2)".
+  # TODO: Remove once chef-ruby-lvm is fixed upstream
+  def patch_lvm_version_parsing
+    return if LVM::LVM.method_defined?(:_lvm_cookbook_version_patched)
+
+    LVM::LVM.class_eval do
+      def version
+        ver_str = userland.lvm_version
+        match = ver_str.match(/^([\d.]+)\((\d+)[^)]*\)/)
+        match ? "#{match[1]}(#{match[2]})" : ver_str.split(/[-\s]/).first
+      end
+
+      def _lvm_cookbook_version_patched
+        true
+      end
+    end
   end
 end

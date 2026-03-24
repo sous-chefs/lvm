@@ -1,0 +1,9 @@
+---
+name: remove
+title: LVM Remove Tests
+maintainer: Sous Chefs
+license: Apache-2.0
+summary: Tests for LVM logical volume removal
+version: 1.0.0
+supports:
+  - platform: linux
