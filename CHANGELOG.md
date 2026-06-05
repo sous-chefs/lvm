@@ -5,11 +5,6 @@ This file is used to list changes made in each version of the lvm cookbook.
 Standardise files with files in sous-chefs/repo-management
 Standardise files with files in sous-chefs/repo-management
 
-## [6.2.6] - *2026-06-04*
-
-* Update chef-ruby-lvm gem to 0.4.4
-* Update chef-ruby-lvm-attrib gem to 0.6.1
-
 ## Unreleased
 
 * Update chef-ruby-lvm-attrib gem to 0.5.0
