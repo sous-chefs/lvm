@@ -17,6 +17,6 @@
 # limitations under the License.
 #
 
-default['lvm']['chef-ruby-lvm']['version'] = '0.4.0'
-default['lvm']['chef-ruby-lvm-attrib']['version'] = '0.5.0'
+default['lvm']['chef-ruby-lvm']['version'] = '0.4.4'
+default['lvm']['chef-ruby-lvm-attrib']['version'] = '0.6.1'
 default['lvm']['rubysource'] = Chef::Config['rubygems_url']
