@@ -1,53 +1,118 @@
+---
 driver:
   name: vagrant
 
 provisioner:
   name: chef_infra
-  deprecations_as_errors: true
-  product_name: <%= ENV['CHEF_PRODUCT_NAME'] || 'chef' %>
+  product_name: chef
+  channel: current
   chef_license: accept-no-persist
-  product_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
-  log_level: <%= ENV['CHEF_LOG_LEVEL'] || 'auto' %>
+  deprecations_as_errors: true
+  always_update_cookbooks: true
 
 verifier:
   name: inspec
 
 platforms:
-  - name: almalinux-8
-  - name: almalinux-9
-  - name: amazonlinux-2023
-  - name: centos-stream-9
-  - name: debian-11
-  - name: debian-12
-  - name: fedora-latest
-  - name: opensuse-leap-15
   - name: rockylinux-8
+    driver:
+      box: bento/rockylinux-8
+      customize:
+        storagectl: "SATA Controller"
+        storages:
+          - port: 1
+            medium: disk
+            size: 4096
+
   - name: rockylinux-9
-  - name: ubuntu-20.04
-  - name: ubuntu-22.04
-  - name: ubuntu-24.04
+    driver:
+      box: bento/rockylinux-9
+      customize:
+        storagectl: "SATA Controller"
+        storages:
+          - port: 1
+            medium: disk
+            size: 4096
+
+  - name: rockylinux-10
+    driver:
+      box: bento/rockylinux-10
+      customize:
+        storagectl: "SATA Controller"
+        storages:
+          - port: 1
+            medium: disk
+            size: 4096
+
+  - name: ubuntu-2204
+    driver:
+      box: bento/ubuntu-22.04
+      customize:
+        storagectl: "SATA Controller"
+        storages:
+          - port: 1
+            medium: disk
+            size: 4096
+
+  - name: ubuntu-2604
+    driver:
+      box: bento/ubuntu-26.04
+      customize:
+        storagectl: "SATA Controller"
+        storages:
+          - port: 1
+            medium: disk
+            size: 4096
 
 suites:
-  - name: create
-    run_list:
-      - recipe[test::create]
-  - name: remove
-    run_list:
-      - recipe[test::remove]
-  - name: create_thin
-    run_list:
-      - recipe[test::create_thin]
-  - name: resize
-    run_list:
-      - recipe[test::create]
-      - recipe[test::resize]
-  - name: resize_thin
-    run_list:
-      - recipe[test::create_thin]
-      - recipe[test::resize_thin]
-  - name: resize_thin_pool_meta_data
-    run_list:
-      - recipe[test::create_thin]
-      - recipe[test::resize_thin_pool_meta_data]
-    excludes:
-      - debian-9
+  - name: default
+    provisioner:
+      named_run_list: default
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    includes:
+      - rockylinux-8
+      - rockylinux-9
+      - rockylinux-10
+      - ubuntu-2204
+      - ubuntu-2604
+  - name: filesystem
+    provisioner:
+      named_run_list: filesystem
+    verifier:
+      inspec_tests:
+        - test/integration/filesystem
+    includes:
+      - ubuntu-2204
+      - ubuntu-2604
+  - name: xfs
+    provisioner:
+      named_run_list: xfs
+    verifier:
+      inspec_tests:
+        - test/integration/xfs
+    includes:
+      - rockylinux-8
+      - rockylinux-9
+      - rockylinux-10
+  - name: thin
+    provisioner:
+      named_run_list: thin
+    verifier:
+      inspec_tests:
+        - test/integration/thin
+    includes:
+      - rockylinux-9
+      - rockylinux-10
+      - ubuntu-2204
+      - ubuntu-2604
+  - name: btrfs
+    provisioner:
+      named_run_list: btrfs
+    verifier:
+      inspec_tests:
+        - test/integration/btrfs
+    includes:
+      - ubuntu-2204
+      - ubuntu-2604

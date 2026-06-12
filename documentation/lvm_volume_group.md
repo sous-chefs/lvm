@@ -1,59 +1,59 @@
-
 # lvm_volume_group
 
-[Back to resource list](../README.md#resources)
+[Back to Resource List](https://github.com/sous-chefs/lvm#resources)
 
-Manages LVM volume groups.
+Creates or extends an LVM volume group. Uses `vgcreate`/`vgextend` directly with `lvm vgs --reportformat json` for idempotency — no gem dependencies.
+
+Introduced: v8.0.0
 
 ## Actions
 
-| Action    | Description                                                     |
-| --------- | --------------------------------------------------------------- |
-| `:create` | (default) Creates a new volume group                            |
-| `:extend` | Extend an existing volume group to include new physical volumes |
+| Action | Description |
+| ------ | ----------- |
+| `:create` | Create the VG if absent; extend with any new PVs if it exists (default) |
+| `:extend` | Add PVs to an already-existing VG (idempotent) |
 
 ## Properties
 
-| Name                   | Type            | Default       | Description                                                                                                                                                                |
-| ---------------------- | --------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`                 | String          | name property | (required) Name of the volume group                                                                                                                                        |
-| `physical_volumes`     | Array, String   |               | (required) The device or list of devices to use as physical volumes (if they haven't already been initialized as physical volumes, they will be initialized automatically) |
-| `physical_extent_size` | String          | `nil`         | The physical extent size for the volume group                                                                                                                              |
-| `logical_volume`       | Proc            | `nil`         | Shortcut for creating a new `lvm_logical_volume` definition (the logical volumes will be created in the order they are declared)                                           |
-| `wipe_signatures`      | `true`, `false` | `false`       | Force the creation of the Volume Group, even if `lvm` detects existing non-LVM data on disk                                                                                |
-| `thin_pool`            | Proc            | `nil`         | Shortcut for creating a new `lvm_thin_pool` definition (the logical volumes will be created in the order they are declared)                                                |
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `name` | String | _name property_ | Name of the volume group |
+| `physical_volumes` | String, Array | _required_ | One or more block devices to include in this VG |
+| `physical_extent_size` | String, Integer | `nil` | Physical extent size (e.g. `"32m"` or `32`). Passed to `vgcreate -s` |
+| `logical_volumes` | Array | `[]` | Array of `lvm_logical_volume` resource objects to create inside this VG |
+| `ignore_skipped_cluster` | true, false | `false` | Suppress errors when a clustered VG is skipped during device scanning |
 
 ## Examples
 
 ```ruby
-lvm_volume_group 'vg00' do
-  physical_volumes ['/dev/sda', '/dev/sdb', '/dev/sdc']
-  wipe_signatures true
+lvm_volume_group 'datavg' do
+  physical_volumes '/dev/sdb'
+end
+```
 
-  logical_volume 'logs' do
-    size        '1G'
-    filesystem  'xfs'
-    mount_point location: '/var/log', options: 'noatime,nodiratime'
-    stripes     3
-  end
+```ruby
+lvm_volume_group 'datavg' do
+  physical_volumes ['/dev/sdb', '/dev/sdc']
+  physical_extent_size '32m'
+end
+```
 
-  logical_volume 'home' do
-    size        '25%VG'
-    filesystem  'ext4'
-    mount_point '/home'
-    stripes     3
-    mirrors     2
-  end
+Extend an existing VG with a new PV:
 
-  thin_pool "lv-thin-pool" do
-    size '5G'
-    stripes 2
+```ruby
+lvm_volume_group 'datavg' do
+  physical_volumes '/dev/sdd'
+  action :extend
+end
+```
 
-    thin_volume "thin01" do
-      size '10G'
-      filesystem  'ext4'
-      mount_point location: '/var/thin01', options: 'noatime,nodiratime'
-    end
-  end
+Nested logical volumes:
+
+```ruby
+lvm_volume_group 'datavg' do
+  physical_volumes '/dev/sdb'
+  logical_volumes [
+    lvm_logical_volume('datalv') { size '10G'; filesystem 'xfs'; mount_point '/data' },
+  ]
 end
 ```

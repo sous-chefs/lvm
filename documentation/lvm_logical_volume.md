@@ -1,65 +1,110 @@
-
 # lvm_logical_volume
 
-[Back to resource list](../README.md#resources)
+[Back to Resource List](https://github.com/sous-chefs/lvm#resources)
 
-Manages LVM logical volumes.
+Creates, resizes, or manages an LVM logical volume. Supports optional filesystem creation, LUKS encryption, and mount point management. Uses `lvcreate`/`lvresize` directly with `lvm lvs --reportformat json` for idempotency — no gem dependencies.
+
+See also: [partial_lv_common](partial_lv_common.md), [partial_lv_filesystem](partial_lv_filesystem.md)
+
+Introduced: v8.0.0
 
 ## Actions
 
-| Action    | Description                                                                                                                                                  |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `:create` | (default) Creates a new logical volume                                                                                                                       |
-| `:resize` | Resize an existing logical volume (resizing only handles extending existing, this action will not shrink volumes due to the 'lvextend' command being passed) |
-| `:remove` | Remove an existing logical volume (optionally clean up the mount location/directory)                                                                         |
+| Action | Description |
+| ------ | ----------- |
+| `:create` | Create the logical volume if absent; optionally create filesystem and mount point (default) |
+| `:resize` | Resize the logical volume to the specified size; grow filesystem if configured |
 
 ## Properties
 
-| Name                     | Type            | Default       | Description                                                                                                                              |
-| ------------------------ | --------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`                   | String          | name property | Name of the logical volume                                                                                                               |
-| `group`                  | String          |               | (required) Volume group in which to create the new volume (not required if the volume is declared inside of an `lvm_volume_group` block) |
-| `size`                   | String          |               | (required) Size of the volume, including units (k, K, m, M, g, G, t, T) or as the percentage of the size of the volume group             |
-| `filesystem`             | String          | `nil`         | The format for the file system                                                                                                           |
-| `filesystem_params`      | String          | `nil`         | Optional parameters to use when formatting the file system                                                                               |
-| `mount_point`            | String, Hash    | `nil`         | Either a String containing the path to the mount point, or a Hash                                                                        |
-| `physical_volumes`       | String, Array   | `[]`          | Array of physical volumes that the volume will be restricted to                                                                          |
-| `stripes`                | Integer         | `nil`         | Number of stripes for the volume                                                                                                         |
-| `stripe_size`            | Integer         | `nil`         | Number of kilobytes per stripe segment (must be a power of 2 less than or equal to the physical extent size for the volume group)        |
-| `mirrors`                | Integer         | `nil`         | Number of mirrors for the volume                                                                                                         |
-| `contiguous`             | `true`, `false` | `false`       | Whether or not volume should use the contiguous allocation policy                                                                        |
-| `readahead`              | Integer, String | `nil`         | The readahead sector count for the volume (can be a value between 2 and 120, 'auto', or 'none')                                          |
-| `take_up_free_space`     | `true`, `false` | `false`       | whether to have the LV take up the remainder of free space on the VG. Only valid for resize action                                       |
-| `wipe_signatures`        | `true`, `false` | `false`       | Force the creation of the Logical Volume, even if `lvm` detects existing LV signatures                                                   |
-| `ignore_skipped_cluster` | `true`, `false` | `false`       | Continue execution even if `lvm` detects skipped clustered volume groups                                                                 |
-| `lv_params`              | String          | `nil`         | Optional parameters to be passed to LVM                                                                                                  |
-| `remove_mount_point`     | `true`, `false` | `false`       | Optional parameter to be passed to LVM during a :remove event to clean up the directory                                                  |
-
-### mount_point
-
-If using a Hash, it _must_ contain the following keys:
-
-- `location` - (required) the directory to mount the volume on
-- `options` - the mount options for the volume
-- `dump` - the dump field for the fstab entry
-- `pass` - the pass field for the fstab entry
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `name` | String | _name property_ | Name of the logical volume |
+| `group` | String | `nil` | Volume group the logical volume belongs to |
+| `size` | String, Integer | `nil` | Size (e.g. `"10G"`, `"512M"`, `"80%FREE"`, `"50%VG"`) |
+| `take_up_free_space` | true, false | `false` | Use `100%FREE`; overrides `size` |
+| `thin` | true, false | `false` | Create as a thin logical volume provisioned from a thin pool |
+| `pool` | String | `nil` | Thin pool name (requires `thin: true`) |
+| `physical_volumes` | String, Array | `nil` | Restrict allocation to specific PVs within the VG |
+| `stripes` | Integer | `nil` | Number of stripes |
+| `stripe_size` | Integer | `nil` | Stripe size in KB |
+| `mirrors` | Integer | `nil` | Number of mirrors |
+| `nosync` | true, false | `false` | Skip initial mirror synchronisation (`--nosync`) |
+| `contiguous` | true, false | `false` | Require contiguous allocation (`--contiguous y`) |
+| `readahead` | String, Integer | `nil` | Read-ahead sector count (`--readahead`) |
+| `lv_params` | String | `''` | Arbitrary extra flags appended verbatim to `lvcreate` |
+| `wipe_signatures` | true, false | `false` | Wipe existing signatures on the device before creation (`-W y`) |
+| `ignore_skipped_cluster` | true, false | `false` | Suppress errors when a clustered VG is skipped |
+| `filesystem` | String | `nil` | Filesystem type (e.g. `"xfs"`, `"ext4"`, `"btrfs"`) |
+| `filesystem_params` | String | `nil` | Additional flags passed verbatim to `mkfs` |
+| `mount_point` | String, Hash | `nil` | Mount point path or Hash with `:location`, `:fstype`, `:options`, `:dump`, `:pass` |
+| `encrypt_with_luks` | true, false | `false` | Encrypt the block device with LUKS before creating the filesystem |
+| `luks_version` | String, Integer | `2` | LUKS format version: `1` or `2` |
+| `password` | String | `nil` | Path to a key-file for LUKS `luksFormat` and `open` (sensitive) |
 
 ## Examples
 
-```ruby
-lvm_logical_volume 'home' do
-  group       'vg00'
-  size        '25%VG'
-  filesystem  'ext4'
-  mount_point '/home'
-  stripes     3
-  mirrors     2
-end
+Simple logical volume:
 
-lvm_logical_volume 'test' do
-  group               'vg01'
-  mount_point         '/mnt/test'
-  remove_mount_point  true
-  action              :remove
+```ruby
+lvm_logical_volume 'datalv' do
+  group      'datavg'
+  size       '10G'
+end
+```
+
+With filesystem and mount point:
+
+```ruby
+lvm_logical_volume 'datalv' do
+  group       'datavg'
+  size        '20G'
+  filesystem  'xfs'
+  mount_point '/data'
+end
+```
+
+Use all remaining free space:
+
+```ruby
+lvm_logical_volume 'datalv' do
+  group             'datavg'
+  take_up_free_space true
+  filesystem        'ext4'
+  mount_point       '/data'
+end
+```
+
+Resize an existing volume:
+
+```ruby
+lvm_logical_volume 'datalv' do
+  group  'datavg'
+  size   '30G'
+  action :resize
+end
+```
+
+Striped volume:
+
+```ruby
+lvm_logical_volume 'stripelv' do
+  group       'datavg'
+  size        '40G'
+  stripes     2
+  stripe_size 64
+end
+```
+
+LUKS-encrypted volume:
+
+```ruby
+lvm_logical_volume 'secretlv' do
+  group            'datavg'
+  size             '10G'
+  encrypt_with_luks true
+  password         '/etc/lvm/keyfile'
+  filesystem       'ext4'
+  mount_point      '/secret'
 end
 ```
