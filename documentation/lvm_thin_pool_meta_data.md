@@ -1,32 +1,28 @@
-
 # lvm_thin_pool_meta_data
 
-[Back to resource list](../README.md#resources)
-
-Manages LVM thin pool metadata size.
+Resizes the metadata volume of an LVM thin pool.
 
 ## Actions
 
-| Action    | Description                                                                                                                                                            |
-| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `:resize` | Resize an existing thin pool metadata volume (resizing only handles extending existing, this action will not shrink volumes due to the `lvextend` command being passed |
+| Action | Description |
+|---|---|
+| `:resize` | Extends the thin pool metadata volume to the requested size |
 
 ## Properties
 
-| Name    | Type   | Default       | Description                                                                                |
-| ------- | ------ | ------------- | ------------------------------------------------------------------------------------------ |
-| `name`  | String | name property | Name of the thin pool metadata volume                                                      |
-| `group` | String |               | (required) Name of volume group in which thin pool metadata volume exist                   |
-| `pool`  | String |               | (required) Name of thin pool volume in which thin pool metadata volume exist               |
-| `size`  | String |               | (required) Size of the thin pool metadata volume, including units (k, K, m, M, g, G, t, T) |
+| Property | Type | Default | Description |
+|---|---|---|---|
+| `name` | `String` | name | Name of the metadata volume (e.g. `pool0_tmeta`) |
+| `group` | `String` | — | **Required.** Volume group name |
+| `pool` | `String` | — | **Required.** Parent thin pool LV name |
+| `size` | `String` | — | **Required.** New metadata size (e.g. `512M`, `1G`) |
 
 ## Examples
 
 ```ruby
-lvm_thin_pool_meta_data 'lv-thin-pool_tmeta' do
-  group       'vg00'
-  pool        'lv-thin-pool'
-  size        '2M'
-  action      :resize
+lvm_thin_pool_meta_data 'pool0_tmeta' do
+  group 'vg_data'
+  pool  'pool0'
+  size  '512M'
 end
 ```

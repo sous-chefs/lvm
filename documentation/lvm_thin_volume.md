@@ -1,46 +1,36 @@
-
 # lvm_thin_volume
 
-[Back to resource list](../README.md#resources)
-
-Manages LVM thin volumes (which are simply logical volumes created with the `--thin` argument to `lvcreate` and are contained inside of other logical volumes that were created with the `--thinpool` option to `lvcreate`).
+Manages thin logical volumes within an LVM thin pool.
 
 ## Actions
 
-| Action    | Description                                                                                                                                                       |
-| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `:create` | (default) Create a new thin logical volume                                                                                                                        |
-| `:resize` | Resize an existing thin logical volume (resizing only handles extending existing, this action will not shrink volumes due to the `lvextend` command being passed) |
+| Action | Description |
+|---|---|
+| `:create` | Creates the thin volume (virtually-allocated) |
+| `:resize` | Extends the thin volume |
 
 ## Properties
 
-| Name                | Type          | Default       | Description                                                                                                                               |
-| ------------------- | ------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`              | String        | name property | Name of the logical volume                                                                                                                |
-| `group`             | String        |               | (required) Volume group in which to create the new volume (not required if the volume is declared inside of an `lvm_volume_group` block)  |
-| `pool`              | String        |               | (required) Thin pool volume in which to create the new volume (not required if the volume is declared inside of an `lvm_thin_pool` block) |
-| `size`              | String        |               | (required) Size of the thin volume, including units (k, K, m, M, g, G, t, T)                                                              |
-| `filesystem`        | String        | `nil`         | The format for the file system                                                                                                            |
-| `filesystem_params` | String        | `nil`         | Optional parameters to use when formatting the file system                                                                                |
-| `mount_point`       | String, Hash  | `nil`         | Either a String containing the path to the mount point, or a Hash                                                                         |
-
-### mount_point
-
-If using a Hash, it _must_ contain the following keys:
-
-- `location` - (required) the directory to mount the volume on
-- `options` - the mount options for the volume
-- `dump` - the dump field for the fstab entry
-- `pass` - the pass field for the fstab entry
+| Property | Type | Default | Description |
+|---|---|---|---|
+| `name` | `String` | name | Name of the thin volume |
+| `group` | `String` | — | Volume group name |
+| `pool` | `String` | — | **Required.** Thin pool LV name |
+| `size` | `String` | — | **Required.** Virtual size (e.g. `10G`, `512M`) |
+| `filesystem` | `String` | — | Filesystem type |
+| `filesystem_params` | `String` | — | Extra mkfs parameters |
+| `mount_point` | `[String, Hash]` | — | Mount path or options hash |
+| `lv_params` | `String` | — | Extra lvcreate flags |
+| `ignore_skipped_cluster` | `[true, false]` | `false` | Pass `--ignoreskippedcluster` |
 
 ## Examples
 
 ```ruby
-lvm_thin_volume 'thin01' do
-  group       'vg00'
-  pool        'lv-thin-pool'
-  size        '5G'
-  filesystem  'ext4'
-  mount_point location: '/var/thin01', options: 'noatime,nodiratime'
+lvm_thin_volume 'tv_app' do
+  group      'vg_data'
+  pool       'pool0'
+  size       '20G'
+  filesystem 'xfs'
+  mount_point '/srv/app'
 end
 ```

@@ -1,54 +1,42 @@
-
 # lvm_thin_pool
 
-[Back to resource list](../README.md#resources)
-
-Manages LVM thin pools (which are simply logical volumes created with the `--thinpool` argument to `lvcreate`).
+Manages LVM thin-provisioning pool logical volumes. Can declare thin volumes inline.
 
 ## Actions
 
-| Action    | Description                                                                                                                                                            |
-| --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `:create` | (default) Create a new thin pool logical volume                                                                                                                        |
-| `:resize` | Resize an existing thin pool logical volume (resizing only handles extending existing, this action will not shrink volumes due to the `lvextend` command being passed) |
+| Action | Description |
+|---|---|
+| `:create` | Creates the thin pool LV and any declared thin volumes |
+| `:resize` | Extends the thin pool and resizes any declared thin volumes |
+| `:remove` | Removes the thin pool LV |
 
 ## Properties
 
-| Name                 | Type            | Default       | Description                                                                                                                              |
-| -------------------- | --------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`               | String          | name property | Name of the logical volume                                                                                                               |
-| `group`              | String          |               | (required) Volume group in which to create the new volume (not required if the volume is declared inside of an `lvm_volume_group` block) |
-| `size`               | String          |               | (required) Size of the thin pool volume, including units (k, K, m, M, g, G, t, T) or as the percentage of the size of the volume group   |
-| `filesystem`         | String          | `nil`         | The format for the file system                                                                                                           |
-| `filesystem_params`  | String          | `nil`         | Optional parameters to use when formatting the file system                                                                               |
-| `mount_point`        | String, Hash    | `nil`         | Either a String containing the path to the mount point, or a Hash                                                                        |
-| `physical_volumes`   | String, Array   | `[]`          | Array of physical volumes that the volume will be restricted to                                                                          |
-| `stripes`            | Integer         | `nil`         | Number of stripes for the volume                                                                                                         |
-| `stripe_size`        | Integer         | `nil`         | Number of kilobytes per stripe segment (must be a power of 2 less than or equal to the physical extent size for the volume group)        |
-| `mirrors`            | Integer         | `nil`         | Number of mirrors for the volume                                                                                                         |
-| `contiguous`         | `true`, `false` | `false`       | Whether or not volume should use the contiguous allocation policy                                                                        |
-| `readahead`          | Integer, String | `nil`         | The readahead sector count for the volume (can be a value between 2 and 120, 'auto', or 'none')                                          |
-| `take_up_free_space` | `true`, `false` | `false`       | whether to have the LV take up the remainder of free space on the VG. Only valid for resize action                                       |
-| `thin_volume`        | Proc            | `nil`         | Shortcut for creating a new `lvm_thin_volume` definition (the volumes will be created in the order they are declared)                    |
+Same as `lvm_logical_volume` — see [lvm_logical_volume.md](lvm_logical_volume.md).
 
-### mount_point
+## DSL Helpers
 
-If using a Hash, it _must_ contain the following keys:
+### `thin_volume(name, &block)`
 
-- `location` - (required) the directory to mount the volume on
-- `options` - the mount options for the volume
-- `dump` - the dump field for the fstab entry
-- `pass` - the pass field for the fstab entry
+Declares an `lvm_thin_volume` to create/resize when the thin pool action runs.
 
 ## Examples
 
 ```ruby
-lvm_thin_pool 'home' do
-  group       'vg00'
-  size        '25%VG'
-  filesystem  'ext4'
-  mount_point '/home'
-  stripes     3
-  mirrors     2
+lvm_thin_pool 'pool0' do
+  group 'vg_data'
+  size  '50G'
+
+  thin_volume 'tv_app' do
+    size '20G'
+    filesystem 'xfs'
+    mount_point '/srv/app'
+  end
+
+  thin_volume 'tv_db' do
+    size '10G'
+    filesystem 'ext4'
+    mount_point '/var/lib/mysql'
+  end
 end
 ```

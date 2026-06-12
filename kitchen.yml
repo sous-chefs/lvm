@@ -31,23 +31,41 @@ suites:
   - name: create
     run_list:
       - recipe[test::create]
+    verifier:
+      inspec_tests:
+        - test/integration/default
   - name: remove
     run_list:
       - recipe[test::remove]
+    verifier:
+      inspec_tests:
+        - test/integration/default
   - name: create_thin
     run_list:
       - recipe[test::create_thin]
+    verifier:
+      inspec_tests:
+        - test/integration/default
   - name: resize
     run_list:
       - recipe[test::create]
       - recipe[test::resize]
+    verifier:
+      inspec_tests:
+        - test/integration/default
   - name: resize_thin
     run_list:
       - recipe[test::create_thin]
       - recipe[test::resize_thin]
+    verifier:
+      inspec_tests:
+        - test/integration/default
   - name: resize_thin_pool_meta_data
     run_list:
       - recipe[test::create_thin]
       - recipe[test::resize_thin_pool_meta_data]
+    verifier:
+      inspec_tests:
+        - test/integration/default
     excludes:
       - debian-9
