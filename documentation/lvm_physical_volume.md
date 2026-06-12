@@ -1,31 +1,39 @@
-
 # lvm_physical_volume
 
-[Back to resource list](../README.md#resources)
+[Back to Resource List](https://github.com/sous-chefs/lvm#resources)
 
-Manages LVM physical volumes.
+Creates or removes an LVM physical volume on a block device. Uses `pvcreate`/`pvremove` directly with `lvm pvs --reportformat json` for idempotency — no gem dependencies.
+
+Introduced: v8.0.0
 
 ## Actions
 
-| Action    | Description                             |
-| --------- | --------------------------------------- |
-| `:create` | (default) Creates a new physical volume |
-| `:resize` | Resize an existing physical volume      |
+| Action | Description |
+| ------ | ----------- |
+| `:create` | Create the physical volume if it does not exist (default) |
+| `:remove` | Remove the physical volume |
 
 ## Properties
 
-| Name                     | Type           | Default       | Description                                                                            |
-| ------------------------ | -------------- | ------------- | -------------------------------------------------------------------------------------- |
-| `volume_name`            | String         | name property | The device to create the new physical volume on                                        |
-| `wipe_signatures`        | `true`,`false` | `false`       | Force the creation of the Logical Volume, even if `lvm` detects existing PV signatures |
-| `ignore_skipped_cluster` | `true`,`false` | `false`       | Continue execution even if `lvm` detects skipped clustered volume groups               |
+| Name | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `name` | String | _name property_ | Block device path (e.g. `/dev/sdb`) |
+| `ignore_skipped_cluster` | true, false | `false` | Suppress errors when a clustered VG is skipped during device scanning |
 
 ## Examples
 
 ```ruby
-lvm_physical_volume '/dev/sda'
+lvm_physical_volume '/dev/sdb'
+```
 
+```ruby
+lvm_physical_volume '/dev/sdc' do
+  action :create
+end
+```
+
+```ruby
 lvm_physical_volume '/dev/sdb' do
-  action :resize
+  action :remove
 end
 ```
