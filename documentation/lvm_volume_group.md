@@ -1,58 +1,56 @@
-
 # lvm_volume_group
 
-[Back to resource list](../README.md#resources)
-
-Manages LVM volume groups.
+Manages LVM volume groups (VGs). Can optionally declare logical volumes and thin pools
+inline using DSL block helpers.
 
 ## Actions
 
-| Action    | Description                                                     |
-| --------- | --------------------------------------------------------------- |
-| `:create` | (default) Creates a new volume group                            |
-| `:extend` | Extend an existing volume group to include new physical volumes |
+| Action | Description |
+|---|---|
+| `:create` | Creates the VG (and any declared LVs) if it does not already exist |
+| `:extend` | Extends the VG with additional PVs and resizes any declared LVs |
 
 ## Properties
 
-| Name                   | Type            | Default       | Description                                                                                                                                                                |
-| ---------------------- | --------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`                 | String          | name property | (required) Name of the volume group                                                                                                                                        |
-| `physical_volumes`     | Array, String   |               | (required) The device or list of devices to use as physical volumes (if they haven't already been initialized as physical volumes, they will be initialized automatically) |
-| `physical_extent_size` | String          | `nil`         | The physical extent size for the volume group                                                                                                                              |
-| `logical_volume`       | Proc            | `nil`         | Shortcut for creating a new `lvm_logical_volume` definition (the logical volumes will be created in the order they are declared)                                           |
-| `wipe_signatures`      | `true`, `false` | `false`       | Force the creation of the Volume Group, even if `lvm` detects existing non-LVM data on disk                                                                                |
-| `thin_pool`            | Proc            | `nil`         | Shortcut for creating a new `lvm_thin_pool` definition (the logical volumes will be created in the order they are declared)                                                |
+| Property | Type | Default | Description |
+|---|---|---|---|
+| `name` | `String` | name | Name of the volume group |
+| `physical_volumes` | `[String, Array]` | — | **Required.** PV device path(s) |
+| `physical_extent_size` | `String` | — | PE size (e.g. `4m`, `8m`) |
+| `wipe_signatures` | `[true, false]` | `false` | Pass `--yes` to vgcreate |
+| `ignore_skipped_cluster` | `[true, false]` | `false` | Pass `--ignoreskippedcluster` |
+
+## DSL Helpers
+
+### `logical_volume(name, &block)`
+
+Declares an `lvm_logical_volume` to create/resize when the VG action runs.
+
+### `thin_pool(name, &block)`
+
+Declares an `lvm_thin_pool` to create/resize when the VG action runs.
 
 ## Examples
 
 ```ruby
-lvm_volume_group 'vg00' do
-  physical_volumes ['/dev/sda', '/dev/sdb', '/dev/sdc']
-  wipe_signatures true
+lvm_volume_group 'vg_data' do
+  physical_volumes ['/dev/sdb', '/dev/sdc']
+  physical_extent_size '4m'
+end
 
-  logical_volume 'logs' do
-    size        '1G'
+lvm_volume_group 'vg_app' do
+  physical_volumes '/dev/sdd'
+
+  logical_volume 'lv_app' do
+    size        '50G'
     filesystem  'xfs'
-    mount_point location: '/var/log', options: 'noatime,nodiratime'
-    stripes     3
+    mount_point '/srv/app'
   end
 
-  logical_volume 'home' do
-    size        '25%VG'
-    filesystem  'ext4'
-    mount_point '/home'
-    stripes     3
-    mirrors     2
-  end
-
-  thin_pool "lv-thin-pool" do
-    size '5G'
-    stripes 2
-
-    thin_volume "thin01" do
-      size '10G'
-      filesystem  'ext4'
-      mount_point location: '/var/thin01', options: 'noatime,nodiratime'
+  thin_pool 'pool0' do
+    size '20G'
+    thin_volume 'tv_docker' do
+      size '15G'
     end
   end
 end
