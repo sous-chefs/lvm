@@ -9,6 +9,13 @@ Standardise files with files in sous-chefs/repo-management
 
 * Update chef-ruby-lvm-attrib gem to 0.5.0
 
+## [6.2.7](https://github.com/sous-chefs/lvm/compare/v6.2.6...v6.2.7) (2026-06-15)
+
+
+### Bug Fixes
+
+* update kitchen product names to cinc ([#299](https://github.com/sous-chefs/lvm/issues/299)) ([8730054](https://github.com/sous-chefs/lvm/commit/8730054a9978f125758196338a141c7402edb75b))
+
 ## [6.2.6](https://github.com/sous-chefs/lvm/compare/v6.2.5...v6.2.6) (2026-06-05)
 
 
