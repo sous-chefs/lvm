@@ -47,33 +47,24 @@ property :ignore_skipped_cluster,
           description: 'Whether to ignore skipped cluster VGs during LVM commands'
 
 action :resize do
-  require_lvm_gems
-  lvm = LVM::LVM.new
   name = new_resource.lv_name
   group = new_resource.group
   pool = new_resource.pool
-  vg = lvm.volume_groups[group]
 
-  # if doing a resize make sure that the volume exists before doing anything
-  raise("Error volume group #{group} does not exist") if vg.nil?
+  vg = find_vg(group)
+  raise "Volume group '#{group}' does not exist" if vg.nil?
 
-  lv = vg.logical_volumes.select do |lvs|
-    lvs.name == pool
-  end
+  lv = find_lv(pool, group)
+  raise "Logical volume (thin pool) '#{pool}' does not exist in volume group '#{group}'" if lv.nil?
 
-  # make sure that the thin pool / volume specified exists in the VG specified.
-  raise("Error logical volume (thin pool) #{pool} does not exist") if lv.empty?
+  # Look for the metadata LV (named as [pool_tmeta] internally)
+  all_lvs = list_lvs(group)
+  lv_metadata = all_lvs.find { |l| l['metadata_lv'] == "[#{name}]" }
+  raise "Thin pool metadata volume '#{name}' does not exist in volume group '#{group}'" if lv_metadata.nil?
 
-  lv_metadata = vg.logical_volumes.select do |lvs|
-    lvs.metadata_lv == "[#{name}]"
-  end
-
-  # make sure that the thin pool metadata specified exists in the VG specified
-  raise("Error logical volume thin pool metadata volume #{name} does not exist") if lv_metadata.empty?
-
-  lv_metadata = lv_metadata.first
-  pe_size = vg.extent_size.to_i
-  lv_metadata_size_cur = lv_metadata.metadata_size.to_i / pe_size
+  ext_info = vg_extent_info(group)
+  pe_size = ext_info[:extent_size]
+  lv_metadata_size_cur = (lv_metadata['metadata_size'] || lv_metadata['lv_size']).to_i / pe_size
 
   lv_metadata_size = new_resource.size
   lv_metadata_size_req = case lv_metadata_size
@@ -88,17 +79,14 @@ action :resize do
                          when /^(\d+)$/
                            Regexp.last_match[1].to_i
                          else
-                           raise("Invalid size #{Regexp.last_match[1]} for lvm resize")
+                           raise("Invalid size #{lv_metadata_size} for lvm resize")
                          end
 
   if lv_metadata_size_cur >= lv_metadata_size_req
-    Chef::Log.debug "Logical volume thin pool metadata #{lv_metadata.name} in volume group #{group} already at requested size"
+    Chef::Log.debug "Logical volume thin pool metadata #{name} in volume group #{group} already at requested size"
   else
     command = resize_command(new_resource.size)
-    Chef::Log.debug "Running command: #{command}"
-    output = lvm.raw command
-    Chef::Log.debug "Command output: #{output}"
-    # broadcast that we did a resize
+    lvm_raw(command)
     new_resource.updated_by_last_action true
   end
 end

@@ -3,26 +3,28 @@
 
 [Back to resource list](../README.md#resources)
 
-Manages LVM thin volumes (which are simply logical volumes created with the `--thin` argument to `lvcreate` and are contained inside of other logical volumes that were created with the `--thinpool` option to `lvcreate`).
+Manages LVM thin volumes (logical volumes created with `--thin` inside a thin pool created with `--thinpool`).
 
 ## Actions
 
 | Action    | Description                                                                                                                                                       |
 | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `:create` | (default) Create a new thin logical volume                                                                                                                        |
-| `:resize` | Resize an existing thin logical volume (resizing only handles extending existing, this action will not shrink volumes due to the `lvextend` command being passed) |
+| `:resize` | Resize an existing thin logical volume (resizing only handles extending; this action will not shrink volumes)                                                     |
 
 ## Properties
 
-| Name                | Type          | Default       | Description                                                                                                                               |
-| ------------------- | ------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`              | String        | name property | Name of the logical volume                                                                                                                |
-| `group`             | String        |               | (required) Volume group in which to create the new volume (not required if the volume is declared inside of an `lvm_volume_group` block)  |
-| `pool`              | String        |               | (required) Thin pool volume in which to create the new volume (not required if the volume is declared inside of an `lvm_thin_pool` block) |
-| `size`              | String        |               | (required) Size of the thin volume, including units (k, K, m, M, g, G, t, T)                                                              |
-| `filesystem`        | String        | `nil`         | The format for the file system                                                                                                            |
-| `filesystem_params` | String        | `nil`         | Optional parameters to use when formatting the file system                                                                                |
-| `mount_point`       | String, Hash  | `nil`         | Either a String containing the path to the mount point, or a Hash                                                                         |
+| Name                     | Type           | Default       | Description                                                                                                                               |
+| ------------------------ | -------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `lv_name`                | String         | name property | Name of the thin logical volume                                                                                                           |
+| `group`                  | String         | `nil`         | Volume group in which the thin pool resides (not required if declared inside an `lvm_thin_pool` block)                                    |
+| `pool`                   | String         |               | (required) Name of the thin pool logical volume in which this thin volume will be created                                                 |
+| `size`                   | String         |               | (required) Virtual size of the thin volume, including units (`k`, `K`, `m`, `M`, `g`, `G`, `t`, `T`) — percentage sizes are not supported |
+| `filesystem`             | String         | `nil`         | File system type to format the volume with (e.g. `ext4`, `xfs`)                                                                          |
+| `filesystem_params`      | String         | `nil`         | Additional parameters to pass to `mkfs` when formatting                                                                                   |
+| `mount_point`            | String, Hash   | `nil`         | Either a String path to mount the volume on, or a Hash (see below)                                                                        |
+| `lv_params`              | String         | `nil`         | Additional parameters to pass to `lvcreate`                                                                                               |
+| `ignore_skipped_cluster` | `true`, `false`| `false`       | Whether to ignore skipped cluster VGs during LVM commands                                                                                 |
 
 ### mount_point
 
@@ -42,5 +44,12 @@ lvm_thin_volume 'thin01' do
   size        '5G'
   filesystem  'ext4'
   mount_point location: '/var/thin01', options: 'noatime,nodiratime'
+end
+
+lvm_thin_volume 'thin02' do
+  group  'vg00'
+  pool   'lv-thin-pool'
+  size   '20G'
+  action :resize
 end
 ```

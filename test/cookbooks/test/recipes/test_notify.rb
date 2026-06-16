@@ -1,6 +1,6 @@
-apt_update
-
 # frozen_string_literal: true
+
+apt_update
 
 ## this recipe is purely used in chefspec to verify you can test notifications
 

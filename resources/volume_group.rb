@@ -8,35 +8,30 @@ default_action :create
 property :vg_name,
           String,
           name_property: true,
-          regex: /[\w+.-]+/,
-          callbacks: {
-            "cannot be '.' or '..'" => proc { |value|
-              !(value == '.' || value == '..')
-            },
-          },
           description: 'Name of the volume group'
 
 property :physical_volumes,
-          [Array, String],
+          [String, Array],
           required: true,
-          description: 'List of physical devices for this volume group'
+          coerce: proc { |val| Array(val) },
+          description: 'Physical volume(s) to use for the volume group'
 
 property :physical_extent_size,
           String,
-          regex: /\d+[bBsSkKmMgGtTpPeE]?/,
-          description: 'Physical extent size'
+          regex: /^\d+[kKmMgGtT]?$/,
+          description: 'Physical extent size (e.g. 4M)'
 
 property :wipe_signatures,
           [true, false],
           default: false,
-          description: 'Whether to automatically wipe any preexisting signatures'
+          description: 'Whether to automatically wipe signatures on new PVs'
 
 property :ignore_skipped_cluster,
           [true, false],
           default: false,
           description: 'Whether to ignore skipped cluster VGs during LVM commands'
 
-# Logical volumes to be created in the volume group
+# Nested logical volumes declared via the DSL
 attr_reader :logical_volumes
 
 def after_created
@@ -44,144 +39,71 @@ def after_created
   super
 end
 
-# A shortcut for creating a logical volume when creating the volume group
+# DSL method for declaring nested logical volumes within a volume group
 def logical_volume(name, &block)
   @logical_volumes ||= []
-  Chef::Log.debug "Creating logical volume #{name}"
   volume = declare_resource(:lvm_logical_volume, name, created_at: caller.first, &block)
   volume.action :nothing
   @logical_volumes << volume
   volume
 end
 
-# A shortcut for creating a thin pool when creating the volume group
-def thin_pool(name, &block)
-  @logical_volumes ||= []
-  volume = declare_resource(:lvm_thin_pool, name, created_at: caller.first, &block)
-  volume.action :nothing
-  @logical_volumes << volume
-  volume
-end
-
 action :create do
-  require_lvm_gems
-  name = new_resource.name
-  physical_volume_list = [new_resource.physical_volumes].flatten
+  converge_if_changed do
+    # Ensure all physical volumes exist
+    new_resource.physical_volumes.each do |pv|
+      lvm_physical_volume pv do
+        wipe_signatures new_resource.wipe_signatures
+      end
+    end
 
-  # Make sure any pvs are not being used as filesystems
-  create_mount_resource(physical_volume_list)
-
-  lvm = LVM::LVM.new(lvm_options)
-  # Create the volume group
-  create_volume_group(lvm, physical_volume_list, name)
-
-  # Create the logical volumes specified as sub-resources
-  create_logical_volumes
-end
-
-action :extend do
-  require_lvm_gems
-  name = new_resource.name
-  physical_volume_list = [new_resource.physical_volumes].flatten
-  lvm = LVM::LVM.new(lvm_options)
-
-  # verify that the volume group is valid
-  raise("VG #{name} is not a valid volume group") if lvm.volume_groups[name].nil?
-
-  # get uuid of the volume group so we can compare it to the VG the PV belongs to
-  vg_uuid = lvm.volume_groups[name].uuid
-
-  pvs_to_add = []
-  physical_volume_list.each do |pv_name|
-    pv = lvm.physical_volumes[pv_name]
-
-    # get the uuid of the VG the PV belongs to if it exists
-    # if we get "nil" then the PV does not belong to a VG
-    # per the vgextend man page the pv will be initalized if it isn't already pv
-    pv_vg_uuid = pv.nil? ? nil : pv.vg_uuid
-    if pv_vg_uuid.nil?
-      pvs_to_add.push pv_name
+    vg = find_vg(new_resource.vg_name)
+    if vg.nil?
+      # Create the volume group
+      pe_size = new_resource.physical_extent_size ? "-s #{new_resource.physical_extent_size}" : ''
+      pvs = new_resource.physical_volumes.join(' ')
+      lvm_raw("vgcreate #{pe_size} #{new_resource.vg_name} #{pvs}".strip)
     else
-      # raise an error if we attempt to add a PV that is already a member of a VG
-      raise("PV #{pv} is already a member of another volume group. Cannot add to #{name}") unless pv_vg_uuid == vg_uuid
+      Chef::Log.info "Volume group '#{new_resource.vg_name}' already exists. Skipping create..."
     end
   end
 
-  return if pvs_to_add.empty?
-  command = "vgextend #{name} #{pvs_to_add.join(' ')}"
-  Chef::Log.debug "Executing lvm command: '#{command}'"
-  output = lvm.raw command
-  Chef::Log.debug "Command output: '#{output}'"
-  new_resource.updated_by_last_action(true)
-  resize_logical_volumes
+  # Process nested logical volumes
+  process_logical_volumes(:create)
+end
+
+action :extend do
+  converge_if_changed do
+    vg = find_vg(new_resource.vg_name)
+    raise "Volume group '#{new_resource.vg_name}' does not exist" if vg.nil?
+
+    current_pvs = list_pvs_in_vg(new_resource.vg_name).map { |pv| pv['pv_name'] }
+
+    new_resource.physical_volumes.each do |pv|
+      next if current_pvs.include?(pv)
+
+      # Create the PV if it doesn't exist
+      lvm_physical_volume pv do
+        wipe_signatures new_resource.wipe_signatures
+      end
+
+      # Extend the VG
+      lvm_raw("vgextend #{new_resource.vg_name} #{pv}")
+    end
+  end
+
+  # Process nested logical volumes
+  process_logical_volumes(:create)
 end
 
 action_class do
   include LVMCookbook
 
-  def lvm_options
-    new_resource.ignore_skipped_cluster ? { additional_arguments: '--ignoreskippedcluster' } : {}
-  end
-
-  def create_mount_resource(physical_volume_list)
-    physical_volume_list.select { |pv| ::File.exist?(pv) }.each do |pv|
-      mount_point = get_mount_point(pv)
-      next if mount_point.nil?
-
-      mount_resource = mount mount_point do
-        device pv
-        action :nothing
-      end
-      mount_resource.run_action(:umount)
-      mount_resource.run_action(:disable)
-    end
-  end
-
-  def create_volume_group(lvm, physical_volume_list, name)
-    if lvm.volume_groups[name]
-      Chef::Log.info "Volume group '#{name}' already exists. Not creating..."
-    else
-      physical_volumes = physical_volume_list.join(' ')
-      physical_extent_size = new_resource.physical_extent_size ? "-s #{new_resource.physical_extent_size}" : ''
-      yes_flag = new_resource.wipe_signatures == true ? '--yes' : '-qq'
-      command = "vgcreate #{name} #{physical_extent_size} #{physical_volumes} #{yes_flag}"
-      Chef::Log.debug "Executing lvm command: '#{command}'"
-      output = lvm.raw command
-      Chef::Log.debug "Command output: '#{output}'"
-      new_resource.updated_by_last_action(true)
-    end
-  end
-
-  def create_logical_volumes
-    updates = []
+  def process_logical_volumes(action)
     new_resource.logical_volumes&.each do |lv|
-      lv.group new_resource.name
-      lv.run_action :create
-      updates << lv.updated?
+      lv.group new_resource.vg_name
+      lv.run_action action
+      new_resource.updated_by_last_action(true) if lv.updated?
     end
-    new_resource.updated_by_last_action(updates.any?)
-  end
-
-  def resize_logical_volumes
-    updates = []
-    new_resource.logical_volumes&.each do |lv|
-      lv.group new_resource.name
-      lv.run_action :resize
-      updates << lv.updated?
-    end
-    new_resource.updated_by_last_action(updates.any?)
-  end
-
-  # Obtains the mount point of a device and returns nil if the device is not mounted
-  def get_mount_point(device)
-    mount_point = nil
-    shell_out!('mount').stdout.each_line do |line|
-      matched = line.match(/#{Regexp.escape(device)}\s+on\s+(.*)\s+type.*/)
-      unless matched.nil?
-        mount_point = matched[1]
-        break
-      end
-    end
-    mount_point
   end
 end
