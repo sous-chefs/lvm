@@ -38,7 +38,7 @@ property :contiguous,
 
 property :readahead,
           [Integer, String],
-          equal_to: [2..120, 'auto', 'none'].flatten!,
+          equal_to: [*2..120, 'auto', 'none'],
           description: 'Read ahead sector count of the logical volume'
 
 property :take_up_free_space,
