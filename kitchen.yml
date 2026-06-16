@@ -4,7 +4,7 @@ driver:
 provisioner:
   name: chef_infra
   deprecations_as_errors: true
-  product_name: <%= ENV['CHEF_PRODUCT_NAME'] || 'chef' %>
+  product_name: <%= ENV['CHEF_PRODUCT_NAME'] || 'cinc' %>
   chef_license: accept-no-persist
   product_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
   log_level: <%= ENV['CHEF_LOG_LEVEL'] || 'auto' %>
@@ -30,6 +30,7 @@ platforms:
   - name: rockylinux-10
   - name: ubuntu-22.04
   - name: ubuntu-24.04
+  - name: ubuntu-26.04
 
 suites:
   - name: default
