@@ -42,7 +42,7 @@ describe LVMCookbook do
     end
 
     it 'parses JSON output from LVM commands' do
-      pvs = helper.lvm_report('pvs -a -o pv_all', 'pv')
+      pvs = helper.lvm_report('pvs -o pv_name,vg_name,pv_size,pv_free,pv_attr', 'pv')
       expect(pvs).to be_an(Array)
       expect(pvs.first['pv_name']).to eq('/dev/sdb')
     end

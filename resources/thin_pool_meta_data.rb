@@ -64,7 +64,7 @@ action :resize do
 
   ext_info = vg_extent_info(group)
   pe_size = ext_info[:extent_size]
-  lv_metadata_size_cur = (lv_metadata['metadata_size'] || lv_metadata['lv_size']).to_i / pe_size
+  lv_metadata_size_cur = (lv_metadata['lv_metadata_size'] || lv_metadata['lv_size']).to_i / pe_size
 
   lv_metadata_size = new_resource.size
   lv_metadata_size_req = case lv_metadata_size

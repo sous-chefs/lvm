@@ -34,7 +34,7 @@ module LVMCookbook
   # @param device [String] device path (e.g. '/dev/sdb')
   # @return [Hash, nil] PV info hash or nil if not found
   def find_pv(device)
-    pvs = lvm_report('pvs -a -o pv_all', 'pv')
+    pvs = lvm_report('pvs -o pv_name,vg_name,pv_size,pv_free,pv_attr', 'pv')
     pvs.find { |pv| pv['pv_name'] == device }
   end
 
@@ -43,7 +43,7 @@ module LVMCookbook
   # @param name [String] volume group name
   # @return [Hash, nil] VG info hash or nil if not found
   def find_vg(name)
-    vgs = lvm_report('vgs -a -o vg_all', 'vg')
+    vgs = lvm_report('vgs -o vg_name,vg_attr,vg_extent_size,vg_extent_count,vg_free_count', 'vg')
     vgs.find { |vg| vg['vg_name'] == name }
   end
 
@@ -53,7 +53,7 @@ module LVMCookbook
   # @param vg_name [String] volume group name
   # @return [Hash, nil] LV info hash or nil if not found
   def find_lv(lv_name, vg_name)
-    lvs = lvm_report("lvs -a -o lv_all #{vg_name}", 'lv')
+    lvs = lvm_report("lvs -a -o lv_name,vg_name,lv_attr,lv_size,pool_lv,metadata_lv #{vg_name}", 'lv')
     lvs.find { |lv| lv['lv_name'] == lv_name }
   end
 
@@ -62,7 +62,7 @@ module LVMCookbook
   # @param vg_name [String] volume group name
   # @return [Array<Hash>] array of LV info hashes
   def list_lvs(vg_name)
-    lvm_report("lvs -a -o lv_all #{vg_name}", 'lv')
+    lvm_report("lvs -a -o lv_name,vg_name,lv_attr,lv_size,pool_lv,metadata_lv,lv_metadata_size #{vg_name}", 'lv')
   end
 
   # Get volume group extent information needed for size calculations.
@@ -85,7 +85,7 @@ module LVMCookbook
   # @param vg_name [String] volume group name
   # @return [Array<Hash>] array of PV info hashes
   def list_pvs_in_vg(vg_name)
-    pvs = lvm_report('pvs -a -o pv_all', 'pv')
+    pvs = lvm_report('pvs -o pv_name,vg_name', 'pv')
     pvs.select { |pv| pv['vg_name'] == vg_name }
   end
 
