@@ -53,4 +53,26 @@ describe 'lvm_volume_group' do
 
     it { is_expected.to extend_lvm_volume_group('vg-data') }
   end
+
+  context 'action :create with vg_name property' do
+    recipe do
+      lvm_volume_group 'my_vg' do
+        vg_name 'actual-vg-name'
+        physical_volumes ['/dev/sdb']
+      end
+    end
+
+    it { is_expected.to create_lvm_volume_group('my_vg').with(vg_name: 'actual-vg-name') }
+  end
+
+  context 'action :create with wipe_signatures' do
+    recipe do
+      lvm_volume_group 'vg-data' do
+        physical_volumes ['/dev/sdb']
+        wipe_signatures true
+      end
+    end
+
+    it { is_expected.to create_lvm_volume_group('vg-data').with(wipe_signatures: true) }
+  end
 end

@@ -32,4 +32,14 @@ describe 'lvm_physical_volume' do
 
     it { is_expected.to resize_lvm_physical_volume('/dev/sdb') }
   end
+
+  context 'action :create with volume_name property' do
+    recipe do
+      lvm_physical_volume 'my_pv' do
+        volume_name '/dev/sdc'
+      end
+    end
+
+    it { is_expected.to create_lvm_physical_volume('my_pv').with(volume_name: '/dev/sdc') }
+  end
 end
