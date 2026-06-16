@@ -16,7 +16,7 @@ Manages LVM physical volumes.
 
 | Name               | Type           | Default       | Description                                                                            |
 | ------------------ | -------------- | ------------- | -------------------------------------------------------------------------------------- |
-| `volume_name`      | String         | name property | Device name of the physical volume (e.g. `/dev/sdb`)                                  |
+| `volume_name`      | String         | name property | Device name of the physical volume (e.g. `/dev/sdb`)                                   |
 | `wipe_signatures`  | `true`,`false` | `false`       | Whether to wipe existing signatures before creating the physical volume                |
 
 ## Examples

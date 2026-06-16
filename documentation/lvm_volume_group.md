@@ -18,7 +18,7 @@ Manages LVM volume groups.
 | ----------------------- | --------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `vg_name`               | String          | name property | Name of the volume group                                                                                                                                                   |
 | `physical_volumes`      | String, Array   |               | (required) The device or list of devices to use as physical volumes (if they haven't already been initialized as physical volumes, they will be initialized automatically) |
-| `physical_extent_size`  | String          | `nil`         | Physical extent size for the volume group (e.g. `4M`). Must match pattern `\d+[kKmMgGtT]?`                                                                                |
+| `physical_extent_size`  | String          | `nil`         | Physical extent size for the volume group (e.g. `4M`). Must match pattern `\d+[kKmMgGtT]?`                                                                                 |
 | `wipe_signatures`       | `true`, `false` | `false`       | Whether to automatically wipe signatures on new PVs                                                                                                                        |
 | `ignore_skipped_cluster`| `true`, `false` | `false`       | Whether to ignore skipped cluster VGs during LVM commands                                                                                                                  |
 

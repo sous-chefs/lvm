@@ -19,11 +19,11 @@ Manages LVM logical volumes.
 | ------------------------ | --------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `lv_name`                | String          | name property | Name of the logical volume                                                                                                               |
 | `group`                  | String          | `nil`         | Volume group in which to create the new volume (not required if declared inside an `lvm_volume_group` block)                             |
-| `size`                   | String          | `nil`         | Size of the volume, including units (`k`, `K`, `m`, `M`, `g`, `G`, `t`, `T`) or as a percentage of the volume group (e.g. `25%VG`)     |
-| `filesystem`             | String          | `nil`         | File system type to format the volume with (e.g. `ext4`, `xfs`)                                                                         |
+| `size`                   | String          | `nil`         | Size of the volume, including units (`k`, `K`, `m`, `M`, `g`, `G`, `t`, `T`) or as a percentage of the volume group (e.g. `25%VG`)       |
+| `filesystem`             | String          | `nil`         | File system type to format the volume with (e.g. `ext4`, `xfs`)                                                                          |
 | `filesystem_params`      | String          | `nil`         | Additional parameters to pass to `mkfs` when formatting the file system                                                                  |
 | `mount_point`            | String, Hash    | `nil`         | Either a String path to mount the volume on, or a Hash (see below)                                                                       |
-| `lv_params`              | String          | `nil`         | Additional parameters to pass to `lvcreate`/`lvextend`                                                                                  |
+| `lv_params`              | String          | `nil`         | Additional parameters to pass to `lvcreate`/`lvextend`                                                                                   |
 | `physical_volumes`       | String, Array   | `nil`         | Physical volume(s) to restrict the logical volume to                                                                                     |
 | `stripes`                | Integer         | `nil`         | Number of stripes for the volume (must be greater than 0)                                                                                |
 | `stripe_size`            | Integer         | `nil`         | Stripe size in kilobytes (must be a power of 2)                                                                                          |

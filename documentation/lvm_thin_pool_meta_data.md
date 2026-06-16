@@ -18,11 +18,11 @@ Manages LVM thin pool metadata volume size. This resource resizes the internal m
 | `lv_name`                | String         | name property | Name of the thin pool metadata logical volume                                                                |
 | `group`                  | String         | `nil`         | Name of the volume group in which the thin pool resides                                                      |
 | `pool`                   | String         |               | (required) Name of the thin pool logical volume whose metadata will be resized                               |
-| `size`                   | String         |               | (required) New size for the metadata volume, including units (`k`, `K`, `m`, `M`, `g`, `G`, `t`, `T`)       |
+| `size`                   | String         |               | (required) New size for the metadata volume, including units (`k`, `K`, `m`, `M`, `g`, `G`, `t`, `T`)        |
 | `lv_params`              | String         | `nil`         | Additional parameters to pass to `lvextend`                                                                  |
-| `filesystem`             | String         | `nil`         | File system type (kept for interface compatibility; unused for metadata volumes)                              |
+| `filesystem`             | String         | `nil`         | File system type (kept for interface compatibility; unused for metadata volumes)                             |
 | `filesystem_params`      | String         | `nil`         | Additional mkfs parameters (kept for interface compatibility; unused for metadata volumes)                   |
-| `mount_point`            | String, Hash   | `nil`         | Mount point (kept for interface compatibility; unused for metadata volumes)                                   |
+| `mount_point`            | String, Hash   | `nil`         | Mount point (kept for interface compatibility; unused for metadata volumes)                                  |
 | `ignore_skipped_cluster` | `true`, `false`| `false`       | Whether to ignore skipped cluster VGs during LVM commands                                                    |
 
 ## Examples

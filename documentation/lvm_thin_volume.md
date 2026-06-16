@@ -20,7 +20,7 @@ Manages LVM thin volumes (logical volumes created with `--thin` inside a thin po
 | `group`                  | String         | `nil`         | Volume group in which the thin pool resides (not required if declared inside an `lvm_thin_pool` block)                                    |
 | `pool`                   | String         |               | (required) Name of the thin pool logical volume in which this thin volume will be created                                                 |
 | `size`                   | String         |               | (required) Virtual size of the thin volume, including units (`k`, `K`, `m`, `M`, `g`, `G`, `t`, `T`) — percentage sizes are not supported |
-| `filesystem`             | String         | `nil`         | File system type to format the volume with (e.g. `ext4`, `xfs`)                                                                          |
+| `filesystem`             | String         | `nil`         | File system type to format the volume with (e.g. `ext4`, `xfs`)                                                                           |
 | `filesystem_params`      | String         | `nil`         | Additional parameters to pass to `mkfs` when formatting                                                                                   |
 | `mount_point`            | String, Hash   | `nil`         | Either a String path to mount the volume on, or a Hash (see below)                                                                        |
 | `lv_params`              | String         | `nil`         | Additional parameters to pass to `lvcreate`                                                                                               |
