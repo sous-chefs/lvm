@@ -16,10 +16,10 @@ property :wipe_signatures,
           description: 'Whether to wipe existing signatures before creating'
 
 action :create do
-  converge_if_changed do
-    if pv_exists?(new_resource.volume_name)
-      Chef::Log.info "Physical volume '#{new_resource.volume_name}' already exists. Skipping..."
-    else
+  if pv_exists?(new_resource.volume_name)
+    Chef::Log.info "Physical volume '#{new_resource.volume_name}' already exists. Skipping..."
+  else
+    converge_by("create physical volume #{new_resource.volume_name}") do
       yes_flag = new_resource.wipe_signatures ? '--yes' : ''
       lvm_raw("pvcreate #{yes_flag} #{new_resource.volume_name}".strip)
     end
@@ -27,12 +27,12 @@ action :create do
 end
 
 action :resize do
-  converge_if_changed do
-    if pv_exists?(new_resource.volume_name)
+  if pv_exists?(new_resource.volume_name)
+    converge_by("resize physical volume #{new_resource.volume_name}") do
       lvm_raw("pvresize #{new_resource.volume_name}")
-    else
-      Chef::Log.info "Physical volume '#{new_resource.volume_name}' does not exist. Cannot resize."
     end
+  else
+    Chef::Log.info "Physical volume '#{new_resource.volume_name}' does not exist. Cannot resize."
   end
 end
 

@@ -34,26 +34,15 @@ platforms:
 
 suites:
   - name: default
-    run_list:
-      - recipe[test::default]
   - name: create
-    run_list:
-      - recipe[test::create]
+    named_run_list: create
   - name: remove
-    run_list:
-      - recipe[test::remove]
+    named_run_list: remove
   - name: create-thin
-    run_list:
-      - recipe[test::create_thin]
+    named_run_list: create_thin
   - name: resize
-    run_list:
-      - recipe[test::create]
-      - recipe[test::resize]
+    named_run_list: resize
   - name: resize-thin
-    run_list:
-      - recipe[test::create_thin]
-      - recipe[test::resize_thin]
+    named_run_list: resize_thin
   - name: resize-thin-pool-meta-data
-    run_list:
-      - recipe[test::create_thin]
-      - recipe[test::resize_thin_pool_meta_data]
+    named_run_list: resize_thin_pool_meta_data

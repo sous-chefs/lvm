@@ -29,11 +29,11 @@ end
 
 execute 'extend loop10 device' do
   command <<-EOF
-dd if=/dev/zero bs=512 count=65536 >> /vfile0
+dd if=/dev/zero bs=512 count=65536 >> /vfile10
 losetup -c /dev/loop10
-touch /vfile0.extended
+touch /vfile10.extended
   EOF
-  not_if { ::File.exist?('/vfile0.extended') }
+  not_if { ::File.exist?('/vfile10.extended') }
 end
 
 lvm_physical_volume 'loop10_resize' do

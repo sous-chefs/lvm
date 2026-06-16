@@ -48,24 +48,32 @@ def logical_volume(name, &block)
   volume
 end
 
-action :create do
-  converge_if_changed do
-    # Ensure all physical volumes exist
-    new_resource.physical_volumes.each do |pv|
-      lvm_physical_volume pv do
-        wipe_signatures new_resource.wipe_signatures
-      end
-    end
+# DSL method for declaring nested thin pools within a volume group
+def thin_pool(name, &block)
+  @logical_volumes ||= []
+  volume = declare_resource(:lvm_thin_pool, name, created_at: caller.first, &block)
+  volume.action :nothing
+  @logical_volumes << volume
+  volume
+end
 
-    vg = find_vg(new_resource.vg_name)
-    if vg.nil?
-      # Create the volume group
+action :create do
+  # Ensure all physical volumes exist
+  new_resource.physical_volumes.each do |pv|
+    lvm_physical_volume pv do
+      wipe_signatures new_resource.wipe_signatures
+    end
+  end
+
+  vg = find_vg(new_resource.vg_name)
+  if vg.nil?
+    converge_by("create volume group #{new_resource.vg_name}") do
       pe_size = new_resource.physical_extent_size ? "-s #{new_resource.physical_extent_size}" : ''
       pvs = new_resource.physical_volumes.join(' ')
       lvm_raw("vgcreate #{pe_size} #{new_resource.vg_name} #{pvs}".strip)
-    else
-      Chef::Log.info "Volume group '#{new_resource.vg_name}' already exists. Skipping create..."
     end
+  else
+    Chef::Log.info "Volume group '#{new_resource.vg_name}' already exists. Skipping create..."
   end
 
   # Process nested logical volumes
@@ -73,21 +81,21 @@ action :create do
 end
 
 action :extend do
-  converge_if_changed do
-    vg = find_vg(new_resource.vg_name)
-    raise "Volume group '#{new_resource.vg_name}' does not exist" if vg.nil?
+  vg = find_vg(new_resource.vg_name)
+  raise "Volume group '#{new_resource.vg_name}' does not exist" if vg.nil?
 
-    current_pvs = list_pvs_in_vg(new_resource.vg_name).map { |pv| pv['pv_name'] }
+  current_pvs = list_pvs_in_vg(new_resource.vg_name).map { |pv| pv['pv_name'] }
 
-    new_resource.physical_volumes.each do |pv|
-      next if current_pvs.include?(pv)
+  new_resource.physical_volumes.each do |pv|
+    next if current_pvs.include?(pv)
 
-      # Create the PV if it doesn't exist
-      lvm_physical_volume pv do
-        wipe_signatures new_resource.wipe_signatures
-      end
+    # Create the PV if it doesn't exist
+    lvm_physical_volume pv do
+      wipe_signatures new_resource.wipe_signatures
+    end
 
-      # Extend the VG
+    # Extend the VG
+    converge_by("extend volume group #{new_resource.vg_name} with #{pv}") do
       lvm_raw("vgextend #{new_resource.vg_name} #{pv}")
     end
   end
