@@ -82,6 +82,9 @@ lvm_thin_volume 'app' do
 end
 ```
 
+If you are upgrading from the legacy recipe and attribute based cookbook, see the
+[migration guide](migration.md).
+
 ## Resources
 
 - [lvm_logical_volume](documentation/lvm_logical_volume.md)

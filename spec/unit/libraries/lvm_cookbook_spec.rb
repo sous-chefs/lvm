@@ -324,4 +324,24 @@ describe LVMCookbook do
       helper_raw.lvm_raw('lvcreate --size 10M --name lv-test vg-data')
     end
   end
+
+  describe '#normalized_mount_spec' do
+    it 'sets fstab defaults for a string mount point' do
+      expect(helper.normalized_mount_spec('/mnt/home')).to eq(
+        location: '/mnt/home',
+        options: 'defaults',
+        dump: 0,
+        pass: 2
+      )
+    end
+
+    it 'preserves explicit hash mount options' do
+      expect(helper.normalized_mount_spec(location: '/mnt/logs', options: 'noatime', dump: 1, pass: 0)).to eq(
+        location: '/mnt/logs',
+        options: 'noatime',
+        dump: 1,
+        pass: 0
+      )
+    end
+  end
 end

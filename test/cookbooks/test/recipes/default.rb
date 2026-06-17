@@ -40,8 +40,6 @@ loop_devices 'loop_devices' do
   action :create
 end
 
-# Creates the physical device
-log 'Creating physical volume for test'
 devices.each do |device|
   lvm_physical_volume device
 end

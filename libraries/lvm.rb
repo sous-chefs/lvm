@@ -101,6 +101,18 @@ module LVMCookbook
     result.stdout
   end
 
+  # Normalize string and hash mount point inputs to the values Chef writes to fstab.
+  #
+  # @param mount_point [String, Hash] mount point property value
+  # @return [Hash] normalized mount point options
+  def normalized_mount_spec(mount_point)
+    mount_spec = mount_point.is_a?(String) ? { location: mount_point } : mount_point.dup
+    mount_spec[:options] ||= 'defaults'
+    mount_spec[:dump] = 0 unless mount_spec.key?(:dump)
+    mount_spec[:pass] = 2 unless mount_spec.key?(:pass)
+    mount_spec
+  end
+
   # Converts the device name to the device-mapper name format.
   # LVM uses double-hyphens to escape single hyphens in DM names.
   #

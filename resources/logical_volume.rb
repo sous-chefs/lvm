@@ -95,11 +95,7 @@ action :create do
 
   # If the mount point is specified, mount the logical volume
   if new_resource.mount_point
-    mount_spec = if new_resource.mount_point.is_a?(String)
-                   { location: new_resource.mount_point }
-                 else
-                   new_resource.mount_point
-                 end
+    mount_spec = normalized_mount_spec(new_resource.mount_point)
 
     # Create the mount point
     dir_resource = directory mount_spec[:location] do
@@ -116,8 +112,8 @@ action :create do
     # Mount the logical volume
     mount_resource = mount mount_spec[:location] do
       options mount_spec[:options]
-      dump mount_spec[:dump] if mount_spec[:dump]
-      pass mount_spec[:pass] if mount_spec[:pass]
+      dump mount_spec[:dump]
+      pass mount_spec[:pass]
       device device_name
       fstype fs_type
       action :nothing
@@ -218,17 +214,13 @@ action :remove do
 
   # If the mount point is specified, umount the logical volume
   if mount_pt
-    mount_spec = if mount_pt.is_a?(String)
-                   { location: mount_pt }
-                 else
-                   mount_pt
-                 end
+    mount_spec = normalized_mount_spec(mount_pt)
 
     # Umount the logical volume
     mount_resource = mount mount_spec[:location] do
       options mount_spec[:options]
-      dump mount_spec[:dump] if mount_spec[:dump]
-      pass mount_spec[:pass] if mount_spec[:pass]
+      dump mount_spec[:dump]
+      pass mount_spec[:pass]
       device device_name
       action :nothing
     end
