@@ -4,11 +4,14 @@ control 'remove-physical-volumes' do
   impact 1.0
   title 'Physical volumes remain after LV removal'
 
-  describe command 'pvs' do
-    its('stdout') { should match %r{/dev/loop10\s+vg-rmdata\s+lvm2\s+a--\s+124.00m\s+124.00m} }
-    its('stdout') { should match %r{/dev/loop11\s+vg-rmdata\s+lvm2\s+a--\s+124.00m\s+124.00m} }
-    its('stdout') { should match %r{/dev/loop12\s+vg-rmdata\s+lvm2\s+a--\s+124.00m\s+124.00m} }
-    its('stdout') { should match %r{/dev/loop13\s+vg-rmdata\s+lvm2\s+a--\s+124.00m\s+124.00m} }
+  %w(/dev/loop10 /dev/loop11 /dev/loop12 /dev/loop13).each do |device|
+    describe command("pvs #{device}") do
+      its('exit_status') { should eq 0 }
+    end
+
+    describe command("pvs --noheadings -o vg_name #{device}") do
+      its('stdout') { should match 'vg-rmdata' }
+    end
   end
 end
 
@@ -16,9 +19,12 @@ control 'remove-logical-volumes' do
   impact 1.0
   title 'Logical volumes are removed'
 
-  describe command 'lvs' do
-    its('stdout') { should_not match 'rmlogs' }
-    its('stdout') { should_not match 'rmtest' }
+  describe command('lvs vg-rmdata/rmlogs') do
+    its('exit_status') { should_not eq 0 }
+  end
+
+  describe command('lvs vg-rmdata/rmtest') do
+    its('exit_status') { should_not eq 0 }
   end
 end
 

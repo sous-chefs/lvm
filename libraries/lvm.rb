@@ -1,87 +1,123 @@
 # frozen_string_literal: true
 
 #
-# Copyright:: Chef Software, Inc.
-# License:: Apache License, Version 2.0
+# LVMCookbook - Helper module for querying LVM state using JSON output
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+# Uses LVM2's built-in --reportformat json (available since 2.02.158, 2017)
+# with --units b --nosuffix to get consistent byte values for size calculations.
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+# All query methods return Ruby hashes (or nil/empty array) rather than objects,
+# eliminating the need for the chef-ruby-lvm and chef-ruby-lvm-attrib gems.
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 module LVMCookbook
-  LVM_GEM_VERSION = '0.4.3'
-  LVM_ATTRIB_GEM_VERSION = '0.6.0'
+  require 'json'
 
-  def lvm_gem_version
-    node.dig('lvm', 'chef-ruby-lvm-version') || LVM_GEM_VERSION
+  # Run an LVM report command and parse the JSON output.
+  # Returns the parsed array of report entries for the given report key.
+  #
+  # @param cmd [String] the LVM command (pvs, vgs, lvs)
+  # @param report_key [String] the JSON key containing results ('pv', 'vg', 'lv')
+  # @param additional_args [String, nil] extra arguments (e.g. '--ignoreskippedcluster')
+  # @return [Array<Hash>] parsed results
+  def lvm_report(cmd, report_key, additional_args: nil)
+    full_cmd = "#{cmd} --reportformat json --units b --nosuffix #{additional_args}".strip
+    result = shell_out!(full_cmd, returns: [0, 5])
+    data = JSON.parse(result.stdout)
+    data.dig('report', 0, report_key) || []
+  rescue JSON::ParserError => e
+    Chef::Log.warn("Failed to parse LVM JSON output for '#{cmd}': #{e.message}")
+    []
   end
 
-  def lvm_attrib_gem_version
-    node.dig('lvm', 'chef-ruby-lvm-attrib-version') || LVM_ATTRIB_GEM_VERSION
+  # Find a physical volume by device name.
+  #
+  # @param device [String] device path (e.g. '/dev/sdb')
+  # @return [Hash, nil] PV info hash or nil if not found
+  def find_pv(device)
+    pvs = lvm_report('pvs -o pv_name,vg_name,pv_size,pv_free,pv_attr', 'pv')
+    pvs.find { |pv| pv['pv_name'] == device }
   end
 
-  def require_lvm_gems
-    return if defined?(LVM)
-
-    gem 'chef-ruby-lvm-attrib', lvm_attrib_gem_version
-    gem 'chef-ruby-lvm', lvm_gem_version
-    require 'lvm'
-    patch_lvm_version_parsing
-    Chef::Log.debug("Node had chef-ruby-lvm-attrib #{lvm_attrib_gem_version} and chef-ruby-lvm #{lvm_gem_version} installed. No need to install gems.")
-  rescue LoadError
-    Chef::Log.debug('Did not find lvm gems of the specified versions installed. Installing now')
-
-    rubygems_url = Chef::Config['rubygems_url']
-
-    chef_gem 'chef-ruby-lvm-attrib' do
-      action :install
-      version lvm_attrib_gem_version
-      source rubygems_url
-      clear_sources true
-      compile_time true
-    end
-
-    chef_gem 'chef-ruby-lvm' do
-      action :install
-      version lvm_gem_version
-      source rubygems_url
-      clear_sources true
-      compile_time true
-    end
-
-    require 'lvm'
-    patch_lvm_version_parsing
+  # Find a volume group by name.
+  #
+  # @param name [String] volume group name
+  # @return [Hash, nil] VG info hash or nil if not found
+  def find_vg(name)
+    vgs = lvm_report('vgs -o vg_name,vg_attr,vg_extent_size,vg_extent_count,vg_free_count', 'vg')
+    vgs.find { |vg| vg['vg_name'] == name }
   end
 
-  # Workaround for chef-ruby-lvm version parsing bug. On RHEL-based distros the
-  # LVM version string includes a distro suffix inside the parentheses, e.g.
-  # "2.03.32(2-RHEL10)". The upstream regex ^(.*?)(-| ) captures "2.03.32(2"
-  # (stopping at the first hyphen), which doesn't match any attributes directory.
-  # This patch extracts the base version with numeric paren suffix, e.g.
-  # "2.03.32(2-RHEL10)" becomes "2.03.32(2)".
-  # TODO: Remove once chef-ruby-lvm is fixed upstream
-  def patch_lvm_version_parsing
-    return if LVM::LVM.method_defined?(:_lvm_cookbook_version_patched)
+  # Find a logical volume by name within a volume group.
+  #
+  # @param lv_name [String] logical volume name
+  # @param vg_name [String] volume group name
+  # @return [Hash, nil] LV info hash or nil if not found
+  def find_lv(lv_name, vg_name)
+    lvs = lvm_report("lvs -a -o lv_name,vg_name,lv_attr,lv_size,pool_lv,metadata_lv #{vg_name}", 'lv')
+    lvs.find { |lv| lv['lv_name'] == lv_name }
+  end
 
-    LVM::LVM.class_eval do
-      def version
-        ver_str = userland.lvm_version
-        match = ver_str.match(/^([\d.]+)\((\d+)[^)]*\)/)
-        match ? "#{match[1]}(#{match[2]})" : ver_str.split(/[-\s]/).first
-      end
+  # List all logical volumes in a volume group.
+  #
+  # @param vg_name [String] volume group name
+  # @return [Array<Hash>] array of LV info hashes
+  def list_lvs(vg_name)
+    lvm_report("lvs -a -o lv_name,vg_name,lv_attr,lv_size,pool_lv,metadata_lv,lv_metadata_size #{vg_name}", 'lv')
+  end
 
-      def _lvm_cookbook_version_patched
-        true
-      end
-    end
+  # Get volume group extent information needed for size calculations.
+  #
+  # @param vg_name [String] volume group name
+  # @return [Hash] with keys :extent_size, :extent_count, :free_count (all integers, bytes for extent_size)
+  def vg_extent_info(vg_name)
+    vg = find_vg(vg_name)
+    raise "Volume group '#{vg_name}' does not exist" if vg.nil?
+
+    {
+      extent_size: vg['vg_extent_size'].to_i,
+      extent_count: vg['vg_extent_count'].to_i,
+      free_count: vg['vg_free_count'].to_i,
+    }
+  end
+
+  # List physical volumes that belong to a given volume group.
+  #
+  # @param vg_name [String] volume group name
+  # @return [Array<Hash>] array of PV info hashes
+  def list_pvs_in_vg(vg_name)
+    pvs = lvm_report('pvs -o pv_name,vg_name', 'pv')
+    pvs.select { |pv| pv['vg_name'] == vg_name }
+  end
+
+  # Run a raw LVM command (for create/modify/delete operations).
+  #
+  # @param command [String] the full LVM command
+  # @param args [Hash] additional shell_out options
+  # @return [String] command stdout
+  def lvm_raw(command, **args)
+    Chef::Log.debug("Executing LVM command: '#{command}'")
+    result = shell_out!(command, **args)
+    Chef::Log.debug("Command output: '#{result.stdout}'")
+    result.stdout
+  end
+
+  # Converts the device name to the device-mapper name format.
+  # LVM uses double-hyphens to escape single hyphens in DM names.
+  #
+  # @param name [String] VG or LV name
+  # @return [String] DM-safe name
+  def to_dm_name(name)
+    name.gsub('-', '--')
+  end
+
+  # Checks if a device is formatted with the given file system type.
+  #
+  # @param device_name [String] device path
+  # @param fs_type [String] filesystem type to check for
+  # @return [Boolean]
+  def device_formatted?(device_name, fs_type)
+    Chef::Log.debug("Checking to see if #{device_name} is formatted...")
+    blkid = shell_out("blkid #{device_name}")
+    blkid.exitstatus == 0 && blkid.stdout.strip.include?(fs_type.strip)
   end
 end

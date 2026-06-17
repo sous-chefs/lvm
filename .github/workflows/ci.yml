@@ -8,7 +8,7 @@ name: "Lint & Unit Test"
 
 jobs:
   lint-unit:
-    uses: sous-chefs/.github/.github/workflows/lint-unit.yml@main
+    uses: sous-chefs/.github/.github/workflows/lint-unit.yml@8.0.4
     permissions:
       actions: write
       checks: write
@@ -18,32 +18,58 @@ jobs:
 
   integration:
     needs: lint-unit
-    # Temporary pin: keep this on 22.04 until we migrate off Vagrant/VirtualBox.
-    # Follow-up required before ubuntu-22.04 runner EOL.
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - os: ubuntu-22.04
-            suite: default
-          - os: ubuntu-22.04
-            suite: create
-          - os: ubuntu-22.04
-            suite: remove
-          - os: ubuntu-22.04
-            suite: create-thin
-          - os: ubuntu-22.04
-            suite: resize
-          - os: ubuntu-22.04
-            suite: resize-thin
-          - os: ubuntu-22.04
-            suite: resize-thin-pool-meta-data
+        os:
+          - almalinux-8
+          - almalinux-9
+          - almalinux-10
+          - amazonlinux-2023
+          - debian-12
+          - debian-13
+          - centos-stream-9
+          - centos-stream-10
+          - fedora-latest
+          - ubuntu-2204
+          - ubuntu-2404
+          - ubuntu-2604
+          - rockylinux-8
+          - rockylinux-9
+          - rockylinux-10
+        suite:
+          - default
+          - create
+          - remove
+          - create-thin
+          - resize
+          - resize-thin
+          - resize-thin-pool-meta-data
       fail-fast: false
 
     steps:
       - name: Check out code
         uses: actions/checkout@v6
-      - name: Install Chef
+      - name: Setup HashiCorp Vagrant
+        run: |
+          wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+          sudo apt update
+          sudo apt install -y vagrant
+      - name: Setup Virtualbox
+        run: |
+          echo "deb [signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/debian $(lsb_release -cs) contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
+          wget -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo gpg --yes --output /usr/share/keyrings/oracle-virtualbox-2016.gpg --dearmor
+          sudo apt-get update
+          # updated vbox install to 7.2. New releases of bento boxes are now starting to default to EFI versions and vbox 7.1 added support for nvram settings.
+          # GHA ubuntu 24.04 doesn't have vbox 7.1+ in it's default repo just 7.0.x and thus requires a specific version to be specified to use vbox repos
+          # TODO: When 26.04 Ubuntu is available for GHA runners if it has vbox 7.1 or greater in it's default repos we can revert back to using more future proof `virtualbox` pkg name without version specified.
+          sudo apt-get install -y build-essential software-properties-common virtualbox-7.2
+      - name: Check versions
+        run: |
+          vagrant --version
+          vboxmanage --version
+      - name: Install Chef Workstation
         uses: sous-chefs/.github/.github/actions/install-workstation@main
       - name: test-kitchen
         uses: actionshub/test-kitchen@3.0.0

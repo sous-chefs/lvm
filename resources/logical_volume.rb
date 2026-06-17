@@ -38,7 +38,7 @@ property :contiguous,
 
 property :readahead,
           [Integer, String],
-          equal_to: [2..120, 'auto', 'none'].flatten!,
+          equal_to: [*2..120, 'auto', 'none'],
           description: 'Read ahead sector count of the logical volume'
 
 property :take_up_free_space,
@@ -55,10 +55,8 @@ property :remove_mount_point,
           description: 'Whether to remove the mount location/directory on :remove action'
 
 action :create do
-  require_lvm_gems
   install_filesystem_deps
 
-  lvm = LVM::LVM.new(lvm_options)
   name = new_resource.lv_name
   group = new_resource.group
   fs_type = new_resource.filesystem
@@ -66,24 +64,21 @@ action :create do
   device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
   updates = []
 
-  vg = lvm.volume_groups[group]
+  lv = find_lv(name, group)
+
   # Create the logical volume
-  if vg.nil? || vg.logical_volumes.none? { |lv| lv.name == name }
+  if lv.nil?
     command = create_command
-    Chef::Log.debug "Executing lvm command: '#{command}'"
-    output = lvm.raw(command)
-    Chef::Log.debug "Command output: '#{output}'"
+    lvm_raw(command)
     updates << true
   else
-    lv = vg.logical_volumes.find { |v| v.name == name }
-    if !lv.state.nil? && lv.state.to_sym == :active
+    lv_attr = lv['lv_attr'] || ''
+    # lv_attr character 5 is volume state: 'a' = active
+    if lv_attr[4] == 'a'
       Chef::Log.info "Logical volume '#{name}' already exists and active. Not creating..."
     else
       Chef::Log.info "Logical volume '#{name}' already created and inactive. Activating now..."
-      command = "lvchange -a y #{device_name}"
-      Chef::Log.debug "Executing lvm command: '#{command}'"
-      output = lvm.raw(command)
-      Chef::Log.debug "Command output: '#{output}'"
+      lvm_raw("lvchange -a y #{device_name}")
       updates << true
     end
   end
@@ -100,7 +95,6 @@ action :create do
 
   # If the mount point is specified, mount the logical volume
   if new_resource.mount_point
-
     mount_spec = if new_resource.mount_point.is_a?(String)
                    { location: new_resource.mount_point }
                  else
@@ -117,7 +111,6 @@ action :create do
       not_if { Pathname.new(mount_spec[:location]).mountpoint? }
     end
     dir_resource.run_action(:create)
-    # Mark the resource as updated if the directory resource is updated
     updates << dir_resource.updated?
 
     # Mount the logical volume
@@ -131,7 +124,6 @@ action :create do
     end
     mount_resource.run_action(:mount)
     mount_resource.run_action(:enable)
-    # Mark the resource as updated if the mount resource is updated
     updates << mount_resource.updated?
   end
   new_resource.updated_by_last_action(updates.any?)
@@ -139,27 +131,18 @@ end
 
 # Action to resize LV to specified size
 action :resize do
-  require_lvm_gems
-  lvm = LVM::LVM.new(lvm_options)
   name = new_resource.lv_name
   group = new_resource.group
 
-  vg = lvm.volume_groups[group]
-  # if doing a resize make sure that the volume exists before doing anything
+  ext_info = vg_extent_info(group)
+  pe_size = ext_info[:extent_size]
+  pe_free = ext_info[:free_count]
+  pe_count = ext_info[:extent_count]
 
-  raise("Error volume group #{group} does not exist") if vg.nil?
+  lv = find_lv(name, group)
+  raise "Logical volume '#{name}' does not exist in volume group '#{group}'" if lv.nil?
 
-  lv = vg.logical_volumes.select do |lvs|
-    lvs.name == name
-  end
-  # make sure that the LV specified exists in the VG specified
-  raise("Error logical volume #{name} does not exist") if lv.empty?
-
-  lv = lv.first
-  pe_size = lvm.volume_groups[group].extent_size.to_i
-  pe_free = lvm.volume_groups[group].free_count.to_i
-  pe_count = lvm.volume_groups[group].extent_count.to_i
-  lv_size_cur = lv.size.to_i / pe_size
+  lv_size_cur = lv['lv_size'].to_i / pe_size
 
   lv_size = new_resource.size
   lv_size = '100%FREE' if new_resource.respond_to?(:take_up_free_space) && new_resource.take_up_free_space
@@ -175,7 +158,6 @@ action :resize do
                 end
 
   # calculate extents based off of an explicit size
-  # if not suffix is supplied assume extents is what is being specified
   if resize_type == 'byte' || resize_type == 'extent'
     lv_size_req = case lv_size
                   when /^(\d+)(k|K)$/
@@ -189,7 +171,7 @@ action :resize do
                   when /^(\d+)$/
                     Regexp.last_match[1].to_i
                   else
-                    raise("Invalid size #{Regexp.last_match[1]} for lvm resize")
+                    raise("Invalid size #{lv_size} for lvm resize")
                   end
   # calculate the number of extents needed differently if specifying a percentage
   elsif resize_type == 'percent'
@@ -208,18 +190,16 @@ action :resize do
     raise("Invalid size specification #{lv_size}")
   end
 
-  raise("Error trying to extend logical volume #{lv.name} beyond the capacity of volume group #{group}") if !thin_volume? && (lv_size_req - lv_size_cur) > pe_free
+  raise("Error trying to extend logical volume #{name} beyond the capacity of volume group #{group}") if !thin_volume? && (lv_size_req - lv_size_cur) > pe_free
 
   # don't resize if the current size is greater than or equal to the target size
   if lv_size_cur >= lv_size_req
-    Chef::Log.debug "Logical volume #{lv.name} in volume group #{group} already at requested size"
+    Chef::Log.debug "Logical volume #{name} in volume group #{group} already at requested size"
   else
-    Chef::Log.debug "Resizing logical volume #{lv.name} from #{lv_size_cur} pe to #{lv_size_req} pe with #{pe_free} pe left in volume group #{group}"
+    Chef::Log.debug "Resizing logical volume #{name} from #{lv_size_cur} pe to #{lv_size_req} pe with #{pe_free} pe left in volume group #{group}"
 
     command = resize_command(lv_size_req)
-    Chef::Log.debug "Running command: #{command}"
-    output = lvm.raw command
-    Chef::Log.debug "Command output: #{output}"
+    lvm_raw(command)
 
     # broadcast that we did a resize
     new_resource.updated_by_last_action true
@@ -228,10 +208,8 @@ end
 
 # The remove action
 action :remove do
-  require_lvm_gems
   install_filesystem_deps
 
-  lvm = LVM::LVM.new(lvm_options)
   name = new_resource.lv_name
   group = new_resource.group
   mount_pt = new_resource.mount_point
@@ -256,7 +234,6 @@ action :remove do
     end
     mount_resource.run_action(:umount)
     mount_resource.run_action(:disable)
-    # Mark the resource as updated if the mount resource is updated
     updates << mount_resource.updated?
 
     # If specified, remove the mount point
@@ -267,20 +244,17 @@ action :remove do
         not_if { Pathname.new(mount_spec[:location]).mountpoint? }
       end
       dir_resource.run_action(:delete)
-      # Mark the resource as updated if the directory resource is updated
       updates << dir_resource.updated?
     end
   end
 
-  vg = lvm.volume_groups[group]
+  lv = find_lv(name, group)
   # Remove the logical volume
-  if vg.logical_volumes.select { |lv| lv.name == name }
+  if lv
     command = remove_command
-    Chef::Log.debug "Executing lvm command: '#{command}'"
-    output = lvm.raw(command)
-    Chef::Log.debug "Command output: '#{output}'"
+    lvm_raw(command)
   else
-    Chef::Log.info "Logical volume '#{name}' unable to be removed. Not removing..."
+    Chef::Log.info "Logical volume '#{name}' does not exist. Not removing..."
   end
   updates << true
   new_resource.updated_by_last_action(updates.any?)
@@ -288,10 +262,6 @@ end
 
 action_class do
   include LVMCookbook
-
-  def lvm_options
-    new_resource.ignore_skipped_cluster ? { additional_arguments: '--ignoreskippedcluster' } : {}
-  end
 
   def thin_volume?
     false
@@ -359,17 +329,5 @@ action_class do
     device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
 
     "lvremove #{device_name} #{lv_params} --force"
-  end
-
-  # Converts the device name to the dm name format
-  def to_dm_name(name)
-    name.gsub('-', '--')
-  end
-
-  # Checks if the device is formatted with the given file system type
-  def device_formatted?(device_name, fs_type)
-    Chef::Log.debug "Checking to see if #{device_name} is formatted..."
-    blkid = shell_out("blkid #{device_name}")
-    blkid.exitstatus == 0 && blkid.stdout.strip.include?(fs_type.strip)
   end
 end

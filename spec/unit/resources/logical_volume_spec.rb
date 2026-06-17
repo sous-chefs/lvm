@@ -83,4 +83,96 @@ describe 'lvm_logical_volume' do
 
     it { is_expected.to remove_lvm_logical_volume('test_lv').with(remove_mount_point: true) }
   end
+
+  context 'action :create with lv_name property' do
+    recipe do
+      lvm_logical_volume 'my_resource' do
+        lv_name 'actual-lv-name'
+        group 'vg-data'
+        size '10M'
+      end
+    end
+
+    it { is_expected.to create_lvm_logical_volume('my_resource').with(lv_name: 'actual-lv-name') }
+  end
+
+  context 'action :create with take_up_free_space' do
+    recipe do
+      lvm_logical_volume 'free_space_lv' do
+        group 'vg-data'
+        take_up_free_space true
+        filesystem 'ext4'
+        mount_point '/mnt/free'
+      end
+    end
+
+    it { is_expected.to create_lvm_logical_volume('free_space_lv').with(take_up_free_space: true) }
+  end
+
+  context 'action :create with ignore_skipped_cluster' do
+    recipe do
+      lvm_logical_volume 'cluster_lv' do
+        group 'vg-data'
+        size '10M'
+        ignore_skipped_cluster true
+      end
+    end
+
+    it { is_expected.to create_lvm_logical_volume('cluster_lv').with(ignore_skipped_cluster: true) }
+  end
+
+  context 'action :create with lv_params' do
+    recipe do
+      lvm_logical_volume 'params_lv' do
+        group 'vg-data'
+        size '10M'
+        lv_params '--type raid1'
+      end
+    end
+
+    it { is_expected.to create_lvm_logical_volume('params_lv').with(lv_params: '--type raid1') }
+  end
+
+  context 'action :create with mount_point as a hash' do
+    recipe do
+      lvm_logical_volume 'hash_mount_lv' do
+        group 'vg-data'
+        size '10M'
+        filesystem 'ext4'
+        mount_point location: '/mnt/data', options: 'noatime,nodiratime', dump: 0, pass: 2
+      end
+    end
+
+    it do
+      is_expected.to create_lvm_logical_volume('hash_mount_lv').with(
+        mount_point: { location: '/mnt/data', options: 'noatime,nodiratime', dump: 0, pass: 2 }
+      )
+    end
+  end
+
+  context 'action :create with contiguous and readahead' do
+    recipe do
+      lvm_logical_volume 'tuned_lv' do
+        group 'vg-data'
+        size '10M'
+        contiguous true
+        readahead 'auto'
+      end
+    end
+
+    it { is_expected.to create_lvm_logical_volume('tuned_lv').with(contiguous: true, readahead: 'auto') }
+  end
+
+  context 'action :create with stripe_size' do
+    recipe do
+      lvm_logical_volume 'stripe_lv' do
+        group 'vg-data'
+        size '10M'
+        stripes 2
+        stripe_size 64
+      end
+    end
+
+    it { is_expected.to create_lvm_logical_volume('stripe_lv').with(stripes: 2, stripe_size: 64) }
+  end
 end

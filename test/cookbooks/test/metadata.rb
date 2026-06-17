@@ -6,6 +6,6 @@ maintainer_email  'help@sous-chefs.org'
 license           'Apache-2.0'
 description       'A test cookbook for lvm'
 version           '0.1.0'
-chef_version      '>= 15.3'
+chef_version      '>= 16.0'
 
 depends 'lvm'

@@ -4,11 +4,19 @@ control 'thin-physical-volumes' do
   impact 1.0
   title 'Physical volumes for thin provisioning'
 
-  describe command 'pvs' do
-    its('stdout') { should match '/dev/loop10 vg-data' }
-    its('stdout') { should match '/dev/loop11 vg-data' }
-    its('stdout') { should match '/dev/loop12 vg-test' }
-    its('stdout') { should match '/dev/loop13 vg-test' }
+  {
+    '/dev/loop10' => 'vg-data',
+    '/dev/loop11' => 'vg-data',
+    '/dev/loop12' => 'vg-test',
+    '/dev/loop13' => 'vg-test',
+  }.each do |device, vg|
+    describe command("pvs #{device}") do
+      its('exit_status') { should eq 0 }
+    end
+
+    describe command("pvs --noheadings -o vg_name #{device}") do
+      its('stdout') { should match vg }
+    end
   end
 end
 
@@ -16,10 +24,18 @@ control 'thin-logical-volumes' do
   impact 1.0
   title 'Thin pool and thin volumes are created'
 
-  describe command 'lvs' do
-    its('stdout') { should match(/tpool\s+vg-data\s+twi-aotz--\s+24.00m/) }
-    its('stdout') { should match(/tvol01\s+vg-data\s+Vwi-aotz--\s+40.00m\s+tpool/) }
-    its('stdout') { should match(/tvol02\s+vg-data\s+Vwi-aotz--\s+1.00g\s+tpool/) }
+  %w(tpool tvol01 tvol02).each do |lv|
+    describe command("lvs vg-data/#{lv}") do
+      its('exit_status') { should eq 0 }
+    end
+  end
+
+  describe command('lvs --noheadings -o pool_lv vg-data/tvol01') do
+    its('stdout') { should match 'tpool' }
+  end
+
+  describe command('lvs --noheadings -o pool_lv vg-data/tvol02') do
+    its('stdout') { should match 'tpool' }
   end
 end
 

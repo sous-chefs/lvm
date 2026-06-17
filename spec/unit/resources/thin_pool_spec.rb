@@ -45,4 +45,15 @@ describe 'lvm_thin_pool' do
 
     it { is_expected.to resize_lvm_thin_pool('lv-thin') }
   end
+
+  context 'action :create with percentage size' do
+    recipe do
+      lvm_thin_pool 'lv-thin' do
+        group 'vg-data'
+        size '50%VG'
+      end
+    end
+
+    it { is_expected.to create_lvm_thin_pool('lv-thin').with(size: '50%VG') }
+  end
 end

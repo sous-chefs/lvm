@@ -38,7 +38,7 @@ property :contiguous,
 
 property :readahead,
           [Integer, String],
-          equal_to: [2..120, 'auto', 'none'].flatten!,
+          equal_to: [*2..120, 'auto', 'none'],
           description: 'Read ahead sector count of the logical volume'
 
 property :take_up_free_space,
@@ -68,10 +68,8 @@ def thin_volume(name, &block)
 end
 
 action :create do
-  require_lvm_gems
   install_filesystem_deps
 
-  lvm = LVM::LVM.new(lvm_options)
   name = new_resource.lv_name
   group = new_resource.group
   fs_type = new_resource.filesystem
@@ -79,24 +77,20 @@ action :create do
   device_name = "/dev/mapper/#{to_dm_name(group)}-#{to_dm_name(name)}"
   updates = []
 
-  vg = lvm.volume_groups[group]
+  lv = find_lv(name, group)
+
   # Create the logical volume (thin pool)
-  if vg.nil? || vg.logical_volumes.none? { |lv| lv.name == name }
+  if lv.nil?
     command = create_command
-    Chef::Log.debug "Executing lvm command: '#{command}'"
-    output = lvm.raw(command)
-    Chef::Log.debug "Command output: '#{output}'"
+    lvm_raw(command)
     updates << true
   else
-    lv = vg.logical_volumes.find { |v| v.name == name }
-    if !lv.state.nil? && lv.state.to_sym == :active
+    lv_attr = lv['lv_attr'] || ''
+    if lv_attr[4] == 'a'
       Chef::Log.info "Logical volume '#{name}' already exists and active. Not creating..."
     else
       Chef::Log.info "Logical volume '#{name}' already created and inactive. Activating now..."
-      command = "lvchange -a y #{device_name}"
-      Chef::Log.debug "Executing lvm command: '#{command}'"
-      output = lvm.raw(command)
-      Chef::Log.debug "Command output: '#{output}'"
+      lvm_raw("lvchange -a y #{device_name}")
       updates << true
     end
   end
@@ -149,22 +143,18 @@ action :create do
 end
 
 action :resize do
-  require_lvm_gems
-  lvm = LVM::LVM.new(lvm_options)
   name = new_resource.lv_name
   group = new_resource.group
 
-  vg = lvm.volume_groups[group]
-  raise("Error volume group #{group} does not exist") if vg.nil?
+  ext_info = vg_extent_info(group)
+  pe_size = ext_info[:extent_size]
+  pe_free = ext_info[:free_count]
+  pe_count = ext_info[:extent_count]
 
-  lv = vg.logical_volumes.select { |lvs| lvs.name == name }
-  raise("Error logical volume #{name} does not exist") if lv.empty?
+  lv = find_lv(name, group)
+  raise "Logical volume '#{name}' does not exist in volume group '#{group}'" if lv.nil?
 
-  lv = lv.first
-  pe_size = lvm.volume_groups[group].extent_size.to_i
-  pe_free = lvm.volume_groups[group].free_count.to_i
-  pe_count = lvm.volume_groups[group].extent_count.to_i
-  lv_size_cur = lv.size.to_i / pe_size
+  lv_size_cur = lv['lv_size'].to_i / pe_size
 
   lv_size = new_resource.size
   lv_size = '100%FREE' if new_resource.respond_to?(:take_up_free_space) && new_resource.take_up_free_space
@@ -191,7 +181,7 @@ action :resize do
                   when /^(\d+)$/
                     Regexp.last_match[1].to_i
                   else
-                    raise("Invalid size #{Regexp.last_match[1]} for lvm resize")
+                    raise("Invalid size #{lv_size} for lvm resize")
                   end
   elsif resize_type == 'percent'
     percent, type = lv_size.scan(/(\d{1,2}|100)%(FREE|VG|PVS)/).first
@@ -210,14 +200,12 @@ action :resize do
   end
 
   if lv_size_cur >= lv_size_req
-    Chef::Log.debug "Logical volume #{lv.name} in volume group #{group} already at requested size"
+    Chef::Log.debug "Logical volume #{name} in volume group #{group} already at requested size"
   else
-    Chef::Log.debug "Resizing logical volume #{lv.name} from #{lv_size_cur} pe to #{lv_size_req} pe"
+    Chef::Log.debug "Resizing logical volume #{name} from #{lv_size_cur} pe to #{lv_size_req} pe"
 
     command = resize_command(lv_size_req)
-    Chef::Log.debug "Running command: #{command}"
-    output = lvm.raw command
-    Chef::Log.debug "Command output: #{output}"
+    lvm_raw(command)
 
     new_resource.updated_by_last_action true
   end
@@ -228,10 +216,6 @@ end
 
 action_class do
   include LVMCookbook
-
-  def lvm_options
-    new_resource.ignore_skipped_cluster ? { additional_arguments: '--ignoreskippedcluster' } : {}
-  end
 
   def thin_volume?
     false
@@ -291,16 +275,6 @@ action_class do
     lv_params = new_resource.lv_params
 
     "lvextend -l #{lv_size_req} #{resize_fs} #{stripes} #{stripe_size} #{mirrors} #{device_name} #{lv_params}"
-  end
-
-  def to_dm_name(name)
-    name.gsub('-', '--')
-  end
-
-  def device_formatted?(device_name, fs_type)
-    Chef::Log.debug "Checking to see if #{device_name} is formatted..."
-    blkid = shell_out("blkid #{device_name}")
-    blkid.exitstatus == 0 && blkid.stdout.strip.include?(fs_type.strip)
   end
 
   def process_thin_volumes(action)

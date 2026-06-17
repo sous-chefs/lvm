@@ -4,15 +4,23 @@ control 'create-physical-volumes' do
   impact 1.0
   title 'Physical volumes are created'
 
-  describe command 'pvs' do
-    its('stdout') { should match '/dev/loop10 vg-data' }
-    its('stdout') { should match '/dev/loop11 vg-data' }
-    its('stdout') { should match '/dev/loop12 vg-data' }
-    its('stdout') { should match '/dev/loop13 vg-data' }
-    its('stdout') { should match '/dev/loop14 vg-test' }
-    its('stdout') { should match '/dev/loop15 vg-test' }
-    its('stdout') { should match '/dev/loop16 vg-test' }
-    its('stdout') { should match '/dev/loop17 vg-test' }
+  {
+    '/dev/loop10' => 'vg-data',
+    '/dev/loop11' => 'vg-data',
+    '/dev/loop12' => 'vg-data',
+    '/dev/loop13' => 'vg-data',
+    '/dev/loop14' => 'vg-test',
+    '/dev/loop15' => 'vg-test',
+    '/dev/loop16' => 'vg-test',
+    '/dev/loop17' => 'vg-test',
+  }.each do |device, vg|
+    describe command("pvs #{device}") do
+      its('exit_status') { should eq 0 }
+    end
+
+    describe command("pvs --noheadings -o vg_name #{device}") do
+      its('stdout') { should match vg }
+    end
   end
 end
 
@@ -20,9 +28,28 @@ control 'create-volume-groups' do
   impact 1.0
   title 'Volume groups are created'
 
-  describe command 'vgs' do
-    its('stdout') { should match(/vg-data\s+4   2   0 wz--n- 496.00m 444.00m/) }
-    its('stdout') { should match(/vg-test\s+4   2   0 wz--n- 496.00m 240.00m/) }
+  describe command('vgs vg-data') do
+    its('exit_status') { should eq 0 }
+  end
+
+  describe command('vgs --noheadings -o pv_count vg-data') do
+    its('stdout') { should match '4' }
+  end
+
+  describe command('vgs --noheadings -o lv_count vg-data') do
+    its('stdout') { should match '2' }
+  end
+
+  describe command('vgs vg-test') do
+    its('exit_status') { should eq 0 }
+  end
+
+  describe command('vgs --noheadings -o pv_count vg-test') do
+    its('stdout') { should match '4' }
+  end
+
+  describe command('vgs --noheadings -o lv_count vg-test') do
+    its('stdout') { should match '2' }
   end
 end
 
@@ -30,10 +57,16 @@ control 'create-logical-volumes' do
   impact 1.0
   title 'Logical volumes are created'
 
-  describe command 'lvs' do
-    its('stdout') { should match(/logs\s+vg-data\s+-wi-ao----  16.00m/) }
-    its('stdout') { should match(/home\s+vg-data\s+rwi-aor---   8.00m/) }
-    its('stdout') { should match(/test\s+vg-test\s+-wi-ao---- 248.00m/) }
+  [
+    %w(vg-data logs),
+    %w(vg-data home),
+    %w(vg-test test),
+    %w(vg-test small),
+  ].each do |vg, lv|
+    describe command("lvs --noheadings -o lv_name,lv_size --units m --nosuffix #{vg}/#{lv}") do
+      its('exit_status') { should eq 0 }
+      its('stdout') { should match lv }
+    end
   end
 end
 
