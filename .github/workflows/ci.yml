@@ -78,6 +78,7 @@ jobs:
         uses: actionshub/test-kitchen@3.0.0
         env:
           CHEF_LICENSE: accept-no-persist
+          CHEF_PRODUCT_NAME: cinc
           KITCHEN_LOCAL_YAML: kitchen.yml
         with:
           suite: ${{ matrix.suite }}
