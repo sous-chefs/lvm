@@ -2,8 +2,6 @@
 
 name 'lvm'
 
-default_source :supermarket
-
 run_list 'test::default'
 
 named_run_list :create, 'test::create'
