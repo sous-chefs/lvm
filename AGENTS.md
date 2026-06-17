@@ -139,6 +139,27 @@ run list directly at the suite level with `named_run_list:`.
 - Each suite has its own InSpec profile matching the kitchen suite name
 - Tests validate actual LVM state (pvs, vgs, lvs commands, mount points)
 
+## Mandatory Documentation & Test Updates
+
+Any code change — whether an addition, modification, or removal — **must** include corresponding
+updates to all affected artifacts. Do not consider work complete until each of these is addressed:
+
+1. **README.md** — Update usage examples, property tables, or platform lists if the change affects
+   the public API or supported configurations
+2. **Spec tests** (`spec/unit/`) — Add or update ChefSpec unit tests covering the changed behavior;
+   ensure all existing specs still pass
+3. **Integration tests** (`test/integration/`) — Add or update InSpec controls if the change
+   affects observable system state (LVM objects, mounts, filesystems)
+4. **Test cookbook** (`test/cookbooks/test/`) — Update test recipes if resources gain new properties,
+   actions, or behavior
+5. **AGENTS.md** — Update this file if the change affects architecture, conventions, command
+   patterns, design patterns, or any other guidance that future AI contributors need to know
+6. **Policyfile.rb** — Update named run lists if new test recipes are added or existing ones are
+   renamed/removed
+
+Skipping any of these creates drift that will cause future contributors (human or AI) to produce
+incorrect work.
+
 ## Historical Context
 
 This cookbook was refactored from a gem-dependent design (`chef-ruby-lvm` + `chef-ruby-lvm-attrib`)
