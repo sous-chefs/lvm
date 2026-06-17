@@ -4,7 +4,7 @@ driver:
 provisioner:
   name: chef_infra
   deprecations_as_errors: true
-  product_name: <%= ENV['CHEF_PRODUCT_NAME'] || 'chef' %>
+  product_name: <%= ENV['CHEF_PRODUCT_NAME'] || 'cinc' %>
   chef_license: accept-no-persist
   product_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
   log_level: <%= ENV['CHEF_LOG_LEVEL'] || 'auto' %>
@@ -23,8 +23,10 @@ platforms:
   - name: debian-13
   - name: fedora-latest
   - name: opensuse-leap-15
+  - name: opensuse-leap-16
   - name: oraclelinux-8
   - name: oraclelinux-9
+  - name: oraclelinux-10
   - name: rockylinux-8
   - name: rockylinux-9
   - name: rockylinux-10
