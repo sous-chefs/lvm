@@ -14,14 +14,23 @@ Manages LVM volume groups.
 
 ## Properties
 
-| Name                   | Type            | Default       | Description                                                                                                                                                                |
-| ---------------------- | --------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`                 | String          | name property | (required) Name of the volume group                                                                                                                                        |
-| `physical_volumes`     | Array, String   |               | (required) The device or list of devices to use as physical volumes (if they haven't already been initialized as physical volumes, they will be initialized automatically) |
-| `physical_extent_size` | String          | `nil`         | The physical extent size for the volume group                                                                                                                              |
-| `logical_volume`       | Proc            | `nil`         | Shortcut for creating a new `lvm_logical_volume` definition (the logical volumes will be created in the order they are declared)                                           |
-| `wipe_signatures`      | `true`, `false` | `false`       | Force the creation of the Volume Group, even if `lvm` detects existing non-LVM data on disk                                                                                |
-| `thin_pool`            | Proc            | `nil`         | Shortcut for creating a new `lvm_thin_pool` definition (the logical volumes will be created in the order they are declared)                                                |
+| Name                    | Type            | Default       | Description                                                                                                                                                                |
+| ----------------------- | --------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `vg_name`               | String          | name property | Name of the volume group                                                                                                                                                   |
+| `physical_volumes`      | String, Array   |               | (required) The device or list of devices to use as physical volumes (if they haven't already been initialized as physical volumes, they will be initialized automatically) |
+| `physical_extent_size`  | String          | `nil`         | Physical extent size for the volume group (e.g. `4M`). Must match pattern `\d+[kKmMgGtT]?`                                                                                 |
+| `wipe_signatures`       | `true`, `false` | `false`       | Whether to automatically wipe signatures on new PVs                                                                                                                        |
+| `ignore_skipped_cluster`| `true`, `false` | `false`       | Whether to ignore skipped cluster VGs during LVM commands                                                                                                                  |
+
+## DSL Methods
+
+### `logical_volume`
+
+Shortcut DSL method for declaring nested `lvm_logical_volume` resources within a volume group block. Logical volumes are created in the order they are declared.
+
+### `thin_pool` _(via nested `lvm_thin_pool`)_
+
+Nested `lvm_thin_pool` resources should be declared using `lvm_thin_pool` directly or via the `logical_volume` DSL inside `lvm_volume_group`. Thin pools declared as nested `lvm_thin_pool` resources inside the volume group will be processed automatically.
 
 ## Examples
 
@@ -44,16 +53,10 @@ lvm_volume_group 'vg00' do
     stripes     3
     mirrors     2
   end
+end
 
-  thin_pool "lv-thin-pool" do
-    size '5G'
-    stripes 2
-
-    thin_volume "thin01" do
-      size '10G'
-      filesystem  'ext4'
-      mount_point location: '/var/thin01', options: 'noatime,nodiratime'
-    end
-  end
+lvm_volume_group 'vg01' do
+  physical_volumes '/dev/sdd'
+  action :extend
 end
 ```

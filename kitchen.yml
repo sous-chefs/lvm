@@ -23,35 +23,28 @@ platforms:
   - name: debian-13
   - name: fedora-latest
   - name: opensuse-leap-15
+  - name: opensuse-leap-16
+  - name: oraclelinux-8
+  - name: oraclelinux-9
+  - name: oraclelinux-10
   - name: rockylinux-8
   - name: rockylinux-9
   - name: rockylinux-10
-  - name: ubuntu-20.04
   - name: ubuntu-22.04
   - name: ubuntu-24.04
   - name: ubuntu-26.04
 
 suites:
+  - name: default
   - name: create
-    run_list:
-      - recipe[test::create]
+    named_run_list: create
   - name: remove
-    run_list:
-      - recipe[test::remove]
-  - name: create_thin
-    run_list:
-      - recipe[test::create_thin]
+    named_run_list: remove
+  - name: create-thin
+    named_run_list: create_thin
   - name: resize
-    run_list:
-      - recipe[test::create]
-      - recipe[test::resize]
-  - name: resize_thin
-    run_list:
-      - recipe[test::create_thin]
-      - recipe[test::resize_thin]
-  - name: resize_thin_pool_meta_data
-    run_list:
-      - recipe[test::create_thin]
-      - recipe[test::resize_thin_pool_meta_data]
-    excludes:
-      - debian-9
+    named_run_list: resize
+  - name: resize-thin
+    named_run_list: resize_thin
+  - name: resize-thin-pool-meta-data
+    named_run_list: resize_thin_pool_meta_data

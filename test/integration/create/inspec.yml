@@ -1,0 +1,7 @@
+---
+name: create
+title: LVM Create Tests
+maintainer: Sous Chefs
+license: Apache-2.0
+summary: Tests for LVM physical volume, volume group, and logical volume creation
+version: 1.0.0

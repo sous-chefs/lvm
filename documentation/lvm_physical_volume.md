@@ -14,11 +14,10 @@ Manages LVM physical volumes.
 
 ## Properties
 
-| Name                     | Type           | Default       | Description                                                                            |
-| ------------------------ | -------------- | ------------- | -------------------------------------------------------------------------------------- |
-| `volume_name`            | String         | name property | The device to create the new physical volume on                                        |
-| `wipe_signatures`        | `true`,`false` | `false`       | Force the creation of the Logical Volume, even if `lvm` detects existing PV signatures |
-| `ignore_skipped_cluster` | `true`,`false` | `false`       | Continue execution even if `lvm` detects skipped clustered volume groups               |
+| Name               | Type           | Default       | Description                                                                            |
+| ------------------ | -------------- | ------------- | -------------------------------------------------------------------------------------- |
+| `volume_name`      | String         | name property | Device name of the physical volume (e.g. `/dev/sdb`)                                   |
+| `wipe_signatures`  | `true`,`false` | `false`       | Whether to wipe existing signatures before creating the physical volume                |
 
 ## Examples
 
@@ -26,6 +25,10 @@ Manages LVM physical volumes.
 lvm_physical_volume '/dev/sda'
 
 lvm_physical_volume '/dev/sdb' do
+  wipe_signatures true
+end
+
+lvm_physical_volume '/dev/sdc' do
   action :resize
 end
 ```

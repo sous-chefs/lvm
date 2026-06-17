@@ -6,35 +6,86 @@
 [![OpenCollective](https://opencollective.com/sous-chefs/sponsors/badge.svg)](#sponsors)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
-Installs lvm2 package and includes resources for managing LVM.
-
-## Note on LVM gems
-
-This cookbook has used multiple variants of the ruby-lvm and ruby-lvm-attrib gems for interacting with LVM. Most recently we used di-ruby-lvm and di-ruby-lvm-attrib gems, which are no longer being maintained. As of the 4.0 release this cookbook uses new Chef maintained gems: chef-ruby-lvm and chef-ruby-lvm-attrib. Previous versions of this cookbook supported cleaning those gems up for approximetly 3 years. At this point you'll need to remove those gems yourself if they're still present as the namespaces will conflict. If you previously used attributes to control the version of the gems to install, you will need to update to the latest attribute names to maintain that functionality.
+Resource-driven cookbook for managing LVM physical volumes, volume groups, and logical volumes using LVM2 built-in JSON reporting.
 
 ## Maintainers
 
-This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of Chef cookbook maintainers working together to maintain important cookbooks. If you’d like to know more please visit [sous-chefs.org](https://sous-chefs.org/) or come chat with us on the Chef Community Slack in [#sous-chefs](https://chefcommunity.slack.com/messages/C2V7B88SF).
+This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of Chef cookbook maintainers working together to maintain important cookbooks. If you'd like to know more please visit [sous-chefs.org](https://sous-chefs.org/) or come chat with us on the Chef Community Slack in [#sous-chefs](https://chefcommunity.slack.com/messages/C2V7B88SF).
 
 ## Requirements
 
 ### Platforms
 
-- Debian/Ubuntu
-- RHEL/CentOS/Scientific/Amazon/Oracle
-- SLES
+- AlmaLinux 8+
+- Amazon Linux 2023+
+- CentOS Stream 9+
+- Debian 12+
+- Fedora (latest)
+- openSUSE Leap 15+
+- Oracle Linux 8+
+- Rocky Linux 8+
+- Ubuntu 22.04+
 
 ### Chef
 
-- Chef 12.15+
+- Chef >= 16.0
+
+### LVM2
+
+- LVM2 >= 2.02.158 (released 2017; required for `--reportformat json` support)
 
 ### Cookbooks
 
 - none
 
-## Resources
+## Usage
 
-The following resources are provided:
+Declare a dependency on `lvm` in your cookbook metadata:
+
+```ruby
+# your_cookbook/metadata.rb
+depends 'lvm'
+```
+
+Then use the resources directly in your recipes:
+
+```ruby
+# Create a physical volume
+lvm_physical_volume '/dev/sdb'
+
+# Create a volume group from physical volumes
+lvm_volume_group 'data' do
+  physical_volumes ['/dev/sdb']
+end
+
+# Create a logical volume
+lvm_logical_volume 'logs' do
+  group      'data'
+  size       '10G'
+  filesystem 'ext4'
+  mount_point '/var/log/app'
+end
+
+# Create a thin pool inside a volume group
+lvm_thin_pool 'pool0' do
+  group 'data'
+  size  '50G'
+end
+
+# Create a thin volume from a thin pool
+lvm_thin_volume 'app' do
+  group     'data'
+  pool      'pool0'
+  size      '20G'
+  filesystem 'xfs'
+  mount_point '/srv/app'
+end
+```
+
+If you are upgrading from the legacy recipe and attribute based cookbook, see the
+[migration guide](migration.md).
+
+## Resources
 
 - [lvm_logical_volume](documentation/lvm_logical_volume.md)
 - [lvm_physical_volume](documentation/lvm_physical_volume.md)
@@ -42,33 +93,6 @@ The following resources are provided:
 - [lvm_thin_pool_meta_data](documentation/lvm_thin_pool_meta_data.md)
 - [lvm_thin_volume](documentation/lvm_thin_volume.md)
 - [lvm_volume_group](documentation/lvm_volume_group.md)
-
-## Usage
-
-Include the default recipe in your run list on a node, in a role, or in another recipe:
-
-```ruby
-run_list(
-  'recipe[lvm::default]'
-)
-```
-
-Depend on `lvm` in any cookbook that uses its Resources/Providers:
-
-```ruby
-# other_cookbook/metadata.rb
-depends 'lvm'
-```
-
-## Caveats
-
-This cookbook depends on the [chef-ruby-lvm](https://github.com/chef/chef-ruby-lvm) and [chef-ruby-lvm-attrib](https://github.com/chef/chef-ruby-lvm-attrib) gems. The chef-ruby-lvm-attrib gem in particular is a common cause of failures when using the providers. If you get a failure with an error message similar to
-
-```text
-No such file or directory - /opt/chef/.../chef-ruby-lvm-attrib-0.0.3/lib/lvm/attributes/2.02.300(2)/lvs.yaml
-```
-
-then you are running a version of lvm that the gems do not support. However, getting support added is usually pretty easy. Just follow the instructions on "Adding Attributes" in the [chef-ruby-lvm-attrib README](https://github.com/chef/chef-ruby-lvm-attrib).
 
 ## Contributors
 
